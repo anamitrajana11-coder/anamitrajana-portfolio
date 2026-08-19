@@ -1,0 +1,38 @@
+[
+  {
+    "name": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 1200
+    },
+    "failedRequests": [],
+    "badResponses": [],
+    "consoleErrors": [],
+    "status": {
+      "title": "Anamitra Jana - Product Designer",
+      "bodyText": "Mu\nWORK\nABOUT\nLAB\nRESUME\n\nI’m Anamitra,\nProduct Designer.\n\nWith three years of experience delivering battle-tested ideas and designing solutions that fuse brand vision with user needs.\n\nAvailable for Work\nExperience\n\n2025\n\nBoston Bioprocess\n\n\nProduct Designer\n\n2025\n\nFeaturely AI (Stealth)\n\n\nProduct Design Consultant\n\n2024\n\nToyota Mobility Foundation\n\n\nProduct Designer\n\n2023\n\nIU Redlab\n\n\nProduct Designer (UX Lead)\n\n2022\n\nIndiana University\n\n\nUX Researcher / GRA\n\n2020\n\nIndesign Elements Studio\n\n\nD",
+      "imageCount": 69,
+      "visibleBrokenImages": [],
+      "visibleBrokenWhileScrolling": [],
+      "scrollHeight": 7340
+    }
+  },
+  {
+    "name": "mobile",
+    "viewport": {
+      "width": 390,
+      "height": 1200
+    },
+    "failedRequests": [],
+    "badResponses": [],
+    "consoleErrors": [],
+    "status": {
+      "title": "Anamitra Jana - Product Designer",
+      "bodyText": "Produ\n\nI’m Anamitra,\nProduct Designer.\n\nWith three years of experience delivering battle-tested ideas and designing solutions that fuse brand vision with user needs.\n\nAvailable for Work\nExperience\n\n2025\n\nBoston Bioprocess\n\n\nProduct Designer\n\n2025\n\nFeaturely AI (Stealth)\n\n\nProduct Design Consultant\n\n2024\n\nToyota Mobility Foundation\n\n\nProduct Designer\n\n2023\n\nIU Redlab\n\n\nProduct Designer (UX Lead)\n\n2022\n\nIndiana University\n\n\nUX Researcher / GRA\n\n2020\n\nIndesign Elements Studio\n\n\nDesign Intern\n\nHOVER",
+      "imageCount": 69,
+      "visibleBrokenImages": [],
+      "visibleBrokenWhileScrolling": [],
+      "scrollHeight": 11826
+    }
+  }
+]
