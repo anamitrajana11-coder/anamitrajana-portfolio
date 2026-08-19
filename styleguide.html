@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ANA™ Design System — Style Guide</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<script src="assets/ajax.googleapis.com/webfont-9f87595f89.js" type="text/javascript"></script>
+<script type="text/javascript">
+WebFont.load({ google: { families: [
+  "Montserrat:400,500,600,700",
+  "PT Serif:400,700",
+  "Spline Sans Mono:400,500",
+  "Pixelify Sans:400,600"
+]}});
+</script>
+<script src="assets/use.typekit.net/qjc6msf-c3a3e20f4d.js" type="text/javascript"></script>
+<script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+<link rel="stylesheet" href="design-system/tokens.css">
+<style>
+  /* Token fallbacks: identical to design-system/tokens.css, embedded so this
+     page renders correctly even if the token sheet fails to load. */
+  :root {
+    --ds-black: #000; --ds-white: #fff; --ds-orange: #f15a24;
+    --ds-purple: #a798ff; --ds-purple-dark: #816cff; --ds-green: #009b5c;
+    --ds-surface-1: #141314; --ds-surface-2: #191414; --ds-border-hairline: #111;
+    --ds-overlay-white-5: #ffffff0d; --ds-overlay-white-8: #ffffff14; --ds-overlay-white-10: #ffffff1a;
+    --ds-overlay-black-50: #00000080; --ds-overlay-black-70: #000000b3;
+    --ds-font-primary: aktiv-grotesk, sans-serif; --ds-font-secondary: Montserrat, sans-serif;
+    --ds-font-serif: "PT Serif", serif; --ds-font-mono: "Spline Sans Mono", monospace;
+    --ds-font-pixel: "Pixelify Sans", sans-serif;
+    --ds-text-xs: 12px; --ds-text-sm: 14px; --ds-text-base: 16px; --ds-text-md: 18px;
+    --ds-text-lg: 20px; --ds-text-xl: 24px; --ds-text-2xl: 28px; --ds-text-3xl: 32px;
+    --ds-text-4xl: 36px; --ds-text-5xl: 40px; --ds-text-6xl: 48px; --ds-text-7xl: 56px; --ds-text-8xl: 64px;
+    --ds-weight-regular: 400; --ds-weight-medium: 500; --ds-weight-semibold: 600;
+    --ds-weight-bold: 700; --ds-weight-extrabold: 800;
+    --ds-leading-body: 1.75; --ds-leading-heading: 1.15;
+    --ds-radius-xs: 2px; --ds-radius-sm: 4px; --ds-radius-md: 8px; --ds-radius-lg: 12px;
+    --ds-radius-xl: 16px; --ds-radius-2xl: 20px; --ds-radius-3xl: 24px;
+    --ds-radius-pill: 100px; --ds-radius-circle: 50%;
+    --ds-gradient-cta: linear-gradient(15deg, #f15a24, #a43711 0%, #3b1001 80%, #0f0400 99%);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--ds-black);
+    color: var(--ds-white);
+    font-family: var(--ds-font-primary);
+    line-height: var(--ds-leading-body);
+    padding: 48px clamp(20px, 6vw, 96px) 96px;
+  }
+  header.sg { margin-bottom: 64px; }
+  .sg-kicker {
+    color: var(--ds-orange);
+    font-size: var(--ds-text-sm);
+    font-weight: var(--ds-weight-semibold);
+    letter-spacing: .18em; text-transform: uppercase;
+  }
+  h1 {
+    font-size: clamp(36px, 6vw, var(--ds-text-8xl));
+    font-weight: var(--ds-weight-extrabold);
+    line-height: var(--ds-leading-heading);
+    margin: 8px 0 12px;
+  }
+  .sg-sub { color: #a1a1a1; max-width: 620px; font-size: var(--ds-text-base); }
+  section { margin-bottom: 72px; }
+  h2 {
+    font-size: var(--ds-text-3xl);
+    font-weight: var(--ds-weight-bold);
+    line-height: var(--ds-leading-heading);
+    border-bottom: 1px solid var(--ds-border-hairline);
+    padding-bottom: 12px; margin-bottom: 28px;
+  }
+  h3 {
+    font-size: var(--ds-text-lg);
+    font-weight: var(--ds-weight-semibold);
+    color: var(--ds-purple);
+    margin: 32px 0 16px;
+  }
+  .sg-note { color: #a1a1a1; font-size: var(--ds-text-sm); margin-top: -18px; margin-bottom: 20px; }
+
+  /* swatches */
+  .sw-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
+  .sw {
+    border: 1px solid var(--ds-border-hairline);
+    border-radius: var(--ds-radius-2xl);
+    overflow: hidden; background: var(--ds-surface-1);
+  }
+  .sw-chip { height: 84px; }
+  .sw-meta { padding: 10px 14px 12px; }
+  .sw-name { font-size: var(--ds-text-xs); font-weight: var(--ds-weight-semibold); display: block; }
+  .sw-hex { font-family: var(--ds-font-mono); font-size: var(--ds-text-xs); color: #a1a1a1; }
+  .sw.light .sw-meta { background: #fff; }
+  .sw.light .sw-name { color: #222; }
+  .sw.light .sw-hex { color: #585858; }
+
+  /* type ramp */
+  .type-row { display: flex; align-items: baseline; gap: 24px; border-bottom: 1px dashed #1c1c1c; padding: 10px 0; }
+  .type-size { font-family: var(--ds-font-mono); font-size: var(--ds-text-xs); color: var(--ds-orange); min-width: 88px; }
+  .face-row { border: 1px solid var(--ds-border-hairline); border-radius: var(--ds-radius-2xl); padding: 20px 24px; margin-bottom: 14px; }
+  .face-label { font-size: var(--ds-text-xs); color: #a1a1a1; font-family: var(--ds-font-mono); display: block; margin-bottom: 6px; }
+  .face-sample { font-size: var(--ds-text-2xl); }
+  .weights { display: flex; flex-wrap: wrap; gap: 28px; font-size: var(--ds-text-xl); }
+  .weights span small { display: block; font-size: var(--ds-text-xs); color: #a1a1a1; font-weight: var(--ds-weight-regular); }
+
+  /* radii */
+  .radii { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; }
+  .rad { background: var(--ds-overlay-white-8); border: 1px solid var(--ds-border-hairline); width: 92px; height: 92px; display: flex; align-items: center; justify-content: center; font-family: var(--ds-font-mono); font-size: var(--ds-text-xs); color: #a1a1a1; }
+
+  /* components */
+  .comp-stage {
+    border: 1px solid var(--ds-border-hairline);
+    border-radius: var(--ds-radius-2xl);
+    padding: 40px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center;
+    background:
+      linear-gradient(var(--ds-overlay-white-5), transparent 60%),
+      var(--ds-black);
+  }
+  .grad-cta { background-image: var(--ds-gradient-cta); border-radius: var(--ds-radius-sm); padding: 2px; display: inline-block; text-decoration: none; }
+  .grad-cta span {
+    display: block; color: var(--ds-white); background: var(--ds-black);
+    border-radius: var(--ds-radius-xs); padding: 4px 16px;
+    font-family: var(--ds-font-primary); font-size: var(--ds-text-sm);
+  }
+  .nav-demo { display: flex; gap: 28px; align-items: center; font-size: var(--ds-text-sm); }
+  .nav-item { position: relative; padding-bottom: 14px; color: var(--ds-white); text-decoration: none; }
+  .nav-item.active::after {
+    content: ""; position: absolute; left: 50%; transform: translateX(-50%);
+    bottom: 0; width: 40px; height: 3px; background: var(--ds-white); border-radius: var(--ds-radius-pill);
+  }
+  .card-demo {
+    background: var(--ds-black); border: 1px solid var(--ds-border-hairline);
+    border-radius: var(--ds-radius-2xl); padding: 24px; max-width: 280px;
+  }
+  .card-demo .tag { font-family: var(--ds-font-mono); font-size: var(--ds-text-xs); color: var(--ds-orange); }
+  .card-demo h4 { font-size: var(--ds-text-lg); font-weight: var(--ds-weight-semibold); margin: 6px 0; }
+  .card-demo p { font-size: var(--ds-text-sm); color: #a1a1a1; }
+
+  table { border-collapse: collapse; width: 100%; max-width: 560px; font-size: var(--ds-text-sm); }
+  td, th { text-align: left; padding: 8px 16px 8px 0; border-bottom: 1px solid #1c1c1c; }
+  th { color: #a1a1a1; font-weight: var(--ds-weight-medium); }
+  td.mono, .mono { font-family: var(--ds-font-mono); }
+
+  footer.sg { color: #585858; font-size: var(--ds-text-xs); border-top: 1px solid var(--ds-border-hairline); padding-top: 24px; }
+  footer.sg a { color: #a1a1a1; }
+</style>
+</head>
+<body>
+
+<header class="sg">
+  <span class="sg-kicker">ANA™ Design System</span>
+  <h1>Style Guide</h1>
+  <p class="sg-sub">The formalized design language of anamitrajana.com — every value on this page
+  was extracted from the live site's stylesheet. Full rules in
+  <span class="mono">design-system/README.md</span>, tokens in <span class="mono">design-system/tokens.css</span>.</p>
+</header>
+
+<section>
+  <h2>Brand color</h2>
+  <p class="sg-note">White type on true black; orange is the signature accent, purple the brand color.</p>
+  <div class="sw-grid">
+    <div class="sw"><div class="sw-chip" style="background:#000; border-bottom:1px solid #111"></div><div class="sw-meta"><span class="sw-name">Black</span><span class="sw-hex">#000000 · --ds-black</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#fff"></div><div class="sw-meta"><span class="sw-name">White</span><span class="sw-hex">#ffffff · --ds-white</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#f15a24"></div><div class="sw-meta"><span class="sw-name">ANA Orange</span><span class="sw-hex">#f15a24 · --ds-orange</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#a798ff"></div><div class="sw-meta"><span class="sw-name">Brand Purple</span><span class="sw-hex">#a798ff · --ds-purple</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#816cff"></div><div class="sw-meta"><span class="sw-name">Purple Dark</span><span class="sw-hex">#816cff · --ds-purple-dark</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#009b5c"></div><div class="sw-meta"><span class="sw-name">Legacy Green</span><span class="sw-hex">#009b5c · --ds-green</span></div></div>
+  </div>
+
+  <h3>Dark surfaces &amp; overlays</h3>
+  <div class="sw-grid">
+    <div class="sw"><div class="sw-chip" style="background:#141314"></div><div class="sw-meta"><span class="sw-name">Surface 1</span><span class="sw-hex">#141314</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#191414"></div><div class="sw-meta"><span class="sw-name">Surface 2</span><span class="sw-hex">#191414</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#111"></div><div class="sw-meta"><span class="sw-name">Hairline border</span><span class="sw-hex">#111111</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#ffffff0d"></div><div class="sw-meta"><span class="sw-name">White 5%</span><span class="sw-hex">#ffffff0d</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#ffffff14"></div><div class="sw-meta"><span class="sw-name">White 8%</span><span class="sw-hex">#ffffff14</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#ffffff1a"></div><div class="sw-meta"><span class="sw-name">White 10%</span><span class="sw-hex">#ffffff1a</span></div></div>
+  </div>
+
+  <h3>Secondary accents</h3>
+  <div class="sw-grid">
+    <div class="sw"><div class="sw-chip" style="background:#ff7bac"></div><div class="sw-meta"><span class="sw-name">Pink</span><span class="sw-hex">#ff7bac</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#ff4632"></div><div class="sw-meta"><span class="sw-name">Red</span><span class="sw-hex">#ff4632</span></div></div>
+  </div>
+
+  <h3>Project palettes <span style="color:#585858; font-weight:400">(scoped to their case-study pages)</span></h3>
+  <div class="sw-grid">
+    <div class="sw"><div class="sw-chip" style="background:#2370f0"></div><div class="sw-meta"><span class="sw-name">TMF Blue</span><span class="sw-hex">#2370f0</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#7e06d2"></div><div class="sw-meta"><span class="sw-name">Crayon Purple</span><span class="sw-hex">#7e06d2</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#6184db"></div><div class="sw-meta"><span class="sw-name">Crayon Blue</span><span class="sw-hex">#6184db</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#62c5b5"></div><div class="sw-meta"><span class="sw-name">Crayon Cyan</span><span class="sw-hex">#62c5b5</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#f55d59"></div><div class="sw-meta"><span class="sw-name">Crayon Red</span><span class="sw-hex">#f55d59</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#cc0505"></div><div class="sw-meta"><span class="sw-name">Firefighter Red</span><span class="sw-hex">#cc0505</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#e56b66"></div><div class="sw-meta"><span class="sw-name">Firefighter Orange</span><span class="sw-hex">#e56b66</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#6157f8"></div><div class="sw-meta"><span class="sw-name">Combine Primary</span><span class="sw-hex">#6157f8</span></div></div>
+    <div class="sw"><div class="sw-chip" style="background:#5532fa"></div><div class="sw-meta"><span class="sw-name">Spark Interactive</span><span class="sw-hex">#5532fa</span></div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Typography</h2>
+  <p class="sg-note">Primary face: aktiv-grotesk (Adobe Fonts). Everything global uses it; other faces belong to individual case studies.</p>
+
+  <div class="face-row" style="font-family: aktiv-grotesk, sans-serif;">
+    <span class="face-label">aktiv-grotesk — PRIMARY · all global UI</span>
+    <span class="face-sample">The quick brown fox jumps over the lazy dog — 0123456789</span>
+  </div>
+  <div class="face-row" style="font-family: Montserrat, sans-serif;">
+    <span class="face-label">Montserrat — body default (16px / 28px)</span>
+    <span class="face-sample">The quick brown fox jumps over the lazy dog — 0123456789</span>
+  </div>
+  <div class="face-row" style="font-family: 'PT Serif', serif;">
+    <span class="face-label">PT Serif — editorial moments</span>
+    <span class="face-sample">The quick brown fox jumps over the lazy dog — 0123456789</span>
+  </div>
+  <div class="face-row" style="font-family: 'Spline Sans Mono', monospace;">
+    <span class="face-label">Spline Sans Mono — code &amp; data</span>
+    <span class="face-sample">The quick brown fox jumps over the lazy dog — 0123456789</span>
+  </div>
+  <div class="face-row" style="font-family: 'Pixelify Sans', sans-serif;">
+    <span class="face-label">Pixelify Sans — playful accents</span>
+    <span class="face-sample">The quick brown fox jumps over the lazy dog — 0123456789</span>
+  </div>
+
+  <h3>Type scale</h3>
+  <div>
+    <div class="type-row"><span class="type-size">64px hero</span><span style="font-size:64px; font-weight:800; line-height:1.1">Display</span></div>
+    <div class="type-row"><span class="type-size">56px hero</span><span style="font-size:56px; font-weight:800; line-height:1.1">Display</span></div>
+    <div class="type-row"><span class="type-size">48px</span><span style="font-size:48px; font-weight:700; line-height:1.1">Display</span></div>
+    <div class="type-row"><span class="type-size">40px</span><span style="font-size:40px; font-weight:700; line-height:1.15">Display</span></div>
+    <div class="type-row"><span class="type-size">36px h1</span><span style="font-size:36px; font-weight:700; line-height:1.15">Page heading</span></div>
+    <div class="type-row"><span class="type-size">32px h2</span><span style="font-size:32px; font-weight:700; line-height:1.15">Section heading</span></div>
+    <div class="type-row"><span class="type-size">28px</span><span style="font-size:28px; font-weight:600; line-height:1.2">Section subhead</span></div>
+    <div class="type-row"><span class="type-size">24px h3</span><span style="font-size:24px; font-weight:600; line-height:1.25">Card heading — most-used heading size</span></div>
+    <div class="type-row"><span class="type-size">20px</span><span style="font-size:20px; font-weight:600">Small heading</span></div>
+    <div class="type-row"><span class="type-size">18px</span><span style="font-size:18px">Lead paragraph text for introductions</span></div>
+    <div class="type-row"><span class="type-size">16px body</span><span style="font-size:16px">Body copy — the reading size across all case studies</span></div>
+    <div class="type-row"><span class="type-size">14px</span><span style="font-size:14px">Navigation, buttons and meta information</span></div>
+    <div class="type-row"><span class="type-size">12px</span><span style="font-size:12px">Captions and labels — the most-used size on the site</span></div>
+  </div>
+
+  <h3>Weights</h3>
+  <div class="weights">
+    <span style="font-weight:400">Regular<small>400</small></span>
+    <span style="font-weight:500">Medium<small>500</small></span>
+    <span style="font-weight:600">Semibold<small>600</small></span>
+    <span style="font-weight:700">Bold<small>700</small></span>
+    <span style="font-weight:800">Extrabold<small>800 · display only</small></span>
+  </div>
+</section>
+
+<section>
+  <h2>Shape &amp; radius</h2>
+  <p class="sg-note">20px is the signature card radius; 4px for buttons; 100px pill for indicators.</p>
+  <div class="radii">
+    <div class="rad" style="border-radius:2px">2px</div>
+    <div class="rad" style="border-radius:4px">4px</div>
+    <div class="rad" style="border-radius:8px">8px</div>
+    <div class="rad" style="border-radius:12px">12px</div>
+    <div class="rad" style="border-radius:16px">16px</div>
+    <div class="rad" style="border-radius:20px; border-color:#f15a24">20px ★</div>
+    <div class="rad" style="border-radius:24px">24px</div>
+    <div class="rad" style="border-radius:50%">50%</div>
+  </div>
+</section>
+
+<section>
+  <h2>Components</h2>
+  <p class="sg-note">The global shell — recreated here with exact values from the live stylesheet.</p>
+  <div class="comp-stage">
+    <nav class="nav-demo">
+      <a class="nav-item active" href="#">WORK</a>
+      <a class="nav-item" href="#">ABOUT</a>
+      <a class="nav-item" href="#">LAB</a>
+      <a class="nav-item" href="#">RESUME</a>
+    </nav>
+    <a class="grad-cta" href="#"><span>WORK</span></a>
+    <div class="card-demo">
+      <span class="tag">CARD ON BLACK</span>
+      <h4>Project card</h4>
+      <p>Black fill, 1px #111 hairline border, 20px radius, 20px gaps.</p>
+    </div>
+  </div>
+
+  <h3>Recipes</h3>
+  <table>
+    <tr><th>Component</th><th>Recipe</th></tr>
+    <tr><td>Gradient CTA frame</td><td class="mono">linear-gradient(15deg, #f15a24, #a43711 0%, #3b1001 80%, #0f0400 99%) · r4 · 2px pad</td></tr>
+    <tr><td>CTA label</td><td class="mono">#000 bg · #fff text · r2 · 4px 16px pad · 14px aktiv-grotesk</td></tr>
+    <tr><td>Active nav indicator</td><td class="mono">40 × 3px white pill (r100)</td></tr>
+    <tr><td>Card on black</td><td class="mono">#000 bg · 1px #111 border · r20 · 20px gaps</td></tr>
+  </table>
+</section>
+
+<section>
+  <h2>Breakpoints</h2>
+  <table>
+    <tr><th>Range</th><th>Meaning</th></tr>
+    <tr><td class="mono">≥ 1280px</td><td>Wide desktop enhancements</td></tr>
+    <tr><td class="mono">base</td><td>Desktop (Webflow default)</td></tr>
+    <tr><td class="mono">≤ 991px</td><td>Tablet</td></tr>
+    <tr><td class="mono">≤ 767px</td><td>Phone landscape</td></tr>
+    <tr><td class="mono">≤ 479px</td><td>Phone portrait</td></tr>
+  </table>
+</section>
+
+<footer class="sg">
+  ANA™ Design System · extracted from the live stylesheet on 2026-08-19 ·
+  source of truth: <a href="https://github.com/anamitrajana11-coder/anamitrajana-portfolio/tree/main/design-system">design-system/</a>
+</footer>
+
+</body>
+</html>

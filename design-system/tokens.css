@@ -1,0 +1,147 @@
+/* ==========================================================================
+   ANA™ Design Tokens
+   ==========================================================================
+   Formalized from the live site's stylesheet (anamitras-portfolio.webflow
+   .shared.*.css) on 2026-08-19. Every value below was extracted from styles
+   actually in use — nothing here is invented.
+
+   This file is ADDITIVE: it is not yet linked from any page and changes
+   nothing visually. It is the canonical reference for the site's design
+   language, and the semantic layer to build against going forward.
+
+   The original Webflow variables (--brand-color, --ana-orange, --tmf-blue,
+   --crayon-*, etc.) remain defined in the Webflow stylesheet; the tokens
+   here alias the same values under organized, semantic names.
+   ========================================================================== */
+
+:root {
+  /* ------------------------------------------------------------------
+     1. BRAND CORE
+     The site identity: white type on true black, orange + purple accents.
+     ------------------------------------------------------------------ */
+  --ds-black: #000;              /* page background (used 89x)            */
+  --ds-white: #fff;              /* primary text on dark (used 123x)      */
+  --ds-orange: #f15a24;          /* signature accent = --ana-orange       */
+  --ds-purple: #a798ff;          /* = --brand-color                       */
+  --ds-purple-dark: #816cff;     /* = --brand-colour-dark                 */
+  --ds-green: #009b5c;           /* Webflow body default green (17x)      */
+
+  /* ------------------------------------------------------------------
+     2. DARK SURFACES & OVERLAYS
+     The "glass on black" system: near-black panels with faint white
+     overlays and hairline borders.
+     ------------------------------------------------------------------ */
+  --ds-surface-1: #141314;       /* near-black panel                      */
+  --ds-surface-2: #191414;       /* warm near-black panel                 */
+  --ds-border-hairline: #111;    /* card hairline border on black         */
+  --ds-overlay-white-5: #ffffff0d;   /* 5% white — subtle fill            */
+  --ds-overlay-white-8: #ffffff14;   /* 8% white — hover fill             */
+  --ds-overlay-white-10: #ffffff1a;  /* 10% white — active fill           */
+  --ds-overlay-black-50: #00000080;  /* 50% black — scrim                 */
+  --ds-overlay-black-70: #000000b3;  /* 70% black — modal scrim           */
+
+  /* ------------------------------------------------------------------
+     3. LIGHT-CONTEXT NEUTRALS (case-study sections on light backgrounds)
+     ------------------------------------------------------------------ */
+  --ds-grey-100: #f4f4f4;
+  --ds-grey-200: #eee;
+  --ds-grey-300: #ddd;
+  --ds-grey-400: #ccc;
+  --ds-grey-700: #333;
+  --ds-grey-800: #222;
+  --ds-border-grey: #e4e4e4;     /* = --border-grey                       */
+
+  /* ------------------------------------------------------------------
+     4. SECONDARY ACCENTS (appear sitewide in small doses)
+     ------------------------------------------------------------------ */
+  --ds-pink: #ff7bac;
+  --ds-red: #ff4632;
+
+  /* ------------------------------------------------------------------
+     5. TYPOGRAPHY
+     Primary face is aktiv-grotesk (Adobe Fonts kit qjc6msf, 125 rules).
+     Montserrat is the Webflow body default (16px/28px). Serif, mono and
+     pixel faces belong to individual case studies only.
+     ------------------------------------------------------------------ */
+  --ds-font-primary: aktiv-grotesk, sans-serif;
+  --ds-font-secondary: Montserrat, sans-serif;
+  --ds-font-serif: "PT Serif", serif;
+  --ds-font-mono: "Spline Sans Mono", monospace;
+  --ds-font-pixel: "Pixelify Sans", sans-serif;
+
+  /* Type scale — px values by real frequency of use */
+  --ds-text-xs: 12px;    /* captions, labels (106x — most used size)      */
+  --ds-text-sm: 14px;    /* nav, buttons, meta (53x)                      */
+  --ds-text-base: 16px;  /* body copy (59x)                               */
+  --ds-text-md: 18px;    /* large body / lead (46x)                       */
+  --ds-text-lg: 20px;    /* small headings (33x)                          */
+  --ds-text-xl: 24px;    /* h3-level (72x)                                */
+  --ds-text-2xl: 28px;   /* section subheads (41x)                        */
+  --ds-text-3xl: 32px;   /* h2-level (26x)                                */
+  --ds-text-4xl: 36px;   /* page headings (31x)                           */
+  --ds-text-5xl: 40px;   /* display (14x)                                 */
+  --ds-text-6xl: 48px;   /* display (8x)                                  */
+  --ds-text-7xl: 56px;   /* hero (7x)                                     */
+  --ds-text-8xl: 64px;   /* hero (6x)                                     */
+
+  /* Weights — 400/500/600 carry the site; 700/800 for emphasis/display */
+  --ds-weight-regular: 400;
+  --ds-weight-medium: 500;
+  --ds-weight-semibold: 600;
+  --ds-weight-bold: 700;
+  --ds-weight-extrabold: 800;
+
+  /* Body rhythm (Webflow body default) */
+  --ds-leading-body: 1.75;       /* 16px/28px                             */
+  --ds-leading-heading: 1.15;
+
+  /* ------------------------------------------------------------------
+     6. RADII — 20px is the signature card radius; 4px for buttons
+     ------------------------------------------------------------------ */
+  --ds-radius-xs: 2px;     /* inner button label                          */
+  --ds-radius-sm: 4px;     /* buttons, small chips (56x)                  */
+  --ds-radius-md: 8px;
+  --ds-radius-lg: 12px;
+  --ds-radius-xl: 16px;
+  --ds-radius-2xl: 20px;   /* cards — most used radius (78x)              */
+  --ds-radius-3xl: 24px;
+  --ds-radius-pill: 100px;
+  --ds-radius-circle: 50%;
+
+  /* ------------------------------------------------------------------
+     7. SIGNATURE RECIPES (exact values from live components)
+     ------------------------------------------------------------------ */
+  /* Nav CTA gradient border (.grad-bg): 2px gradient frame, 4px radius,
+     black label inside at 2px radius, aktiv-grotesk 14px white.        */
+  --ds-gradient-cta: linear-gradient(15deg, #f15a24, #a43711 0%, #3b1001 80%, #0f0400 99%);
+
+  /* Card on black (.flex-block-81 pattern): black fill, 1px #111 border,
+     20px gap, 20px radius family.                                       */
+}
+
+/* ==========================================================================
+   PROJECT-SCOPED PALETTES
+   Each case study carries its own accent set. These stay scoped to their
+   pages — never promote them to global brand colors.
+   ==========================================================================
+   TMF          --tmf-blue: #2370f0
+   Crayon       --crayon-purple: #7e06d2   --crayon-blue: #6184db
+                --crayon-cyan: #62c5b5     --crayon-red: #f55d59
+   Firefighter  --firefighter-red: #cc0505 --firefighter-orange: #e56b66
+   Combine      --combine-library--primary-600: #6157f8 (+ grey/error/
+                success/warning ramps in the Webflow stylesheet)
+   Spark        --spark-library--foreground-interactive: #5532fa
+                --spark-library--foreground-interactive-hover: #1e116e
+   Misc         --impact-green: #00b530    --imenco-green-up: #0ca15b
+                --midnight-blue: #0b1a4a   --glow-yellow: #fadd6033
+   ========================================================================== */
+
+/* ==========================================================================
+   BREAKPOINTS (for reference — CSS variables cannot be used in @media)
+   ==========================================================================
+   >= 1280px   wide desktop enhancements
+   base        desktop (Webflow default)
+   <= 991px    tablet
+   <= 767px    phone landscape
+   <= 479px    phone portrait
+   ========================================================================== */
