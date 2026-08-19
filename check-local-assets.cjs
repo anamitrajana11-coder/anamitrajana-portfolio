@@ -11,6 +11,7 @@ const pages = [
   "redlab.html",
   "tmf2.html",
   "crayon.html",
+  "lab.html",
 ];
 
 function walk(dir) {
@@ -76,6 +77,7 @@ for (const page of pages) {
     'href="/redlab"',
     'href="/tmf2"',
     'href="/crayon"',
+    'href="/lab"',
     'href="https://www.anamitrajana.com/about"',
     'href="https://www.anamitrajana.com/resume2"',
     'href="https://www.anamitrajana.com/featurely"',
@@ -83,6 +85,7 @@ for (const page of pages) {
     'href="https://www.anamitrajana.com/redlab"',
     'href="https://www.anamitrajana.com/tmf2"',
     'href="https://www.anamitrajana.com/crayon"',
+    'href="https://www.anamitrajana.com/lab"',
   ];
   for (const token of forbidden) {
     if (text.includes(token)) routeProblems.push(`${page} contains ${token}`);

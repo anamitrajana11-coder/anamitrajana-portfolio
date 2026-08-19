@@ -18,6 +18,7 @@ const pages = [
   { source: "/tmp/anamitrajana-redlab.html", output: "redlab.html" },
   { source: "/tmp/anamitrajana-tmf2.html", output: "tmf2.html" },
   { source: "/tmp/anamitrajana-crayon.html", output: "crayon.html" },
+  { source: "/tmp/anamitrajana-lab.html", output: "lab.html" },
 ];
 
 const routeMap = new Map([
@@ -29,6 +30,7 @@ const routeMap = new Map([
   ["/redlab", "redlab.html"],
   ["/tmf2", "tmf2.html"],
   ["/crayon", "crayon.html"],
+  ["/lab", "lab.html"],
   [`${siteOrigin}/`, "index.html"],
   [`${siteOrigin}/about`, "about.html"],
   [`${siteOrigin}/resume2`, "resume2.html"],
@@ -37,6 +39,7 @@ const routeMap = new Map([
   [`${siteOrigin}/redlab`, "redlab.html"],
   [`${siteOrigin}/tmf2`, "tmf2.html"],
   [`${siteOrigin}/crayon`, "crayon.html"],
+  [`${siteOrigin}/lab`, "lab.html"],
 ]);
 
 const preconnectUrls = new Set([
