@@ -1,0 +1,691 @@
+/* ==========================================================================
+   ANA™ Case-study layout
+   ==========================================================================
+   Page layout for the Yanta case studies (yanta-*.html) and the Yanta cards
+   in the homepage "Selected works." section. Built only from the tokens in
+   design-system/tokens.css — load that file first.
+
+   The opening (hero visual, orange claim, Company / Role / Product, Project
+   details with the team) reuses the older project pages' Webflow markup, so
+   it matches them exactly. Below it, .cs follows the template in
+   case-studies/CASE-STUDY-GUIDE.md: status and TL;DR, then one section per
+   decision, then credits. Visuals are placeholders (.cs-visual) until the
+   real images exist; swap a placeholder for an <img> in the same place.
+   ========================================================================== */
+
+/* ------------------------------------------------------------------
+   Page shell — .cs sits on a Webflow .section-36 inside .mid-body, the
+   same wrappers as the opening, so the side margins match it.
+   ------------------------------------------------------------------ */
+.cs {
+  color: var(--ds-text-body);
+  font-family: var(--ds-font-primary);
+  font-size: var(--ds-text-md);
+  line-height: 1.65;
+}
+.cs *, .cs *::before, .cs *::after { box-sizing: border-box; }
+/* Neutralise the Webflow element defaults (centred h1 and figcaption, h2
+   sizes, p margins) at class-level specificity, so the .cs-* rules below win. */
+.cs :where(h1, h2, h3, p, ul, ol, figure, figcaption, dl, dt, dd) {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+.cs ul, .cs ol { list-style: none; }
+.cs a { color: inherit; }
+.cs strong { color: var(--ds-white); font-weight: var(--ds-weight-medium); }
+.cs code {
+  font-family: var(--ds-font-mono);
+  font-size: .85em;
+  background: var(--ds-overlay-white-8);
+  border-radius: var(--ds-radius-xs);
+  padding: 1px 5px;
+}
+
+/* ------------------------------------------------------------------
+   Shared atoms
+   ------------------------------------------------------------------ */
+/* Mono tag — same recipe as the homepage card tags (.interaction-tag) */
+.cs-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-xs);
+  font-weight: var(--ds-weight-medium);
+  letter-spacing: .5px;
+  line-height: 18px;
+  text-transform: uppercase;
+  color: var(--ds-text-muted);
+  border: 2px solid var(--ds-border-strong);
+  padding: 3px 8px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.cs-tag--accent { border-color: var(--ds-orange-deep); }
+.cs-tag--pending { border-style: dashed; cursor: default; }
+.cs-tag--pending::after {
+  content: "soon";
+  color: var(--ds-orange);
+  font-size: 10px;
+}
+
+/* Section label — the site's "Problem ↗" pattern (.v25-h3 + arrow) */
+.cs-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--ds-font-primary);
+  font-size: var(--ds-text-base);
+  font-weight: var(--ds-weight-regular);
+  line-height: 24px;
+  color: var(--ds-white);
+}
+.cs-label img { width: 16px; height: 15px; }
+
+/* ------------------------------------------------------------------
+   1. Opening — hero placeholder and team hover (rest is Webflow markup)
+   ------------------------------------------------------------------ */
+/* Same proportions as the older pages' hero images (1440 × 582) */
+.cs-visual.cs-visual--hero { aspect-ratio: 1440 / 582; border-radius: 0; }
+
+/* Hero video (1440 × 582): loops muted; click pauses / plays (video.js).
+   While paused, a tag in the corner says how to resume. */
+.cs-hero-media { position: relative; background: var(--ds-black); }
+.cs-hero-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1440 / 582;
+  object-fit: cover;
+  cursor: pointer;
+}
+/* Still hero (`heroImage`), same proportions as the video */
+.cs-hero-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1440 / 582;
+  object-fit: cover;
+}
+.cs-hero-video:focus-visible,
+.cs-figure-video:focus-visible { outline: 2px solid var(--ds-orange); outline-offset: 4px; }
+.cs-video-paused {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  background: var(--ds-black);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+}
+.is-paused > .cs-video-paused { opacity: 1; }
+
+/* Team avatars: the older pages animate these with Webflow interactions
+   (the avatar's slot widens 50 → 70px and its name card appears). The same
+   effect in CSS, plus keyboard focus. The !important beats the inline
+   width / display that the copied markup carries. */
+.cs-team .div-block-504 { outline: none; }
+.cs-team .div-block-504:hover .div-block-502,
+.cs-team .div-block-504:focus-visible .div-block-502 { display: block !important; }
+.cs-team .div-block-504:focus-visible .image-295 { outline: 2px solid var(--ds-white); outline-offset: 2px; }
+/* Avatar size on every project page: 52px photos in 43px slots (Webflow's
+   60 in 50), and the hover widens the slot to 61px (was 70) — the same
+   overlap and spread in proportion. On the older pages this overrides the
+   inline widths of their Webflow hover; its name card works as before. */
+.team-flex-block .div-block-504 { width: 43px !important; transition: width .3s ease; }
+.team-flex-block .div-block-504:hover,
+.team-flex-block .div-block-504:focus-visible { width: 61px !important; }
+.team-flex-block .div-block-503,
+.team-flex-block .image-295 { width: 52px; height: 52px; }
+
+/* Teams of 7+ don't fit one row in the 4-of-12 column: rows of four, with
+   room left for the hover widening so nothing reflows while hovering
+   (4 × 43 + 9 overhang + 18 hover = 199). */
+.cs-team--rows { flex-wrap: wrap; row-gap: 6px; max-width: 199px; }
+.cs-avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--ds-surface-card);
+}
+.cs-avatar-placeholder svg { width: 100%; height: 100%; fill: var(--ds-text-muted); }
+
+/* ------------------------------------------------------------------
+   2. Status
+   ------------------------------------------------------------------ */
+.cs-status {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 32px;
+  padding: 24px;
+  background: var(--ds-surface-card);
+  border: 2px solid var(--ds-border-strong);
+  border-radius: var(--ds-radius-sm);
+}
+.cs-status ul { margin-top: 10px; display: grid; gap: 6px; }
+.cs-status li, .cs-status p {
+  font-size: var(--ds-text-sm);
+  line-height: 1.55;
+  color: var(--ds-text-muted);
+}
+.cs-status li { padding-left: 18px; position: relative; }
+.cs-status li::before {
+  content: "";
+  position: absolute; left: 0; top: .6em;
+  width: 8px; height: 2px;
+  background: var(--ds-orange);
+}
+.cs-status p { margin-top: 10px; }
+.cs-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+
+/* ------------------------------------------------------------------
+   3. TL;DR — Problem / What I did / Result
+   ------------------------------------------------------------------ */
+.cs-tldr {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 72px;
+}
+.cs-tldr-item {
+  padding: 24px;
+  background: var(--ds-surface-card);
+  border: 2px solid var(--ds-border-strong);
+  border-radius: var(--ds-radius-sm);
+}
+.cs-tldr-item p {
+  margin-top: 14px;
+  font-size: var(--ds-text-base);
+  line-height: 1.6;
+}
+.cs-tldr-item--result { border-color: var(--ds-orange-deep); }
+.cs-tldr-item--result p { color: var(--ds-white); }
+
+/* Older project pages lead with the same cards (Problem / underlying issue /
+   Solution), wrapped in .cs.cs-lead above their contents and body. */
+.cs-lead .cs-tldr { margin-top: 100px; }
+.cs-tldr--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* Four cards (Ask AI) sit in one row, two by two on smaller laptops. */
+.cs-tldr--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media screen and (max-width: 1279px) { .cs-tldr--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.cs-tldr-meta { font-size: var(--ds-text-sm); color: var(--ds-text-muted); }
+.cs-tldr-list { display: grid; gap: 14px; margin-top: 14px; }
+.cs-tldr-list li {
+  position: relative;
+  padding-left: 22px;
+  font-size: var(--ds-text-sm);
+  line-height: 1.55;
+  color: var(--ds-text-muted);
+}
+.cs-tldr-list li::before { content: "↳"; position: absolute; left: 0; color: var(--ds-orange); }
+.cs-tldr-list strong { display: block; margin-bottom: 2px; font-size: var(--ds-text-base); }
+.cs-tldr-list span { display: block; }
+/* A list after the card's opening line gets a little more room. */
+.cs-tldr-item p + .cs-tldr-list { margin-top: 24px; }
+/* A lead with a status tag and a View button beside it (leadCardItem). */
+.cs-tldr-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
+.cs-tldr-head strong { margin: 0 4px 0 0; }
+/* margin: the tags are 3px taller than the lead's line; this keeps the lead
+   level with its 01 / 02 / 03. */
+.cs-tldr-list .cs-tag { display: inline-flex; margin: -2px 0; }
+/* Status tag, as dark-mode products show success (Railway, Render): a dark
+   brand-green tint, a mid-green border, light-green text and dot. */
+.cs-tag--status {
+  color: var(--ds-brand-green-light);
+  background: color-mix(in srgb, var(--ds-brand-green) 16%, transparent);
+  border-color: color-mix(in srgb, var(--ds-brand-green) 55%, transparent);
+}
+.cs-tag--status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+/* Live: the dot pulses, like a live indicator. */
+.cs-tag--live::before { animation: cs-live 2s ease-out infinite; }
+@keyframes cs-live {
+  from { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ds-brand-green-light) 60%, transparent); }
+  to { box-shadow: 0 0 0 5px transparent; }
+}
+@media (prefers-reduced-motion: reduce) { .cs-tag--live::before { animation: none; } }
+.cs .cs-tag--link { color: var(--ds-white); border-color: var(--ds-orange-deep); transition: border-color .2s; }
+.cs .cs-tag--link:hover { border-color: var(--ds-orange); }
+.cs-tag--link svg { width: 16px; height: 16px; color: var(--ds-orange); }
+/* A little more room between a status tag and the View button (16px). */
+.cs-tldr-head .cs-tag--status + .cs-tag--link { margin-left: 6px; }
+/* A sequence (1. 2. 3. in the draft) counts 01, 02… instead of the ↳. */
+ol.cs-tldr-list { counter-reset: cs-step; }
+ol.cs-tldr-list li { counter-increment: cs-step; padding-left: 30px; }
+ol.cs-tldr-list li::before {
+  content: counter(cs-step, decimal-leading-zero);
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-base);
+  font-weight: var(--ds-weight-medium);
+  line-height: 1.55;
+}
+/* A body row whose framing moved into the cards gets the whole width
+   (Featurely's Summary, otherwise capped at 500px by Webflow). */
+.cs-fill > .div-block-590 { max-width: none; }
+
+/* ------------------------------------------------------------------
+   4. Figures — placeholder until the visual exists
+   ------------------------------------------------------------------ */
+.cs-figure { margin-top: 40px; }
+/* margin: Webflow gives every img a 10px bottom margin. */
+.cs-figure img { display: block; width: 100%; height: auto; margin: 0; border-radius: var(--ds-radius-sm); }
+/* A video in the body (an image line pointing at an .mp4): loops muted and
+   pauses on click, like the hero video. */
+.cs-figure-media { position: relative; container-type: inline-size; }
+.cs-figure-video { display: block; width: 100%; height: auto; border-radius: var(--ds-radius-sm); cursor: pointer; }
+/* A credit (an image title that starts with "Credit:"): a tag in the
+   bottom-right corner, across from the "Paused" tag. */
+.cs-credit { position: absolute; right: 20px; bottom: 20px; background: var(--ds-black); pointer-events: none; }
+/* Too narrow for both tags along the bottom: "Paused" moves to the top-left. */
+@container (max-width: 480px) {
+  .cs-figure-media:has(> .cs-credit) > .cs-video-paused { top: 14px; bottom: auto; left: 14px; }
+  .cs-credit { right: 14px; bottom: 14px; }
+}
+/* Several images on one draft line: equal 4:3 tiles, each cropped to fill;
+   stacked on phones. */
+.cs-figure-row { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 20px; }
+.cs-figure-row img { aspect-ratio: 4 / 3; object-fit: cover; }
+/* Images that follow one another with no caption between them read as one
+   group: 20px apart, the same as the tiles in a row. */
+.cs-figure:has(> img, > .cs-figure-row, > .cs-figure-media):not(:has(figcaption)) + .cs-figure:has(> img, > .cs-figure-row, > .cs-figure-media) { margin-top: 20px; }
+
+.cs-visual {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 28px;
+  background-color: var(--ds-surface-card);
+  background-image: repeating-linear-gradient(135deg, transparent 0 18px, var(--ds-overlay-white-5) 18px 19px);
+  border: 2px dashed var(--ds-border-strong);
+  border-radius: var(--ds-radius-sm);
+  overflow: hidden;
+  font-family: var(--ds-font-primary);
+}
+.cs-visual .cs-tag { position: absolute; top: 20px; left: 20px; background: var(--ds-black); }
+.cs-visual-desc {
+  margin: 0;
+  max-width: 60ch;
+  font-size: var(--ds-text-sm);
+  line-height: 1.55;
+  color: var(--ds-text-muted);
+}
+.cs-visual-desc b {
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-xs);
+  font-weight: var(--ds-weight-medium);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  color: var(--ds-white);
+}
+
+.cs-figure figcaption {
+  opacity: 1;
+  margin-top: 12px;
+  font-family: var(--ds-font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ds-text-muted);
+}
+.cs-figure figcaption::before { content: "↳ "; color: var(--ds-orange); }
+
+/* ------------------------------------------------------------------
+   5. Body — sticky contents + decisions
+   ------------------------------------------------------------------ */
+/* A narrow contents column (short 1–5 word entries) and the rest of the
+   width for the text and visuals — the same split as .cs-toc-layout on the
+   older project pages. */
+.cs-body {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  column-gap: 48px;
+  margin-top: 104px;
+}
+/* The contents list is self-contained (font, list reset) because the older
+   project pages use it outside .cs — see .cs-toc-layout below. */
+.cs-toc { position: sticky; top: 32px; align-self: start; max-width: 280px; font-family: var(--ds-font-primary); }
+.cs-toc ol { display: grid; gap: 2px; margin: 16px 0 0; padding: 0; list-style: none; }
+.cs-toc li { margin: 0; }
+.cs-toc a {
+  display: block;
+  padding: 7px 0 7px 14px;
+  border-left: 2px solid var(--ds-border-strong);
+  font-size: var(--ds-text-sm);
+  line-height: 1.4;
+  color: var(--ds-text-muted);
+  text-decoration: none;
+  transition: color .2s, border-color .2s;
+}
+.cs-toc a:hover { color: var(--ds-white); }
+.cs-toc a.is-active { color: var(--ds-white); border-left-color: var(--ds-orange); }
+
+/* Older project pages (featurely, tmf1, tmf2, redlab, crayon): their
+   full-width rows sit beside the same contents, in a narrower column so the
+   rows keep most of their width. Below 992px the contents hide (as above)
+   and the rows return to full width. */
+@media screen and (min-width: 992px) {
+  .cs-toc-layout {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    column-gap: 48px;
+    margin-top: 100px;
+    margin-bottom: 140px;
+  }
+  .cs-toc-content > :first-child { margin-top: 0; }
+  /* The last row's 140px gap to the gallery, moved outside the layout above,
+     so the sticky contents stop where the content ends, not in the gap. */
+  .cs-toc-content > :last-child { margin-bottom: 0; }
+}
+.cs-toc-content [id] { scroll-margin-top: 32px; }
+/* Each section's title sits above its content, as on the Yanta pages,
+   instead of in a 3-of-12 side column. (Featurely's Before & After is a
+   6 + 6 image pair and keeps its two columns.) */
+.cs-toc-content > .w-row > .w-col-3,
+.cs-toc-content > .w-row > .w-col-9 { width: 100%; float: none; }
+.cs-toc-content > .w-row > .w-col-3 { margin-bottom: 32px; }
+/* Some Webflow rows (.columns-41) carry 10px side margins; with titles
+   stacked that shows as a ragged left edge, so every row starts flush. */
+.cs-toc-content > .w-row { margin-left: 0; margin-right: 0; }
+
+.cs-section { scroll-margin-top: 32px; }
+.cs-section + .cs-section { margin-top: 72px; }
+
+/* One section style on every project page: Cabin headings (the Yanta
+   pages' h2) over the older pages' body copy. On the older pages the
+   heading is the Webflow label in the row's first column; its arrow goes. */
+.cs-section h2,
+.cs-toc-content > .w-row > .w-col-3 .v25-h3 {
+  font-family: var(--ds-font-display);
+  font-size: clamp(24px, 2.2vw, var(--ds-text-3xl));
+  font-weight: var(--ds-weight-medium);
+  line-height: 1.2;
+  color: var(--ds-white);
+  text-wrap: balance;
+}
+.cs-section h2 { margin-bottom: 32px; }
+
+/* Heading 3 (24px, the type scale's h3): sub-headings and lead statements
+   inside a section. On the older pages these are the white / plain
+   .ms-heading-2 lines; the orange .ms-heading-2 impact figures stay as
+   they are. */
+.cs-section h3,
+.cs-toc-content .ms-heading-2:not(.orange) {
+  font-family: var(--ds-font-display);
+  font-size: clamp(20px, 1.7vw, var(--ds-text-xl));
+  font-weight: var(--ds-weight-medium);
+  line-height: 1.3;
+  color: var(--ds-white);
+}
+.cs-section h3 { margin-bottom: 20px; }
+/* A sub-heading (### in a draft) opens a new part of its section. */
+.cs-section > * + h3 { margin-top: 56px; }
+/* A study's `gridSections`: the section's ### parts two to a row, their
+   headings and text side by side, then the row's 3:2 visuals (with
+   caption): one visual takes the full width, two sit side by side. A
+   part alone in its row takes the full width for its text too. On
+   phones it stacks, each visual after its own text. */
+.cs-subgrid { display: flex; flex-direction: column; gap: 72px; margin-top: 40px; }
+.cs-subgrid-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 48px; }
+.cs-subgrid-text { grid-row: 1; }
+.cs-subgrid-row > .cs-figure { grid-row: 2; margin: 0; }
+.cs-subgrid-row > .cs-figure:only-of-type,
+.cs-subgrid-row > .cs-subgrid-text:only-of-type { grid-column: 1 / -1; }
+.cs-subgrid .cs-visual { aspect-ratio: 3 / 2; }
+.cs-subgrid .cs-figure :is(img, video) { aspect-ratio: 3 / 2; object-fit: cover; }
+
+/* Space under headings: 32px after a section heading, 20px after a
+   heading 3 (the older pages' own 20px flex gaps). On the older pages that
+   means overriding Webflow's spacing: the title wrapper (.div-block-460,
+   20px, and a 10px gap when a description sits inside it) and the
+   lead-statement box (.div-block-471, 40px, which made two of them uneven). */
+.cs-toc-content > .w-row > .w-col-3 .div-block-460 { margin-bottom: 32px; row-gap: 32px; }
+.cs-toc-content .div-block-471 { margin-bottom: 0; }
+
+/* A short line that belongs to a heading ("(3 mins) Everything you need to
+   know…", image credits) sits on the heading's line, right-aligned and
+   vertically centred, on wide screens; below 992px it wraps underneath.
+   .div-block-460 is unwrapped so its description joins the same row. */
+@media screen and (min-width: 992px) {
+  .cs-toc-content > .w-row > .w-col-3 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .cs-toc-content > .w-row > .w-col-3 > .div-block-460 { display: contents; }
+  .cs-toc-content > .w-row > .w-col-3 > :not(.div-block-460),
+  .cs-toc-content > .w-row > .w-col-3 > .div-block-460 > :not(.flex-block-78) {
+    margin: 0;
+    max-width: none;
+    width: auto;
+    text-align: right;
+  }
+}
+
+/* Weights stay regular (body) or medium (headings, labels, emphasis): the
+   older pages' 600 / 700 bold labels and <strong> come down to medium. */
+.cs-toc-content :is(strong, b, .ms-body-text-1-b, .bas-label-before-h, .bas-label-after-h),
+.cs-lead :is(strong, b) {
+  font-weight: var(--ds-weight-medium);
+}
+.cs-toc-content > .w-row > .w-col-3 .image-266 { display: none; }
+/* The title wrapper was capped at 250px for the old side column. */
+.cs-toc-content > .w-row > .w-col-3 .div-block-460 { max-width: none; }
+
+.cs-section p {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-body-size);
+  line-height: var(--ds-body-leading);
+  color: var(--ds-body-color);
+}
+.cs-section strong { color: inherit; }
+/* Body copy is one style on every page: these runs of text used the card
+   font (Aktiv Grotesk, 14–16px) and now match .cs-section p — the cards'
+   paragraphs and list detail lines (not their titles), the Status box,
+   the credits, and the homepage testimonials. */
+.cs-tldr-item p,
+.cs-tldr-list li > span,
+.cs-status li,
+.cs-status p,
+.cs-credits p:not(.cs-note),
+.v25-b2.grey {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-body-size);
+  line-height: var(--ds-body-leading);
+  color: var(--ds-body-color);
+}
+.cs-section :is(p, .cs-list) + :is(p, .cs-list) { margin-top: 18px; }
+
+/* Lists in the body copy: orange dashes (as in the status block), or orange
+   mono step numbers for a sequence. */
+.cs-list { display: grid; gap: 12px; }
+.cs-list li {
+  position: relative;
+  padding-left: 32px;
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-body-size);
+  line-height: var(--ds-body-leading);
+  color: var(--ds-body-color);
+}
+ul.cs-list li::before {
+  content: "";
+  position: absolute; left: 0; top: calc(.75em - 1px);
+  width: 8px; height: 2px;
+  background: var(--ds-orange);
+}
+ol.cs-list { counter-reset: cs-step; }
+ol.cs-list li { counter-increment: cs-step; }
+ol.cs-list li::before {
+  content: counter(cs-step, decimal-leading-zero);
+  position: absolute; left: 0; top: 0;
+  font-family: var(--ds-font-mono);
+  font-weight: var(--ds-weight-medium);
+  color: var(--ds-orange);
+}
+
+/* ------------------------------------------------------------------
+   6. Credits + next case study
+   ------------------------------------------------------------------ */
+.cs-credits {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 24px 48px;
+  margin-top: 104px;
+  padding-top: 32px;
+  border-top: 2px solid var(--ds-border-strong);
+}
+.cs-credits > .cs-label { align-self: start; justify-self: start; }
+.cs-credits p { font-size: var(--ds-text-sm); line-height: 1.6; color: var(--ds-text-muted); }
+.cs-credits .cs-note { font-family: var(--ds-font-mono); font-size: var(--ds-text-xs); }
+
+.cs-next {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: end;
+  margin-top: 72px;
+  padding: 32px;
+  background: var(--ds-surface-card);
+  border: 2px solid var(--ds-border-strong);
+  border-radius: var(--ds-radius-sm);
+  text-decoration: none;
+  transition: border-color .2s;
+}
+.cs-next:hover { border-color: var(--ds-orange-deep); }
+/* Tag above title, stacked, so the page's line height doesn't add space. */
+.cs-next > span { display: flex; flex-direction: column; align-items: flex-start; }
+.cs-next-title {
+  display: block;
+  margin-top: 14px;
+  font-family: var(--ds-font-display);
+  font-size: clamp(var(--ds-text-lg), 1.9vw, var(--ds-text-2xl));
+  font-weight: var(--ds-weight-medium);
+  line-height: 1.2;
+  color: var(--ds-white);
+}
+.cs-next-arrow { width: 28px; height: 26px; }
+.cs-next .cs-tag { white-space: normal; }
+/* Two cards at the end of a case study: All work (back to the homepage,
+   its arrow mirrored to point back) and the next case study. Stacked on
+   phones. */
+.cs-pager { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 72px; }
+.cs-pager .cs-next { margin-top: 0; }
+/* On the older pages the cards follow the Webflow "Let's talk" box, whose
+   160px gap to the footer would otherwise sit between them. */
+.section-37:has(+ .cs-pager) { margin-bottom: 0; }
+.cs-next--back .cs-next-arrow { transform: scaleX(-1); }
+
+/* ------------------------------------------------------------------
+   Closing — the older pages' gallery and "Let's talk" (their Webflow
+   classes); these rules add what Webflow's interactions do on those pages.
+   ------------------------------------------------------------------ */
+.cs-closing { margin-top: 72px; }
+/* The older pages' Montserrat, which .cs swaps for its own font. */
+.cs-closing, .cs-cta { font-family: var(--ds-font-secondary); }
+/* Rows drift sideways by up to 13svh as --cs-gallery-progress runs 0 → 1
+   (gallery.js), the distance of the Webflow scroll interaction. */
+.cs-gallery ._01 { transform: translateX(calc(var(--cs-gallery-progress, 0) * -13svh)); }
+.cs-gallery ._02 { transform: translateX(calc((1 - var(--cs-gallery-progress, 0)) * -13svh)); }
+/* A slot whose image isn't in assets/yanta/gallery/ yet. */
+.cs-gallery-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--ds-surface-card);
+  background-image: repeating-linear-gradient(135deg, transparent 0 18px, var(--ds-overlay-white-5) 18px 19px);
+  border: 2px dashed var(--ds-border-strong);
+  border-radius: var(--ds-radius-sm);
+}
+.cs-gallery-slot .cs-tag { background: var(--ds-black); }
+/* Followed by the next-study link, not the footer. */
+.cs-cta { margin-bottom: 0; }
+/* Hovering the button slides its arrow out and turns it, as on the older pages. */
+.cs-cta .button-1_arrow-wrapper { transition: transform .9s cubic-bezier(.135, .9, .15, 1); }
+.cs-cta .button-1:hover .button-1_arrow-wrapper,
+.cs-cta .button-1:focus-visible .button-1_arrow-wrapper { transform: translateX(1rem) rotate(45deg); }
+
+/* ------------------------------------------------------------------
+   Responsive
+   ------------------------------------------------------------------ */
+@media screen and (max-width: 991px) {
+  /* .section-36 drops its 10px left padding here and the opening relies on
+     Webflow's 10px column padding instead; match it. */
+  .cs { padding-left: 10px; padding-right: 10px; }
+  .cs-status { grid-template-columns: 1fr; gap: 24px; }
+  .cs-tldr { grid-template-columns: 1fr; margin-top: 48px; }
+  .cs-section p, .cs-list li, .cs-tldr-item p, .cs-tldr-list li > span, .cs-status li, .cs-status p,
+  .cs-credits p:not(.cs-note), .v25-b2.grey { font-size: var(--ds-body-size-compact); }
+  .cs-lead .cs-tldr { margin-top: 60px; }
+  .cs-body, .cs-credits { grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: 72px; }
+  .cs-toc { display: none; }
+  .cs-credits { gap: 12px; }
+}
+@media screen and (max-width: 767px) {
+  .cs { font-size: var(--ds-text-base); }
+  .cs-figure-row { grid-auto-flow: row; }
+  .cs-visual { aspect-ratio: 4 / 3; padding: 20px; }
+  .cs-visual.cs-visual--hero { aspect-ratio: auto; min-height: 280px; }
+  .cs-visual .cs-tag { top: 14px; left: 14px; }
+  .cs-section + .cs-section { margin-top: 56px; }
+  .cs-next { padding: 24px; }
+  .cs-pager { grid-template-columns: minmax(0, 1fr); }
+  .cs-subgrid { gap: 56px; }
+  .cs-subgrid-row { grid-template-columns: minmax(0, 1fr); row-gap: 28px; }
+  .cs-subgrid-row > * { grid-row: auto; }
+  .cs-subgrid-row > .cs-figure + .cs-subgrid-text { margin-top: 28px; }
+}
+@media screen and (max-width: 479px) {
+  .cs-visual-desc { font-size: 13px; }
+  /* Seven avatars are wider than a phone; let the row wrap. */
+  .cs-team { flex-wrap: wrap; row-gap: 6px; }
+}
+
+/* ==========================================================================
+   Homepage — Yanta cards in "Selected works."
+   The cards reuse the existing Webflow card markup; this only adds the
+   "Earlier work" divider and the image placeholder until the visuals exist.
+   ========================================================================== */
+.ds-work-group { margin: 72px 0 20px; }
+.ds-work-group .cs-tag { color: var(--ds-white); border-color: var(--ds-orange-deep); }
+.ds-work-group--mobile { margin: 48px 0 8px; }
+
+.ds-card-visual {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  padding: 24px;
+  background-color: var(--ds-surface-card);
+  background-image: repeating-linear-gradient(135deg, transparent 0 18px, var(--ds-overlay-white-5) 18px 19px);
+  box-sizing: border-box;
+}
+.ds-card-visual-title {
+  max-width: 34ch;
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-text-xl);
+  font-weight: var(--ds-weight-medium);
+  line-height: 1.25;
+  color: var(--ds-white);
+}
+.ds-card-visual--mobile { aspect-ratio: 4 / 3; height: auto; min-height: 0; padding: 18px; }
+/* A Yanta card's thumbnail, with the older cards' hover (their Webflow
+   interaction, which is tied to each of those cards): the picture grows
+   to 105% inside its frame over half a second, and back. */
+.ds-card-thumb { width: 100%; height: 100%; object-fit: cover; transition: width .5s ease, height .5s ease; }
+/* A video thumbnail sits like an image does (Webflow caps images at 100%
+   wide) and plays like a GIF: no controls, not even the play button some
+   phones overlay when they hold back autoplay (Low Power Mode). */
+video.ds-card-video { display: block; max-width: 100%; object-fit: cover; pointer-events: none; }
+video.ds-card-video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
+.new-project-card:hover .ds-card-thumb { width: 105%; height: 105%; }
+@media (prefers-reduced-motion: reduce) { .ds-card-thumb { transition: none; } }
+.ds-card-visual--mobile .ds-card-visual-title { font-size: var(--ds-text-lg); }

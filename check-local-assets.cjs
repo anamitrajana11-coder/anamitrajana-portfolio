@@ -2,17 +2,9 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const root = __dirname;
-const pages = [
-  "index.html",
-  "about.html",
-  "resume2.html",
-  "featurely.html",
-  "tmf1.html",
-  "redlab.html",
-  "tmf2.html",
-  "crayon.html",
-  "lab.html",
-];
+// Every page in the site's root, so pages that aren't published (and so
+// aren't there) are never checked or named here.
+const pages = fs.readdirSync(root).filter((file) => file.endsWith(".html")).sort();
 
 function walk(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -31,6 +23,7 @@ function extractLocalAssetRefs(text) {
   const patterns = [
     /(?:src|href)="(assets\/[^"]+)"/g,
     /data-poster-url="(assets\/[^"]+)"/g,
+    /poster="(assets\/[^"]+)"/g,
     /data-video-urls="([^"]+)"/g,
     /srcset="([^"]+)"/g,
     /url\((?:["']|&quot;)?(\.\.\/[^)"']+|assets\/[^)"']+?)(?:["']|&quot;)?\)/g,
@@ -54,14 +47,16 @@ function extractLocalAssetRefs(text) {
 
 const missing = [];
 const routeProblems = [];
+const brokenLinks = [];
 
 for (const file of [...pages, ...cssFiles]) {
   const absolute = path.join(root, file);
   const text = fs.readFileSync(absolute, "utf8");
   for (const ref of extractLocalAssetRefs(text)) {
-    const resolved = ref.startsWith("../")
-      ? path.resolve(path.dirname(absolute), ref)
-      : path.join(root, ref);
+    const file = ref.split("?")[0]; // drop a ?v= cache-busting version
+    const resolved = file.startsWith("../")
+      ? path.resolve(path.dirname(absolute), file)
+      : path.join(root, file);
     if (!fs.existsSync(resolved)) missing.push(`${file} -> ${ref}`);
   }
 }
@@ -90,13 +85,18 @@ for (const page of pages) {
   for (const token of forbidden) {
     if (text.includes(token)) routeProblems.push(`${page} contains ${token}`);
   }
+  // Links to other pages of the site must point at a page that exists.
+  for (const match of text.matchAll(/href="([\w-]+\.html)(?:[#?][^"]*)?"/g)) {
+    if (!fs.existsSync(path.join(root, match[1]))) brokenLinks.push(`${page} links to ${match[1]}`);
+  }
 }
 
 console.log(`Checked ${pages.length} pages and ${cssFiles.length} CSS files.`);
 console.log(`Missing local assets: ${missing.length}`);
 console.log(`Route problems: ${routeProblems.length}`);
+console.log(`Links to missing pages: ${brokenLinks.length}`);
 
-if (missing.length || routeProblems.length) {
-  for (const issue of [...missing, ...routeProblems]) console.error(issue);
+if (missing.length || routeProblems.length || brokenLinks.length) {
+  for (const issue of [...missing, ...routeProblems, ...brokenLinks]) console.error(issue);
   process.exit(1);
 }

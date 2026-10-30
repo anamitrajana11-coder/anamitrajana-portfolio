@@ -1,2 +1,9 @@
 .claude/
 .DS_Store
+
+# Case-study drafts: working notes, research and internal references.
+# Local-only; the published pages are generated from them by build-case-studies.mjs.
+case-studies/
+
+# Local editor/agent connector settings.
+.mcp.json

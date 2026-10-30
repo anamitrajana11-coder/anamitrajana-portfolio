@@ -182,8 +182,8 @@ module.exports = {
 <script>
   window.addEventListener('message', function(event) {
     if (event.data && event.data.type === 'ready') {
-      const iframe = document.querySelector('iframe[src*="galaxy-animation.html"]');
-      const container = iframe.parentElement;
+      const iframe = document.querySelector('iframe[src*="pixel-galaxy-animation"]');
+      const container = iframe; // the iframe is deliberately larger than its cropped box, so size the animation to the iframe itself
       
       // Send initial size
       iframe.contentWindow.postMessage({

@@ -5,9 +5,11 @@
    .shared.*.css) on 2026-08-19. Every value below was extracted from styles
    actually in use — nothing here is invented.
 
-   This file is ADDITIVE: it is not yet linked from any page and changes
-   nothing visually. It is the canonical reference for the site's design
-   language, and the semantic layer to build against going forward.
+   This file is ADDITIVE: it only defines --ds-* variables, so linking it
+   changes nothing visually. It is the canonical reference for the site's
+   design language, and the semantic layer to build against going forward.
+   Linked from: index.html and the Yanta case-study pages (yanta-*.html),
+   which are styled by design-system/case-study.css.
 
    The original Webflow variables (--brand-color, --ana-orange, --tmf-blue,
    --crayon-*, etc.) remain defined in the Webflow stylesheet; the tokens
@@ -25,6 +27,8 @@
   --ds-purple: #a798ff;          /* = --brand-color                       */
   --ds-purple-dark: #816cff;     /* = --brand-colour-dark                 */
   --ds-green: #009b5c;           /* Webflow body default green (17x)      */
+  --ds-brand-green: #1d8e6b;     /* = Yanta DS brand-60 (--primary-brand); status tag fill + border tints */
+  --ds-brand-green-light: #86ceb8; /* = Yanta DS brand-20; status tag text + dot, 9.5:1 on its fill */
 
   /* ------------------------------------------------------------------
      2. DARK SURFACES & OVERLAYS
@@ -117,6 +121,34 @@
 
   /* Card on black (.flex-block-81 pattern): black fill, 1px #111 border,
      20px gap, 20px radius family.                                       */
+
+  /* ------------------------------------------------------------------
+     8. V25 LAYER (added 2026-10-27)
+     The newest part of the site — the "Selected works." cards, page
+     titles on Lab and Home — uses a tighter recipe than the older pages:
+     4px cards with a 2px #2c2c2c frame, mono tags, Cabin display titles.
+     Every value aliases a variable already in the Webflow stylesheet.
+     ------------------------------------------------------------------ */
+  --ds-font-display: Cabin, sans-serif;  /* .v25-title-text page titles     */
+  --ds-surface-card: #090909;    /* = --back-g-grey, .new-project-card fill */
+  --ds-border-strong: #2c2c2c;   /* = --walsh--black, card + tag frames     */
+  --ds-orange-deep: #641b00;     /* = --orange-dark, client-tag frame       */
+  --ds-coral: #f87638;           /* = --coral, highlighted impact figures   */
+  --ds-text-body: #e4e6ee;       /* = --ghost-white, long-form body copy    */
+  --ds-text-muted: #a1a1a1;      /* = --dark-grey, tags, captions, meta     */
+  --ds-divider: #181818;         /* = --darker-grey, card column divider    */
+
+  /* ------------------------------------------------------------------
+     9. CASE-STUDY BODY COPY (added 2026-10-27)
+     One body style for every project page: the older pages'
+     .ms-body-text-1.ocp75 — Montserrat 14px/1.5, white at 75%, 12px at
+     ≤ 991px. Section headings use --ds-font-display (see case-study.css).
+     ------------------------------------------------------------------ */
+  --ds-font-body: Montserrat, sans-serif;
+  --ds-body-size: 14px;
+  --ds-body-size-compact: 12px;  /* ≤ 991px                                */
+  --ds-body-leading: 1.5;
+  --ds-body-color: #ffffffbf;    /* white at 75%, as .ocp75               */
 }
 
 /* ==========================================================================
