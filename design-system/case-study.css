@@ -121,6 +121,9 @@
 }
 .is-paused > .cs-video-paused { opacity: 1; }
 
+/* A timeline in phases: one per line, below the label. */
+.cs-timeline { display: block; }
+
 /* Team avatars: the older pages animate these with Webflow interactions
    (the avatar's slot widens 50 → 70px and its name card appears). The same
    effect in CSS, plus keyboard focus. The !important beats the inline
@@ -437,6 +440,10 @@ ol.cs-tldr-list li::before {
 .cs-subgrid-row > .cs-subgrid-text:only-of-type { grid-column: 1 / -1; }
 .cs-subgrid .cs-visual { aspect-ratio: 3 / 2; }
 .cs-subgrid .cs-figure :is(img, video) { aspect-ratio: 3 / 2; object-fit: cover; }
+/* A visual alone in its row has nothing to line up with, so it keeps its
+   own proportions (a 16:9 recording isn't cropped to 3:2). */
+.cs-subgrid-row > .cs-figure:only-of-type > img,
+.cs-subgrid-row > .cs-figure:only-of-type > .cs-figure-media > video { aspect-ratio: auto; }
 
 /* Space under headings: 32px after a section heading, 20px after a
    heading 3 (the older pages' own 20px flex gaps). On the older pages that
@@ -483,7 +490,9 @@ ol.cs-tldr-list li::before {
   line-height: var(--ds-body-leading);
   color: var(--ds-body-color);
 }
-.cs-section strong { color: inherit; }
+/* Bold in the body (a list item's lead, a key term) is full white, a step
+   up from the 75% body copy, so it stands out. */
+.cs-section strong { color: var(--ds-white); }
 /* Body copy is one style on every page: these runs of text used the card
    font (Aktiv Grotesk, 14–16px) and now match .cs-section p — the cards'
    paragraphs and list detail lines (not their titles), the Status box,

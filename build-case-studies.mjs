@@ -47,6 +47,9 @@ const people = {
   "nanguan-lin": { name: "Nanguan Lin", role: "Full-Stack Software Engineer" },
   "abhinav-sriram": { name: "Abhinav Sriram", role: "Software Engineer" },
   "rohith-chimpiri": { name: "Rohith Chimpiri", role: "Software Engineer" },
+  "johannes-kung": { name: "Johannes Kung", role: "Chief Science Officer" },
+  "mackenzie-bower": { name: "MacKenzie Bower", role: "Associate Principal Engineer" },
+  "fan-lu": { name: "Fan Lu", role: "Machine Learning Scientist" },
 };
 
 // Homepage card copy is condensed from each draft's Problem/Result lines.
@@ -64,7 +67,7 @@ const people = {
 // the draft's Problem / What I did / Result lines. `gridSections` names sections whose
 // ### parts sit two to a row, their texts side by side and the row's 3:2
 // visuals below them (one visual, or a part alone in its row, takes the
-// full width).
+// full width). `gridPerRow: 1` gives every part a row of its own.
 const caseStudies = [
   {
     slug: "yanta-identity",
@@ -89,10 +92,40 @@ const caseStudies = [
     heroImage: "assets/yanta/ask-ai-hero.jpg",
     thumbnail: "assets/yanta/ask-ai-thumbnail.mp4",
     tags: ["PRODUCT", "B2B", "AI"],
-    summary: "An assistant inside the analysis workbook that turns plain-language questions into validated SQL and a chart, and shows its work before anything is saved.",
-    impact: "Built on the design and on the development environment since",
-    highlight: "Sep 2026",
+    summary: "Designed an AI assistant that turns scientists' plain-language questions into charts and SQL they can check before saving.",
+    impact: "V0 testing –",
+    highlight: "87.5/100 on UX-Lite",
     team: ["anupam-chowdhury", "vinit-vasant-khatavkar", "rohith-chimpiri"],
+  },
+  {
+    slug: "yanta-scheduler",
+    source: "cs-03-scheduler.md",
+    shortName: "Scheduler",
+    leadCards: ["The problem", "What I did", "Outcome"],
+    gridSections: ["Key design decisions"],
+    gridPerRow: 1,
+    heroImage: "assets/yanta/scheduler-hero.jpg",
+    thumbnail: "assets/yanta/scheduler-thumbnail.mp4",
+    tags: ["PRODUCT", "B2B", "SAAS/WEB"],
+    summary: "Replaced scattered planning spreadsheets with one scheduler where the plan becomes the batch record, traceable to audit.",
+    impact: "V1 testing –",
+    highlight: "93.8/100 on UX-Lite",
+    team: ["johannes-kung", "anupam-chowdhury", "mackenzie-bower", "vinit-vasant-khatavkar", "abhinav-sriram"],
+  },
+  {
+    slug: "yanta-data-transformer",
+    source: "cs-04-data-transformer.md",
+    shortName: "Data Transformer",
+    leadCards: ["The problem", "What I did", "Outcome"],
+    gridSections: ["Key design decisions"],
+    gridPerRow: 1,
+    heroImage: "assets/yanta/data-transformer-hero.jpg",
+    thumbnail: "assets/yanta/data-transformer-thumbnail.jpg",
+    tags: ["PRODUCT", "B2B", "AI"],
+    summary: "Turned messy instrument exports into one-step uploads: AI reads the file, the scientist checks the graph before saving.",
+    impact: "V1 testing –",
+    highlight: "91.7/100 on UX-Lite",
+    team: ["anupam-chowdhury", "fan-lu", "vinit-vasant-khatavkar", "nanguan-lin"],
   },
 ];
 
@@ -399,6 +432,13 @@ function renderHeroVideo(src, hero) {
   return renderVideo("hero", src, label);
 }
 
+// A timeline in phases, separated by "; " in the draft, puts each phase on
+// its own line, below the "Timeline:" label.
+function renderTimeline(text) {
+  const phases = text.split(/;\s*/);
+  return phases.length > 1 ? `<span class="cs-timeline">${phases.map(inline).join("<br/>")}</span>` : inline(text);
+}
+
 // A still hero; the draft's hero description is its alt text.
 function renderHeroImage(src, hero) {
   return `<div class="cs-hero-media"><img class="cs-hero-image" src="${versioned(src)}" alt="${escapeHtml(hero ? hero.description : "")}" fetchpriority="high"/></div>`;
@@ -414,7 +454,7 @@ function renderOpening(study, page) {
     + `<div class="columns-36 w-row"><div class="column-67 w-col w-col-5"><div class="div-block-454"><h1 class="ms-heading-2 orange">${inline(page.title)}</h1></div></div>`
     + `<div class="column-68 w-col w-col-3"><div class="div-block-459">${detail("Company", context.Company)}${detail("Role", capitalize(context.Role || ""))}${detail("Product", context.Product)}</div></div>`
     + `<div class="w-col w-col-4"><div class="div-block-473"><div>${heading("Project details")}</div><div class="w-layout-vflex flex-block-98">`
-    + `<div class="frame-2"><div class="frame-4"><div class="ms-body-text-1 ocp75"><span class="text-span-1049">Timeline:  </span>${inline(context.Timeline || "")}</div></div></div>`
+    + `<div class="frame-2"><div class="frame-4"><div class="ms-body-text-1 ocp75"><span class="text-span-1049">Timeline:  </span>${renderTimeline(context.Timeline || "")}</div></div></div>`
     + `<div class="div-block-486"><div class="frame-2"><div class="frame-4"><div class="ms-body-text-1 ocp75"><span class="text-span-1049">Team (hover for details): </span></div><div class="div-block-505"><div class="w-layout-hflex team-flex-block cs-team${study.team.length > 6 ? " cs-team--rows" : ""}">${team}</div></div></div></div></div>`
     + `</div></div></div></div></section>`;
 }
@@ -524,8 +564,9 @@ function renderPage(study, page, index, shell) {
       const text = blocks.filter((b) => b.type !== "figure").map(renderBlock).join("");
       return `<div class="cs-subgrid-text"><h3>${inline(title)}</h3>${text}</div>${visuals}`;
     };
+    const perRow = study.gridPerRow || 2;
     const rows = [];
-    for (let i = 0; i < parts.length; i += 2) rows.push(`<div class="cs-subgrid-row">${parts.slice(i, i + 2).map(part).join("")}</div>`);
+    for (let i = 0; i < parts.length; i += perRow) rows.push(`<div class="cs-subgrid-row">${parts.slice(i, i + perRow).map(part).join("")}</div>`);
     return intro.map(renderBlock).join("") + `<div class="cs-subgrid">${rows.join("")}</div>`;
   };
 
