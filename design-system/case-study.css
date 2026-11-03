@@ -700,6 +700,21 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
 .ds-card-visual--mobile .ds-card-visual-title { font-size: var(--ds-text-lg); }
 
 /* ==========================================================================
+   Homepage — "Hover to reveal" spotlight (Webflow .spotlight1_*)
+   Its white circle is blended (multiply) over the design-philosophy drawing
+   to light it up. Around the drawing the box had no background, so whenever
+   a browser blended the circle against that empty area instead of the black
+   page (as it can when it redraws part of the page in a separate layer), the
+   circle showed as plain white. A black background of its own, with the blend
+   kept inside the box, makes it the same in every browser.
+   ========================================================================== */
+.spotlight1_layout { background-color: var(--ds-black); isolation: isolate; }
+/* The box (.div-block-517) and the drawing inside it are both 55svh tall
+   (50 and 35 on smaller screens), so the drawing runs 4px past the box's
+   border; clip it, or its black hides the bottom border. */
+.div-block-517:has(> .main-wrapper-2 .spotlight1_layout) { overflow: hidden; }
+
+/* ==========================================================================
    Homepage — testimonial deck in "What Others Think"
    The one-pager's card swipe: the cards share one grid cell (so the deck is
    as tall as the longest quote) and fan out behind the front one.
