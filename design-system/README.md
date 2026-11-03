@@ -62,7 +62,7 @@ Each case study carries its own accent set, and that's intentional:
 
 | Role | Family | Source | Where |
 |---|---|---|---|
-| **Primary** | `aktiv-grotesk` | Adobe Fonts (kit `qjc6msf`, linked on every page as `https://use.typekit.net/qjc6msf.css`, so changes to the kit reach the site by themselves) | All global UI — 125 style rules. Pages render Regular 400 and Medium 500 (the style guide also 600–800); the kit loads every style it holds, so it should hold only those in use |
+| **Primary** | `aktiv-grotesk` | Adobe Fonts (kit `qjc6msf`) | All global UI — 125 style rules |
 | **Display** | `Cabin` 500 | Google Fonts | Page and section titles in the newest (v25) layer: "Selected works.", "Welcome to the Lab.", case-study headings — `--ds-font-display` |
 | Secondary | `Montserrat` | Google Fonts | Webflow body default (16px/28px) |
 | Serif | `PT Serif` | Google Fonts | Editorial moments in case studies |
@@ -173,10 +173,6 @@ The older project pages also lead with the TL;DR cards, in a `.cs.cs-lead` wrapp
 The "On this page" contents (`.cs-toc`, highlighted by [`toc.js`](toc.js)) is also on the older project pages (Featurely, TMF 1 and 2, RedLab, Crayon): their full-width rows sit in `.cs-toc-layout` beside it, in a 200px column on desktop; below 992px the contents hide and those pages look exactly as before. Each row's id matches its contents link.
 
 To swap a placeholder for a real visual, replace the `<div class="cs-visual">…</div>` inside its `<figure>` with an `<img>` and keep the `<figcaption>`.
-
-### The one-pager (`hello.html`)
-
-A standalone page sent with outreach messages. **Nothing on the site links to it**, and it asks search engines not to list it (`noindex`); it links out to the portfolio, LinkedIn, the resume and the four Yanta case studies. Its layout is [`hello.css`](hello.css) and its motion [`hello.js`](hello.js), built from the tokens and the `.cs-tag`; it doesn't load the Webflow stylesheet, so it rebuilds the site's two buttons from their Webflow values: the nav button (`.hello-btn`, the `.grad-bg` frame, with `--ds-gradient-cta-hover`) and Let's talk (`.hello-cta`, `.button-1`: orange pill and arrow circle merged by the `#hello-goo` filter). New on this page, from its design file: the "Looking for my next role" pill (`.hello-pill`), the work mosaic (`.hello-row` of `.hello-tile`s, each with its `--ratio` as `flex-grow` so a row lines up at both ends; stacked below 768px) and the testimonial deck (`.hello-deck`: four cards fanned in one grid cell, the front one sliding out left and settling at the back every 7 seconds or on the round arrow buttons; still for reduced motion). Its pictures and videos are the case studies' own files at the same versioned URLs; its pictures load as the page opens, but each mosaic video loads and plays only from a screen's height before it comes into view (loading all 105 MB at once held up every other page from the site while the one-pager stayed open).
 
 ---
 
