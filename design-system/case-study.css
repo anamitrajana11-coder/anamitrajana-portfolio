@@ -699,6 +699,14 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
 @media (prefers-reduced-motion: reduce) { .ds-card-thumb { transition: none; } }
 .ds-card-visual--mobile .ds-card-visual-title { font-size: var(--ds-text-lg); }
 
+/* Every card's footer (Webflow .div-block-579): the summary and the result
+   share one centre line, and the space is the same 20px all round, from the
+   card's edges to the text and from the text to the divider on both sides
+   (Webflow had 15–20px at the edges but 50px at the divider). The divider
+   keeps the footer's full height. */
+.new-project-card .div-block-579 { align-items: center; gap: 20px; padding: 20px; }
+.new-project-card .div-block-580 { align-self: stretch; }
+
 /* ==========================================================================
    Homepage — "Hover to reveal" spotlight (Webflow .spotlight1_*)
    Its white circle is blended (multiply) over the design-philosophy drawing

@@ -631,7 +631,9 @@ function cardVisual(study, mobile) {
 
 function desktopCard(study) {
   const tags = study.tags.map((t) => `<div class="v25-b1 interaction-tag light"> ${escapeHtml(t)} </div>`).join("");
-  return `<div class="w-layout-vflex new-project-card"><a href="${study.slug}.html" class="link-block-13 w-inline-block"><div class="div-block-557-copy"><div class="div-block-583">${cardVisual(study, false)}</div><div class="div-block-578"><div class="v25-b1 interaction-tag-client light"> BOSTON BIOPROCESS · YANTA </div></div><div class="div-block-566"><div class="work-tags-flex-block">${tags}</div></div></div><div class="div-block-579"><div class="div-block-581"><p class="ms-body-text-1 ocp75">${escapeHtml(study.summary)}</p></div><div class="div-block-580"></div><div class="div-block-582"><p class="ms-body-text-1"><span class="opc-75">${escapeHtml(study.impact)}</span> <span class="text-span-1050">${escapeHtml(study.highlight)}</span></p></div></div></a></div>`;
+  // A word joiner after each hyphen keeps "UX-Lite" from breaking across lines.
+  const highlight = escapeHtml(study.highlight).replace(/-/g, "-&#8288;");
+  return `<div class="w-layout-vflex new-project-card"><a href="${study.slug}.html" class="link-block-13 w-inline-block"><div class="div-block-557-copy"><div class="div-block-583">${cardVisual(study, false)}</div><div class="div-block-578"><div class="v25-b1 interaction-tag-client light"> BOSTON BIOPROCESS · YANTA </div></div><div class="div-block-566"><div class="work-tags-flex-block">${tags}</div></div></div><div class="div-block-579"><div class="div-block-581"><p class="ms-body-text-1 ocp75">${escapeHtml(study.summary)}</p></div><div class="div-block-580"></div><div class="div-block-582"><p class="ms-body-text-1"><span class="opc-75">${escapeHtml(study.impact)}</span> <span class="text-span-1050">${highlight}</span></p></div></div></a></div>`;
 }
 
 function mobileCard(study) {
