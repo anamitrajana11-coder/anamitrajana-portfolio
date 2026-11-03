@@ -775,7 +775,8 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
 .ds-dots span { width: 8px; height: 8px; border-radius: var(--ds-radius-circle); background: var(--ds-text-muted); opacity: .4; }
 .ds-dots span.is-on { background: var(--ds-orange); opacity: 1; }
 .ds-quote-mark {
-  margin: 8px 0 -8px;
+  /* the mark's glyph sits high in its line; pull the quote up under it */
+  margin: 8px 0 -24px;
   font-family: var(--ds-font-display);
   font-size: var(--ds-text-7xl);
   line-height: 1;
