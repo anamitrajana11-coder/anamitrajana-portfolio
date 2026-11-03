@@ -698,3 +698,110 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
 .new-project-card:hover .ds-card-thumb { width: 105%; height: 105%; }
 @media (prefers-reduced-motion: reduce) { .ds-card-thumb { transition: none; } }
 .ds-card-visual--mobile .ds-card-visual-title { font-size: var(--ds-text-lg); }
+
+/* ==========================================================================
+   Homepage — testimonial deck in "What Others Think"
+   The one-pager's card swipe: the cards share one grid cell (so the deck is
+   as tall as the longest quote) and fan out behind the front one.
+   design-system/deck.js sets each card's place in data-pos: 0 is the front,
+   the last number the back; "out" is the front card leaving to the left,
+   "hold" the same spot one layer down, just before it slides to the back.
+   It takes the four card slots to the right of the section's title column,
+   with the stack against their right edge so the leaving card has room;
+   from 768px deck.js stops it at the slots' left edge (--deck-out), so it
+   never covers the title column.
+   ========================================================================== */
+.ds-deck-cell { grid-column: span 2; grid-row: span 6; min-width: 0; align-items: stretch; }
+.ds-deck-cell *, .ds-deck-cell *::before, .ds-deck-cell *::after { box-sizing: border-box; }
+/* Neutralise the Webflow element defaults (blockquote bar and padding,
+   centred figcaption) at class-level specificity. */
+.ds-deck-cell :where(p, figure, blockquote, figcaption) { margin: 0; padding: 0; border: 0; text-align: left; }
+.ds-deck-nav { display: flex; justify-content: flex-end; gap: 10px; }
+.ds-round {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--ds-orange);
+  border-radius: var(--ds-radius-circle);
+  background: var(--ds-black);
+  color: var(--ds-white);
+  cursor: pointer;
+  transition: background-color .2s;
+}
+.ds-round:hover, .ds-round:focus-visible { background: var(--ds-orange); outline: none; }
+.ds-round svg { width: 18px; height: 18px; }
+.ds-deck {
+  --fan: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  /* cards up to 600px, and at most 70% of the slots, so the leaving card
+     has room to slide */
+  max-width: min(656px, 70%);
+  margin: 0 0 0 auto;
+  /* the fanned cards reach about 50px past the front one, on the right */
+  padding: 40px 56px 76px 0;
+}
+.ds-quote {
+  grid-area: 1 / 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 40px 40px 32px;
+  background: var(--ds-surface-1);
+  border: 2px solid var(--ds-border-strong);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: 0 28px 56px rgba(0, 0, 0, .65);
+  font-family: var(--ds-font-primary);
+  color: var(--ds-white);
+  text-align: left;
+  transform-origin: 50% 50%;
+  transition: transform .45s cubic-bezier(.45, 0, .25, 1), opacity .35s ease;
+}
+.ds-quote[data-pos="0"] { transform: translate(0, 0) rotate(0) scale(1); z-index: 4; }
+.ds-quote[data-pos="1"] { transform: translate(calc(14px * var(--fan)), calc(10px * var(--fan))) rotate(calc(2deg * var(--fan))) scale(.97); z-index: 3; }
+.ds-quote[data-pos="2"] { transform: translate(calc(28px * var(--fan)), calc(20px * var(--fan))) rotate(calc(4deg * var(--fan))) scale(.94); opacity: .9; z-index: 2; }
+/* Cards further back wait, hidden, behind the last fanned one. */
+.ds-quote[data-pos="3"], .ds-quote[data-pos="back"] { transform: translate(calc(42px * var(--fan)), calc(30px * var(--fan))) rotate(calc(6deg * var(--fan))) scale(.91); opacity: .75; z-index: 1; }
+.ds-quote[data-pos="back"] { opacity: 0; z-index: 0; }
+.ds-quote[data-pos="out"] { transform: translate(var(--deck-out, -102%), 6px) rotate(-3deg) scale(1); z-index: 5; }
+.ds-quote[data-pos="hold"] { transform: translate(var(--deck-out, -102%), 6px) rotate(-3deg) scale(1); z-index: 0; }
+.ds-quote-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+.ds-dots { display: flex; align-items: center; gap: 6px; }
+.ds-dots span { width: 8px; height: 8px; border-radius: var(--ds-radius-circle); background: var(--ds-text-muted); opacity: .4; }
+.ds-dots span.is-on { background: var(--ds-orange); opacity: 1; }
+.ds-quote-mark {
+  margin: 8px 0 -8px;
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-text-7xl);
+  line-height: 1;
+  color: var(--ds-coral);
+}
+/* Quote: the site's body copy (.ms-body-text-1.ocp75); its keywords in full
+   white at medium weight, the body copy's emphasis (see README §2). No
+   quotation marks around it: the coral mark above the quote is the cue. */
+.ds-quote blockquote { font-family: var(--ds-font-body); font-size: var(--ds-body-size); line-height: var(--ds-body-leading); color: var(--ds-body-color); }
+.ds-quote blockquote strong { color: var(--ds-white); font-weight: var(--ds-weight-medium); }
+.ds-quote figcaption { margin-top: auto; display: flex; align-items: center; gap: 12px; }
+.ds-avatar { flex: none; display: block; width: 48px; height: 48px; border-radius: var(--ds-radius-circle); object-fit: cover; background: var(--ds-border-strong); }
+.ds-person { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+/* Name and role: the testimonials' .v25-h3 and .v25-h4.grey */
+.ds-person-name { font-family: var(--ds-font-primary); font-size: var(--ds-text-base); font-weight: var(--ds-weight-regular); line-height: 1.5; color: var(--ds-white); }
+.ds-person-role { font-family: var(--ds-font-primary); font-size: var(--ds-text-xs); font-weight: var(--ds-weight-medium); letter-spacing: .5px; line-height: 1.5; color: var(--ds-text-muted); }
+@media screen and (max-width: 991px) {
+  .ds-quote blockquote { font-size: var(--ds-body-size-compact); }
+}
+@media screen and (max-width: 767px) {
+  .ds-deck-cell { grid-column: auto; }
+  .ds-deck { --fan: .5; max-width: none; padding: 32px 24px 56px 0; }
+  .ds-quote { padding: 28px 24px 24px; gap: 16px; }
+  .ds-quote-mark { font-size: var(--ds-text-6xl); }
+}
+@media screen and (max-width: 479px) {
+  .ds-person-name { font-size: var(--ds-text-sm); }
+}
+@media (prefers-reduced-motion: reduce) { .ds-quote { transition: none; } }

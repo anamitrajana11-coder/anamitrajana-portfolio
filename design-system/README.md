@@ -152,6 +152,16 @@ Hovering a card grows its picture to 105% inside the 3:2 frame over half a secon
 
 ---
 
+### Testimonial deck (homepage "What Others Think")
+The homepage's testimonials are one card deck (`.ds-deck` of `.ds-quote` cards in [`case-study.css`](case-study.css), moved by [`deck.js`](deck.js)). It takes the four card slots to the right of the section's title column, which is unchanged.
+
+- **Layout:** the cards share one grid cell, so they are all as tall as the longest quote. Four are fanned behind the front one. Cards are up to 600px wide (at most 70% of the slots), against the slots' right edge.
+- **Motion:** every 7 seconds, or on the round arrow buttons (`.ds-round`), the front card slides out to the left and settles at the back; the previous arrow brings the back card forward. From 768px the leaving card stops at the slots' left edge (`--deck-out`), so it never covers the title column. The deck holds still for reduced motion.
+- **Text:** the quote is the site's body copy (`--ds-body-*`, as `.ms-body-text-1.ocp75`), with a few keywords per quote in `<strong>`: full white at medium weight, the body copy's emphasis. Quotes have no quotation marks, since the coral mark above each one does that job. Name and role match the testimonials' `.v25-h3` (aktiv-grotesk 16px) and `.v25-h4.grey` (aktiv-grotesk 12px medium, muted).
+- **Card details:** each card has a client tag (`.cs-tag--accent`), the position dots, a Cabin quote mark in coral and the person's photo.
+
+---
+
 ## 7. Case-study pages
 
 The Yanta case studies (`yanta-*.html`) are generated from the drafts by `build-case-studies.mjs` (drafts stay local; see the script header). They open exactly like the older project pages, then follow the case-study guide — verdict first, then decisions. Their layout lives in [`case-study.css`](case-study.css):
