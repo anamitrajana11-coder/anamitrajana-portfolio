@@ -25,9 +25,11 @@
 .hello :where(h1, h2, p, figure, blockquote) { margin: 0; }
 .hello a { color: var(--ds-white); text-decoration: none; }
 
+/* Same width as the portfolio's pages (.mid-body): up to 1728px, 40px from
+   the edges, 20px on phones. */
 .hello-wrap {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1728px;
   margin: 0 auto;
   padding: 0 40px;
 }
