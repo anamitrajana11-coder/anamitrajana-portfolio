@@ -73,6 +73,23 @@ Each case study carries its own accent set, and that's intentional:
 
 **Case-study sections** (every project page, old and new) share one set: a **Cabin 500 heading** (24–32px, white), **heading 3** for sub-headings and lead statements (Cabin 500, 20–24px, white), and **Montserrat body copy** at 14px / 1.5, white at 75% (12px at ≤ 991px) — the older pages' `.ms-body-text-1.ocp75`, now the `--ds-body-*` tokens. Orange impact figures keep their own size. Weights are **regular (400) or medium (500) only** — headings, labels and bold emphasis are medium. Bold in the body (a list item's lead-in, a key term) is full white (`--ds-white`), a step up from the 75% body copy. The same body style covers the cards' paragraphs and list detail lines, the Status box, the credits and the homepage testimonials; captions (mono), placeholder notes, opening detail values and labels keep their own styles. Spacing under headings: **32px** after a section heading, **20px** after a heading 3, 18px between paragraphs. Don't add font families — nine already load; the goal is fewer, not more.
 
+### Section headings (two levels, added 2026-11-05)
+
+Homepage and one-pager sections open with one of two headings, each followed by the orange pixel arrow (Brand-hyperlink-arrow, 16 × 15).
+
+| Level | Name | Class | Recipe | Tokens |
+|---|---|---|---|---|
+| 1 | **Section title** | `.ds-section-title` | Cabin 500, 28px / 1.15, white; the arrow follows the last word 8px away (no space, so it never wraps alone), .1em above the baseline. Below 992px it becomes a Section label | `--ds-section-title-font`, `--ds-section-title-size`, `--ds-section-title-weight`, `--ds-section-title-leading` |
+| 2 | **Section label** | `.ds-section-label` | aktiv-grotesk 400, 16px / 1.5 (14px ≤ 479px), white; the arrow 10px after it | `--ds-section-label-font`, `--ds-section-label-size`, `--ds-section-label-size-compact`, `--ds-section-label-weight`, `--ds-section-label-leading` |
+
+Both use `--ds-section-arrow-width` and `--ds-section-arrow-height` for the arrow.
+
+- **Section title** is the one-pager's `hello-h2` ("What they say when I stop screen-sharing").
+  - On the homepage, these headings use it: "Selected works", "What Others Think", "What I've Been Up To" and "Unfiltered notes from visitors". "Selected works" and "Unfiltered notes" were the 40px `v25-title-text extra-large`, and both dropped their full stop.
+  - On phones and tablets (below 992px) it steps down to the Section label look, like every mobile heading.
+- **Section label** is "Experience" and the mobile "Selected works". Both still use the Webflow classes (`.v25-h3` in a `.flex-block-78` row), which `.ds-section-label` matches.
+- Webflow gives every `img` `height: 15px; margin-bottom: 10px; display: block`. Both classes set the arrow's margin in full, otherwise it rides 10px high.
+
 ### Type scale (px, ranked by actual use)
 
 ```
@@ -159,6 +176,13 @@ The homepage's testimonials are one card deck (`.ds-deck` of `.ds-quote` cards i
 - **Motion:** every 7 seconds, or on the round arrow buttons (`.ds-round`), the front card slides out to the left and settles at the back; the previous arrow brings the back card forward. From 768px the leaving card stops at the slots' left edge (`--deck-out`), so it never covers the title column. The deck holds still for reduced motion.
 - **Text:** the quote is the site's body copy (`--ds-body-*`, as `.ms-body-text-1.ocp75`), with a few keywords per quote in `<strong>`: full white at medium weight, the body copy's emphasis. Quotes have no quotation marks, since the coral mark above each one does that job. Name and role match the testimonials' `.v25-h3` (aktiv-grotesk 16px) and `.v25-h4.grey` (aktiv-grotesk 12px medium, muted).
 - **Card details:** each card has a client tag (`.cs-tag--accent`), the position dots, a Cabin quote mark in coral and the person's photo.
+
+### Visitor feedback form (homepage "Drop your feedback")
+The popup form still uses its Webflow markup, but Webflow no longer receives it (since 2026-11-05).
+- **Where it goes:** the form's `action` is Formspree (`https://formspree.io/f/xdeejpvv`). Formspree emails each note under the subject "New portfolio feedback" and keeps it in its dashboard. The free plan allows 50 a month and keeps 30 days of history.
+- **How it sends:** [`feedback.js`](feedback.js) sends the form in the background. On success it swaps the fields for the form's thank-you message (`.w-form-done`); on failure it shows the error (`.w-form-fail`) and keeps the text. Webflow's form script skips any form with its own `action`.
+- **Spam:** a hidden `_gotcha` field catches bots.
+- **The wall:** the visitor notes are a fixed copy of Webflow's list. A new note only shows up when it's added to `index.html` by hand.
 
 ---
 

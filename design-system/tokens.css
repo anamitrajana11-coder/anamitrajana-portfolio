@@ -149,6 +149,29 @@
   --ds-body-size-compact: 12px;  /* ≤ 991px                                */
   --ds-body-leading: 1.5;
   --ds-body-color: #ffffffbf;    /* white at 75%, as .ocp75               */
+
+  /* ------------------------------------------------------------------
+     10. SECTION HEADINGS (added 2026-11-05)
+     Two levels, each followed by the orange pixel arrow
+     (Brand-hyperlink-arrow, 16 × 15). See .ds-section-title and
+     .ds-section-label in case-study.css.
+     Section title (level 1): the one-pager's section headings
+       (hello-h2), Cabin 500 28px/1.15; the homepage's main sections.
+       Below 992px it takes the Section label recipe.
+     Section label (level 2): the homepage's "Experience" (.v25-h3),
+       aktiv-grotesk 400 16px/1.5, 14px ≤ 479px.
+     ------------------------------------------------------------------ */
+  --ds-section-title-font: var(--ds-font-display);
+  --ds-section-title-size: var(--ds-text-2xl);       /* 28px              */
+  --ds-section-title-weight: var(--ds-weight-medium);
+  --ds-section-title-leading: var(--ds-leading-heading);  /* 1.15         */
+  --ds-section-label-font: var(--ds-font-primary);
+  --ds-section-label-size: var(--ds-text-base);      /* 16px              */
+  --ds-section-label-size-compact: var(--ds-text-sm);  /* 14px, ≤ 479px   */
+  --ds-section-label-weight: var(--ds-weight-regular);
+  --ds-section-label-leading: 1.5;
+  --ds-section-arrow-width: 16px;
+  --ds-section-arrow-height: 15px;
 }
 
 /* ==========================================================================

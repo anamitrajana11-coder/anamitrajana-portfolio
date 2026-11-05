@@ -657,6 +657,79 @@ ol.cs-list li::before {
 }
 
 /* ==========================================================================
+   Section headings — two levels, each followed by the orange pixel arrow
+   (tokens: "10. SECTION HEADINGS" in tokens.css).
+   .ds-section-title (level 1): the one-pager's section headings, on the
+     homepage's main sections ("Selected works", "What Others Think",
+     "What I've Been Up To", "Unfiltered notes from visitors"). Below
+     992px it steps down to the Section label, like every mobile heading.
+   .ds-section-label (level 2): the homepage's "Experience" (Webflow .v25-h3
+     in a .flex-block-78 row, arrow 10px away).
+   ========================================================================== */
+.ds-section-title {
+  margin: 0;
+  font-family: var(--ds-section-title-font);
+  font-size: var(--ds-section-title-size);
+  font-weight: var(--ds-section-title-weight);
+  line-height: var(--ds-section-title-leading);
+  color: var(--ds-white);
+  text-align: left;
+}
+/* The arrow follows the last word with no space (so it never wraps onto a
+   line of its own); 8px is the one-pager's space plus 2px, and like the
+   one-pager it sits .1em above the baseline. The margin is set in full:
+   Webflow gives every image a 10px bottom margin, which lifts it. */
+.ds-section-title img {
+  display: inline;
+  width: var(--ds-section-arrow-width);
+  height: var(--ds-section-arrow-height);
+  margin: 0 0 0 8px;
+  vertical-align: .1em;
+}
+/* As a label, the arrow is centred on the text in a row, as
+   .ds-section-label does. */
+@media (max-width: 991px) {
+  .ds-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--ds-section-label-font);
+    font-size: var(--ds-section-label-size);
+    font-weight: var(--ds-section-label-weight);
+    line-height: var(--ds-section-label-leading);
+  }
+  .ds-section-title img { flex: none; margin: 0; }
+}
+@media (max-width: 479px) { .ds-section-title { font-size: var(--ds-section-label-size-compact); } }
+.ds-section-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-family: var(--ds-section-label-font);
+  font-size: var(--ds-section-label-size);
+  font-weight: var(--ds-section-label-weight);
+  line-height: var(--ds-section-label-leading);
+  color: var(--ds-white);
+}
+.ds-section-label img { width: var(--ds-section-arrow-width); height: var(--ds-section-arrow-height); margin: 0; }
+@media (max-width: 479px) { .ds-section-label { font-size: var(--ds-section-label-size-compact); } }
+
+/* ==========================================================================
+   Homepage — gap above "Selected works."
+   The "Every pixel tells a story" section between the intro and the works is
+   gone; the works keep the 100px it left above them (Webflow .section-49 on
+   desktop, the phone list .section-35 below 992px, which already has 140px
+   of its own below 480px).
+   ========================================================================== */
+.section-49 { margin-top: 100px; }
+@media (min-width: 480px) and (max-width: 991px) { .section-35 { margin-top: 100px; } }
+/* "Let's zoom out…" and the visitor notes' intro sit 20px under their
+   titles at every width (Webflow only adds it from 1280px). */
+.section-49 > .w-layout-vflex > .div-block-558,
+.flex-block-136 > .div-block-558 { margin-top: 20px; }
+
+/* ==========================================================================
    Homepage — Yanta cards in "Selected works."
    The cards reuse the existing Webflow card markup; this only adds the
    "Earlier work" divider and the image placeholder until the visuals exist.
