@@ -660,8 +660,8 @@ ol.cs-list li::before {
    Section headings — two levels, each followed by the orange pixel arrow
    (tokens: "10. SECTION HEADINGS" in tokens.css).
    .ds-section-title (level 1): the one-pager's section headings, on the
-     homepage's main sections ("Selected works", "What Others Think",
-     "What I've Been Up To", "Unfiltered notes from visitors"). Below
+     homepage's main sections ("Selected works", "What others think",
+     "What I've been up to", "Unfiltered notes from visitors"). Below
      992px it steps down to the Section label, like every mobile heading.
    .ds-section-label (level 2): the homepage's "Experience" (Webflow .v25-h3
      in a .flex-block-78 row, arrow 10px away).
@@ -724,9 +724,8 @@ ol.cs-list li::before {
    ========================================================================== */
 .section-49 { margin-top: 100px; }
 @media (min-width: 480px) and (max-width: 991px) { .section-35 { margin-top: 100px; } }
-/* "Let's zoom out…" and the visitor notes' intro sit 20px under their
-   titles at every width (Webflow only adds it from 1280px). */
-.section-49 > .w-layout-vflex > .div-block-558,
+/* The visitor notes' intro sits 20px under its title at every width
+   (Webflow only adds it from 1280px). */
 .flex-block-136 > .div-block-558 { margin-top: 20px; }
 
 /* ==========================================================================
@@ -796,7 +795,7 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
 .div-block-517:has(> .main-wrapper-2 .spotlight1_layout) { overflow: hidden; }
 
 /* ==========================================================================
-   Homepage — testimonial deck in "What Others Think"
+   Homepage — testimonial deck in "What others think"
    The one-pager's card swipe: the cards share one grid cell (so the deck is
    as tall as the longest quote) and fan out behind the front one.
    design-system/deck.js sets each card's place in data-pos: 0 is the front,
@@ -883,7 +882,9 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
    quotation marks around it: the coral mark above the quote is the cue. */
 .ds-quote blockquote { font-family: var(--ds-font-body); font-size: var(--ds-body-size); line-height: var(--ds-body-leading); color: var(--ds-body-color); }
 .ds-quote blockquote strong { color: var(--ds-white); font-weight: var(--ds-weight-medium); }
-.ds-quote figcaption { margin-top: auto; display: flex; align-items: center; gap: 12px; }
+/* Full opacity: the Webflow stylesheet fades every figcaption to 60%,
+   which dimmed the photo, name and role. */
+.ds-quote figcaption { margin-top: auto; display: flex; align-items: center; gap: 12px; opacity: 1; }
 .ds-avatar { flex: none; display: block; width: 48px; height: 48px; border-radius: var(--ds-radius-circle); object-fit: cover; background: var(--ds-border-strong); }
 .ds-person { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 /* Name and role: the testimonials' .v25-h3 and .v25-h4.grey */
@@ -902,3 +903,195 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
   .ds-person-name { font-size: var(--ds-text-sm); }
 }
 @media (prefers-reduced-motion: reduce) { .ds-quote { transition: none; } }
+
+/* ==========================================================================
+   Homepage — feedback popover ("Drop your feedback")
+   A popover under the button, in the manner of shadcn/ui's Popover: a
+   near-black panel with a faint border, opened and closed by
+   design-system/feedback.js. Inside, the form is a list of hairline rows
+   (label left, borderless field right, as in Linear's or Notion's settings),
+   then the message, then the Submit pill and an info badge. A row lightens
+   while its field has focus; an empty required field gets a small red dot
+   at the end of its row (the message's sits at its top right), with
+   "Required" for screen readers.
+   ========================================================================== */
+.ds-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 50;
+  width: 380px;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-align: left;
+  color: var(--ds-white);
+  background: var(--ds-surface-1);
+  border: 1px solid var(--ds-overlay-white-10);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: 0 16px 48px var(--ds-overlay-black-70);
+  opacity: 0;
+  transform: translateY(-4px) scale(.98);
+  transform-origin: top right;
+  transition: opacity .15s ease, transform .15s ease;
+}
+.ds-popover.is-open { opacity: 1; transform: none; }
+.ds-popover[hidden], .ds-popover [hidden] { display: none !important; }
+.ds-popover *, .ds-popover *::before, .ds-popover *::after { box-sizing: border-box; }
+.ds-popover :where(p, label) { margin: 0; }
+
+.ds-feedback-row {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 12px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--ds-overlay-white-8);
+  transition: background-color .15s ease;
+}
+.ds-feedback-label {
+  font-family: var(--ds-font-primary);
+  font-size: var(--ds-text-xs);
+  font-weight: var(--ds-weight-regular);
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--ds-body-color);
+}
+.ds-feedback-input {
+  display: block;
+  width: 100%;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-text-sm);
+  line-height: 1.5;
+  color: var(--ds-white);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  outline: none;
+  box-shadow: none;
+}
+.ds-feedback-input::placeholder { color: color-mix(in srgb, var(--ds-white) 32%, transparent); }
+.ds-feedback-hint { font-family: var(--ds-font-primary); font-size: var(--ds-text-xs); color: var(--ds-text-muted); }
+/* The dot: 6px of --ds-red in a 16px hover area (pulled 5px right so the
+   dot keeps the row's edge). Hovering it shows "Required field" to its
+   left, a small tooltip kept inside the row, so the panel doesn't clip it. */
+.ds-feedback-error { position: relative; display: block; width: 16px; height: 16px; margin-right: -5px; cursor: help; }
+.ds-feedback-error::before { content: ""; position: absolute; inset: 5px; border-radius: var(--ds-radius-circle); background: var(--ds-red); }
+.ds-feedback-error::after {
+  content: "Required field" / "";
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 4px);
+  padding: 3px 8px;
+  font-family: var(--ds-font-primary);
+  font-size: var(--ds-text-xs);
+  line-height: 16px;
+  white-space: nowrap;
+  color: var(--ds-white);
+  background: var(--ds-grey-800);
+  border: 1px solid var(--ds-overlay-white-10);
+  border-radius: var(--ds-radius-sm);
+  opacity: 0;
+  transform: translate(4px, -50%);
+  transition: opacity .12s ease, transform .12s ease;
+  pointer-events: none;
+}
+.ds-feedback-error:hover::after { opacity: 1; transform: translate(0, -50%); }
+.ds-feedback-row:focus-within, .ds-feedback-message:focus-within { background: var(--ds-overlay-white-5); }
+.ds-feedback-row:focus-within .ds-feedback-label { color: var(--ds-white); }
+
+.ds-feedback-message {
+  position: relative;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ds-overlay-white-8);
+  transition: background-color .15s ease;
+}
+.ds-feedback-message .ds-feedback-input {
+  height: auto;
+  min-height: 96px;
+  max-height: 220px;
+  padding-right: 16px;
+  field-sizing: content;
+  resize: none;
+}
+/* On the first line of the message, against the right edge. */
+.ds-feedback-message .ds-feedback-error { position: absolute; top: 15px; right: 11px; margin: 0; }
+
+.ds-feedback-fail {
+  padding: 12px 16px 0;
+  font-family: var(--ds-font-primary);
+  font-size: var(--ds-text-xs);
+  color: var(--ds-red);
+}
+/* The pill and the badge share a line, pill on the left; where they don't
+   fit (phones), the badge moves under the pill. */
+.ds-feedback-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px 16px;
+}
+/* The Submit pill (Webflow .button-1) as a real button. */
+.ds-feedback .button-1 { flex: none; margin: 0; padding: 0; font: inherit; background: none; border: 0; cursor: pointer; }
+.ds-feedback .button-1:disabled { cursor: progress; opacity: .7; }
+.ds-feedback .button-1:focus-visible .button-1_content-wrap { box-shadow: 0 0 0 2px var(--ds-white); }
+
+/* Info badge: a soft pill with an info icon, for a quiet note beside an
+   action (the mono .cs-tag is for labels). */
+.ds-info-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 4px 10px 4px 8px;
+  font-family: var(--ds-font-primary);
+  font-size: var(--ds-text-xs);
+  line-height: 16px;
+  white-space: nowrap;
+  color: var(--ds-text-muted);
+  background: var(--ds-overlay-white-5);
+  border: 1px solid var(--ds-overlay-white-8);
+  border-radius: var(--ds-radius-pill);
+}
+.ds-info-badge svg { flex: none; width: 14px; height: 14px; }
+
+.ds-feedback-done { display: flex; align-items: center; gap: 12px; padding: 20px 16px; outline: none; }
+.ds-feedback-check {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--ds-radius-circle);
+  background: var(--ds-overlay-white-8);
+}
+.ds-feedback-check svg { width: 16px; height: 16px; }
+.ds-feedback-done-title { font-family: var(--ds-font-primary); font-size: var(--ds-text-sm); font-weight: var(--ds-weight-medium); line-height: 1.5; }
+.ds-feedback-done-note { font-family: var(--ds-font-body); font-size: var(--ds-text-xs); line-height: 1.5; color: var(--ds-text-muted); }
+
+.ds-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+/* 16px fields on phones, so iOS doesn't zoom in on focus. */
+@media screen and (max-width: 767px) {
+  .ds-feedback-input { font-size: var(--ds-text-base); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ds-popover { transform: none; transition: opacity .15s ease; }
+}

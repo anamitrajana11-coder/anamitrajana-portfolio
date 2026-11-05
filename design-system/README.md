@@ -85,9 +85,10 @@ Homepage and one-pager sections open with one of two headings, each followed by 
 Both use `--ds-section-arrow-width` and `--ds-section-arrow-height` for the arrow.
 
 - **Section title** is the one-pager's `hello-h2` ("What they say when I stop screen-sharing").
-  - On the homepage, these headings use it: "Selected works", "What Others Think", "What I've Been Up To" and "Unfiltered notes from visitors". "Selected works" and "Unfiltered notes" were the 40px `v25-title-text extra-large`, and both dropped their full stop.
+  - On the homepage, these headings use it: "Selected works", "What others think", "What I've been up to" and "Unfiltered notes from visitors". "Selected works" and "Unfiltered notes" were the 40px `v25-title-text extra-large`, and both dropped their full stop.
   - On phones and tablets (below 992px) it steps down to the Section label look, like every mobile heading.
 - **Section label** is "Experience" and the mobile "Selected works". Both still use the Webflow classes (`.v25-h3` in a `.flex-block-78` row), which `.ds-section-label` matches.
+- Section titles and labels are in sentence case: only the first word (and names) capitalised.
 - Webflow gives every `img` `height: 15px; margin-bottom: 10px; display: block`. Both classes set the arrow's margin in full, otherwise it rides 10px high.
 
 ### Type scale (px, ranked by actual use)
@@ -169,7 +170,7 @@ Hovering a card grows its picture to 105% inside the 3:2 frame over half a secon
 
 ---
 
-### Testimonial deck (homepage "What Others Think")
+### Testimonial deck (homepage "What others think")
 The homepage's testimonials are one card deck (`.ds-deck` of `.ds-quote` cards in [`case-study.css`](case-study.css), moved by [`deck.js`](deck.js)). It takes the four card slots to the right of the section's title column, which is unchanged.
 
 - **Layout:** the cards share one grid cell, so they are all as tall as the longest quote. Four are fanned behind the front one. Cards are up to 600px wide (at most 70% of the slots), against the slots' right edge.
@@ -177,13 +178,18 @@ The homepage's testimonials are one card deck (`.ds-deck` of `.ds-quote` cards i
 - **Text:** the quote is the site's body copy (`--ds-body-*`, as `.ms-body-text-1.ocp75`), with a few keywords per quote in `<strong>`: full white at medium weight, the body copy's emphasis. Quotes have no quotation marks, since the coral mark above each one does that job. Name and role match the testimonials' `.v25-h3` (aktiv-grotesk 16px) and `.v25-h4.grey` (aktiv-grotesk 12px medium, muted).
 - **Card details:** each card has a client tag (`.cs-tag--accent`), the position dots, a Cabin quote mark in coral and the person's photo.
 
-### Visitor feedback form (homepage "Drop your feedback")
-The popup form still uses its Webflow markup, but Webflow no longer receives it (since 2026-11-05).
-- **Where it goes:** the form's `action` is Formspree (`https://formspree.io/f/xdeejpvv`). Formspree emails each note under the subject "New portfolio feedback" and keeps it in its dashboard. The free plan allows 50 a month and keeps 30 days of history.
-- **How it sends:** [`feedback.js`](feedback.js) sends the form in the background. On success it swaps the fields for the form's thank-you message (`.w-form-done`); on failure it shows the error (`.w-form-fail`) and keeps the text. Webflow's form script skips any form with its own `action`.
-- **Spam:** a hidden `_gotcha` field catches bots.
+### Visitor feedback popover (homepage "Drop your feedback")
+Since 2026-11-05 the button opens a popover in the manner of shadcn/ui's Popover (`.ds-popover`, styled in [`case-study.css`](case-study.css), run by [`feedback.js`](feedback.js)). Webflow no longer touches it.
+- **Panel:** 380px wide, 8px under the button, right-aligned to it. It uses `--ds-surface-1`, a 1px `--ds-overlay-white-10` border, `--ds-radius-lg` corners and a soft shadow, and fades and scales in over .15s.
+- **Opening and closing:** the button opens and closes it; Escape or a click outside closes it too. There's no title and no ✕. Opening puts the cursor in Name.
+- **Form:** hairline rows with the label on the left and a borderless field on the right (Name, Role, Company marked "Optional"), then the message. A row lightens while its field has focus. An empty required field gets a small red dot (`--ds-red`, 6px) at the end of its row; the message's sits at its top right. Hovering the dot shows a "Required field" tooltip to its left. Screen readers hear "Required". There are no red lines. The labels reset Webflow's uppercase `label` style.
+- **Footer:** the Submit pill on the left, now a real `<button>` with the same look, and an info badge ("Goes straight to my inbox") on the right. On phones the badge moves under the pill.
+- **Sending:** the form's `action` is Formspree (`https://formspree.io/f/xdeejpvv`). Formspree emails each note under the subject "New portfolio feedback" and keeps 30 days in its dashboard; the free plan allows 50 a month. On success a thank-you replaces the rows, and the next opening brings a fresh form. On failure a red line shows and the text stays. A hidden `_gotcha` field catches bots.
+- **Webflow:** the button links to plain `#`. A link to `#feedback-popover` would set off Webflow's smooth scroll.
 - **The wall:** the visitor notes are a fixed copy of Webflow's list. A new note only shows up when it's added to `index.html` by hand.
 
+### Info badge (`.ds-info-badge`)
+A soft pill for a quiet note beside an action: an ⓘ icon (14px) and aktiv-grotesk 12px in `--ds-text-muted`, on a `--ds-overlay-white-5` fill with a 1px `--ds-overlay-white-8` border and `--ds-radius-pill` corners. It stays on one line. The mono `.cs-tag` is for labels; this is for a sentence.
 ---
 
 ## 7. Case-study pages

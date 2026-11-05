@@ -1,4 +1,4 @@
-// Homepage testimonial deck ("What Others Think"), the one-pager's card swipe.
+// Homepage testimonial deck ("What others think"), the one-pager's card swipe.
 // The cards sit fanned in a deck, four in view. Every 7 seconds, or on the
 // next arrow, the front card slides out to the left, drops behind the others
 // and settles at the back; the previous arrow brings the back card to the
