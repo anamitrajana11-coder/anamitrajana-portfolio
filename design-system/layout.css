@@ -1,0 +1,40 @@
+/* ==========================================================================
+   ANA™ Page frame
+   ==========================================================================
+   Rules for the parts every page shares, the top menu, the footer and the
+   scrollbar, so they keep to the page's two edges: the logo's left edge and the same
+   distance in from the right (50px; 30px below 768px; wider on very wide
+   screens). Linked from every page; build-case-studies.mjs keeps the link.
+   Section-level edge fixes for the homepage, All works and the case studies
+   are in case-study.css ("Page edges").
+   ========================================================================== */
+
+/* From 1280px Webflow drops the menu column's 10px gutter, which put
+   "Resume" 10px past the page's right edge. */
+@media (min-width: 1280px) { .column-64 { padding-right: 10px; } }
+
+/* On tablets the four menu buttons are wider than their column and ran over
+   the typing tagline beside the logo; the tagline steps aside there. */
+@media (min-width: 768px) and (max-width: 991px) { .div-block-407 { display: none; } }
+
+/* Between 480px and 767px the page's edge is 30px but the footer kept its
+   50px side padding. */
+@media (min-width: 480px) and (max-width: 767px) { .section-28 { padding-left: 30px; padding-right: 30px; } }
+
+/* --------------------------------------------------------------------------
+   Scrollbar: one on every page.
+   The homepage (and All works, copied from it) carried its own slim dark
+   scrollbar, 10px wide; every other page had the browser's, about 15px wide
+   or none at all. The page is centred, so going from one to the other moved
+   the whole page sideways by half the difference. The slim dark scrollbar is
+   now the site's, and the two pages no longer carry their own copy.
+   (No scrollbar-width / scrollbar-color for Chrome and Safari: setting those
+   switches these rules off.)
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar { width: 10px; height: 5px; }
+::-webkit-scrollbar-track { background: rgb(15, 15, 15); border-radius: 10px; }
+::-webkit-scrollbar-thumb { background: rgb(100, 100, 100); border-radius: 10px; }
+/* Firefox has no ::-webkit-scrollbar; give it the same colours. */
+@supports not selector(::-webkit-scrollbar) {
+  html { scrollbar-color: rgb(100, 100, 100) rgb(15, 15, 15); }
+}

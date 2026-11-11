@@ -16,7 +16,8 @@ WebFont.load({ google: { families: [
 </script>
 <script src="assets/use.typekit.net/qjc6msf-c3a3e20f4d.js" type="text/javascript"></script>
 <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-<link rel="stylesheet" href="design-system/tokens.css?v=483cd0c1">
+<link rel="stylesheet" href="design-system/tokens.css?v=aa77f875">
+<link rel="stylesheet" href="design-system/buttons.css?v=c2ca06db">
 <style>
   /* Token fallbacks: identical to design-system/tokens.css, embedded so this
      page renders correctly even if the token sheet fails to load. */
@@ -115,18 +116,8 @@ WebFont.load({ google: { families: [
       linear-gradient(var(--ds-overlay-white-5), transparent 60%),
       var(--ds-black);
   }
-  .grad-cta { background-image: var(--ds-gradient-cta); border-radius: var(--ds-radius-sm); padding: 2px; display: inline-block; text-decoration: none; }
-  .grad-cta span {
-    display: block; color: var(--ds-white); background: var(--ds-black);
-    border-radius: var(--ds-radius-xs); padding: 4px 16px;
-    font-family: var(--ds-font-primary); font-size: var(--ds-text-sm);
-  }
-  .nav-demo { display: flex; gap: 28px; align-items: center; font-size: var(--ds-text-sm); }
-  .nav-item { position: relative; padding-bottom: 14px; color: var(--ds-white); text-decoration: none; }
-  .nav-item.active::after {
-    content: ""; position: absolute; left: 50%; transform: translateX(-50%);
-    bottom: 0; width: 40px; height: 3px; background: var(--ds-white); border-radius: var(--ds-radius-pill);
-  }
+  .nav-demo { display: flex; gap: 20px; align-items: center; }
+  .btn-demo { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
   .card-demo {
     background: var(--ds-black); border: 1px solid var(--ds-border-hairline);
     border-radius: var(--ds-radius-2xl); padding: 24px; max-width: 280px;
@@ -144,7 +135,7 @@ WebFont.load({ google: { families: [
   footer.sg a { color: #a1a1a1; }
 </style>
 </head>
-<body>
+<body><!-- ds-filters:start --><svg class="ds-filters" width="0" height="0" aria-hidden="true" focusable="false"><defs><filter id="ds-goo" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="g"/><feBlend in="SourceGraphic" in2="g"/></filter><filter id="ds-glass-rim" color-interpolation-filters="sRGB"><feColorMatrix in="SourceAlpha" mode="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0" result="g"/><feGaussianBlur in="g" stdDeviation="1.5" result="h"/><feComposite in="g" in2="h" operator="out" result="band"/><feFlood flood-color="#c8562a" flood-opacity=".9" result="fc"/><feComposite in="fc" in2="band" operator="in" result="bezel"/><feSpecularLighting in="h" surfaceScale="2.5" specularConstant="1" specularExponent="10" lighting-color="#ffcfb5" result="s1"><feDistantLight azimuth="235" elevation="30"/></feSpecularLighting><feComponentTransfer in="s1" result="t1"><feFuncA type="linear" slope="1.7" intercept="-.45"/></feComponentTransfer><feSpecularLighting in="h" surfaceScale="2.5" specularConstant="1" specularExponent="10" lighting-color="#f15a24" result="s2"><feDistantLight azimuth="55" elevation="30"/></feSpecularLighting><feComponentTransfer in="s2" result="t2"><feFuncA type="linear" slope="1.4" intercept="-.45"/></feComponentTransfer><feMerge result="m"><feMergeNode in="bezel"/><feMergeNode in="t1"/><feMergeNode in="t2"/></feMerge><feComposite in="m" in2="g" operator="in"/></filter><filter id="ds-glass-rim-goo" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceAlpha" stdDeviation="5" result="b"/><feColorMatrix in="b" mode="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 19 -9" result="g"/><feGaussianBlur in="g" stdDeviation="1.5" result="h"/><feComposite in="g" in2="h" operator="out" result="band"/><feFlood flood-color="#c8562a" flood-opacity=".9" result="fc"/><feComposite in="fc" in2="band" operator="in" result="bezel"/><feSpecularLighting in="h" surfaceScale="2.5" specularConstant="1" specularExponent="10" lighting-color="#ffcfb5" result="s1"><feDistantLight azimuth="235" elevation="30"/></feSpecularLighting><feComponentTransfer in="s1" result="t1"><feFuncA type="linear" slope="1.7" intercept="-.45"/></feComponentTransfer><feSpecularLighting in="h" surfaceScale="2.5" specularConstant="1" specularExponent="10" lighting-color="#f15a24" result="s2"><feDistantLight azimuth="55" elevation="30"/></feSpecularLighting><feComponentTransfer in="s2" result="t2"><feFuncA type="linear" slope="1.4" intercept="-.45"/></feComponentTransfer><feMerge result="m"><feMergeNode in="bezel"/><feMergeNode in="t1"/><feMergeNode in="t2"/></feMerge><feComposite in="m" in2="g" operator="in"/></filter></defs></svg><!-- ds-filters:end -->
 
 <header class="sg">
   <span class="sg-kicker">ANA™ Design System</span>
@@ -250,7 +241,7 @@ WebFont.load({ google: { families: [
 
 <section>
   <h2>Shape &amp; radius</h2>
-  <p class="sg-note">20px is the signature card radius; 4px for buttons; 100px pill for indicators.</p>
+  <p class="sg-note">8px for buttons and the work, testimonial and visitor-note cards; 4px for chips and tags; 20px on the older Webflow cards; 100px pill for indicators.</p>
   <div class="radii">
     <div class="rad" style="border-radius:2px">2px</div>
     <div class="rad" style="border-radius:4px">4px</div>
@@ -268,12 +259,24 @@ WebFont.load({ google: { families: [
   <p class="sg-note">The global shell — recreated here with exact values from the live stylesheet.</p>
   <div class="comp-stage">
     <nav class="nav-demo">
-      <a class="nav-item active" href="#">WORK</a>
-      <a class="nav-item" href="#">ABOUT</a>
-      <a class="nav-item" href="#">LAB</a>
-      <a class="nav-item" href="#">RESUME</a>
+      <a class="ds-btn ds-btn--secondary" aria-current="page" href="#">Work</a>
+      <a class="ds-btn ds-btn--secondary" href="#">About</a>
+      <a class="ds-btn ds-btn--secondary" href="#">Lab</a>
+      <a class="ds-btn ds-btn--secondary" href="#">Resume</a>
     </nav>
-    <a class="grad-cta" href="#"><span>WORK</span></a>
+    <div class="btn-demo">
+      <a class="ds-btn ds-btn--primary" href="#">View all works</a>
+      <a class="ds-btn ds-btn--secondary" href="#">Explore the Lab</a>
+      <a href="#" class="ds-btn-talk"><span class="ds-btn-talk__glass" aria-hidden="true"><span class="ds-btn-talk__pill"><i></i></span><span class="ds-btn-talk__dot"><i></i></span></span><span class="ds-btn-talk__rim" aria-hidden="true"><i></i><i></i></span><span class="ds-btn-talk__label">Let’s talk</span><span class="ds-btn-talk__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
+    </div>
+    <div class="btn-demo">
+      <a class="ds-btn ds-btn--primary ds-btn--sm" href="#">Small</a>
+      <a class="ds-btn ds-btn--primary" href="#">Medium</a>
+      <a class="ds-btn ds-btn--primary ds-btn--lg" href="#">Large</a>
+      <a class="ds-btn ds-btn--secondary ds-btn--sm" href="#">Small</a>
+      <a class="ds-btn ds-btn--secondary" href="#">Medium</a>
+      <a class="ds-btn ds-btn--secondary ds-btn--lg" href="#">Large</a>
+    </div>
     <div class="card-demo">
       <span class="tag">CARD ON BLACK</span>
       <h4>Project card</h4>
@@ -284,9 +287,11 @@ WebFont.load({ google: { families: [
   <h3>Recipes</h3>
   <table>
     <tr><th>Component</th><th>Recipe</th></tr>
-    <tr><td>Gradient CTA frame</td><td class="mono">linear-gradient(15deg, #f15a24, #a43711 0%, #3b1001 80%, #0f0400 99%) · r4 · 2px pad</td></tr>
-    <tr><td>CTA label</td><td class="mono">#000 bg · #fff text · r2 · 4px 16px pad · 14px aktiv-grotesk</td></tr>
-    <tr><td>Active nav indicator</td><td class="mono">40 × 3px white pill (r100)</td></tr>
+    <tr><td>Buttons, all levels</td><td class="mono">aktiv-grotesk 500 · sentence case · r8 on primary and secondary · width = label + side padding, never stretched</td></tr>
+    <tr><td>Button sizes</td><td class="mono">Small 32px tall · 16px sides · 14px text (unused) — Medium 40 · 24 · 14 (every button on the site) — Large 48 · 32 · 16 (unused). Side padding = 2 × vertical</td></tr>
+    <tr><td>Primary button</td><td class="mono">black · r8 · 1.5px border (2px on standard-density screens) lit orange from the bottom-left corner, grey hairline elsewhere · hover: light spreads, fill drops to 80%. One per view</td></tr>
+    <tr><td>Secondary button</td><td class="mono">ghost: no fill · 1.5px (2px on standard-density screens) 14% white outline · r8 · hover and current page: 34% white outline + 4% white fill. Menu, repeated actions, alternatives</td></tr>
+    <tr><td>Tertiary button</td><td class="mono">#1a0b05 glass pill + arrow circle · glass edge · ember inside · hover: circle pulls away. “Let’s talk” only</td></tr>
     <tr><td>Card on black</td><td class="mono">#000 bg · 1px #111 border · r20 · 20px gaps</td></tr>
   </table>
 </section>

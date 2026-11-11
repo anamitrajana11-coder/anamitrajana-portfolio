@@ -100,10 +100,11 @@
   --ds-leading-heading: 1.15;
 
   /* ------------------------------------------------------------------
-     6. RADII — 20px is the signature card radius; 4px for buttons
+     6. RADII — 8px for buttons and cards (the v25 work cards, testimonial
+        and visitor-note cards; 4px until 2026-11-11); 4px for chips and tags
      ------------------------------------------------------------------ */
   --ds-radius-xs: 2px;     /* inner button label                          */
-  --ds-radius-sm: 4px;     /* buttons, small chips (56x)                  */
+  --ds-radius-sm: 4px;     /* small chips and tags (56x)                  */
   --ds-radius-md: 8px;
   --ds-radius-lg: 12px;
   --ds-radius-xl: 16px;
@@ -133,10 +134,13 @@
   --ds-surface-card: #090909;    /* = --back-g-grey, .new-project-card fill */
   --ds-border-strong: #2c2c2c;   /* = --walsh--black, card + tag frames     */
   --ds-orange-deep: #641b00;     /* = --orange-dark, client-tag frame       */
+  --ds-orange-darkest: #0f0400;  /* = --darkest-orange, "Available" pill fill */
+  --ds-orange-ember: #340e00;    /* "Available for work" pill border        */
   --ds-coral: #f87638;           /* = --coral, highlighted impact figures   */
   --ds-text-body: #e4e6ee;       /* = --ghost-white, long-form body copy    */
   --ds-text-muted: #a1a1a1;      /* = --dark-grey, tags, captions, meta     */
   --ds-divider: #181818;         /* = --darker-grey, card column divider    */
+  --ds-card-border-width: 2px;   /* every line in a work card: its frame, the line under the picture, the footer divider, the tags */
 
   /* ------------------------------------------------------------------
      9. CASE-STUDY BODY COPY (added 2026-10-27)
@@ -172,7 +176,65 @@
   --ds-section-label-leading: 1.5;
   --ds-section-arrow-width: 16px;
   --ds-section-arrow-height: 15px;
+
+  /* ------------------------------------------------------------------
+     11. BUTTONS (added 2026-11-11)
+     Three levels in three sizes; see buttons.css.
+     Primary (.ds-btn--primary): black, with a 1.5px border lit orange from
+       the bottom-left corner; on hover the fill drops to 80% and the
+       light glows through. One per view: the action the view is for.
+     Secondary (.ds-btn--secondary): ghost, a 1.5px outline with
+       no fill; hover brightens the outline and adds a faint fill.
+       Navigation, repeated per-item actions and alternatives.
+     Tertiary (.ds-btn-talk): brown glass arrow button, "Let's talk" only.
+     ------------------------------------------------------------------ */
+  /* Sizes: fixed height, side padding, text size and icon gap. The
+     32 / 40 / 48 ladder is the common one (Carbon, Material and most
+     product systems sit on it). Side padding is twice the vertical
+     padding, the site's own ratio (the old buttons were 10px 20px and
+     20px 40px): around a 16px line that is 8 × 16, 12 × 24 and 16 × 32.
+     Width is always the label plus the side padding; nothing stretches a
+     button.
+       Small   32px tall · 16px sides · 14px text · 6px gap   dense rows; unused so far
+       Medium  40px tall · 24px sides · 14px text · 8px gap   the default: every button today
+       Large   48px tall · 32px sides · 16px text · 8px gap   one stand-out action; unused so far */
+  --ds-btn-sm-height: 32px;
+  --ds-btn-sm-pad-x: 16px;
+  --ds-btn-sm-size: var(--ds-text-sm);               /* 14px            */
+  --ds-btn-sm-gap: 6px;
+  --ds-btn-md-height: 40px;
+  --ds-btn-md-pad-x: 24px;
+  --ds-btn-md-size: var(--ds-text-sm);               /* 14px            */
+  --ds-btn-md-gap: 8px;
+  --ds-btn-lg-height: 48px;
+  --ds-btn-lg-pad-x: 32px;
+  --ds-btn-lg-size: var(--ds-text-base);             /* 16px            */
+  --ds-btn-lg-gap: 8px;
+  --ds-btn-row-gap: 12px;                            /* between neighbouring buttons, side by side or stacked */
+  --ds-btn-height: var(--ds-btn-md-height);          /* the tertiary's height */
+  --ds-btn-radius: var(--ds-radius-md);              /* 8px: primary and secondary, every size */
+  --ds-btn-font: var(--ds-font-primary);
+  --ds-btn-size: var(--ds-btn-md-size);
+  --ds-btn-weight: var(--ds-weight-medium);
+  --ds-btn-cap-nudge: .24em;       /* fallback only: moves the label down 0.12em to centre its capitals (see buttons.css) */
+  --ds-btn-secondary-border: #ffffff24;              /* 14% white hairline */
+  --ds-btn-secondary-border-hover: #ffffff57;        /* 34% white: hover, and the current page in the menu */
+  --ds-btn-secondary-fill-hover: #ffffff0a;          /* 4% white fill: hover, and the current page in the menu */
+  --ds-btn-border-width: 2px;              /* the standard button border: 1.5px on sharp screens, see the end of this file */
+  --ds-btn-primary-border-width: var(--ds-btn-border-width);    /* the primary's lit border */
+  --ds-btn-secondary-border-width: var(--ds-btn-border-width);  /* the secondary's outline  */
+  --ds-btn-primary-fill-hover: .8; /* how solid the primary's black fill stays on hover */
+  --ds-glass-brown: #1a0b05;       /* tertiary fill                       */
+  --ds-glass-tint-rgb: 164 55 17;  /* = #a43711, the sheen on the glass   */
+  --ds-glow-rgb: 241 90 36;        /* = --ds-orange, the light inside     */
 }
+
+/* The standard button border, primary and secondary alike, is 1.5px. A
+   standard-density screen cannot draw half a pixel: the browser draws a
+   1.5px border as 1px there (and the button comes out 1px short). So the
+   border is 2px on those screens and 1.5px wherever the screen can draw it,
+   2x and sharper. */
+@media (min-resolution: 2dppx) { :root { --ds-btn-border-width: 1.5px; } }
 
 /* ==========================================================================
    PROJECT-SCOPED PALETTES

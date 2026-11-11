@@ -1,0 +1,411 @@
+/* ==========================================================================
+   ANA™ Buttons
+   ==========================================================================
+   Three levels, aktiv-grotesk 500, sentence case.
+   Tokens: tokens.css, section 11. Linked from every page.
+
+   Sizes (primary and secondary): fixed height, side padding and text size.
+     .ds-btn--sm   32px tall · 16px sides · 14px text   dense rows; unused so far
+     (default)     40px tall · 24px sides · 14px text   every button today
+     .ds-btn--lg   48px tall · 32px sides · 16px text   one stand-out action
+   Side padding is twice the vertical padding (8 × 16, 12 × 24, 16 × 32).
+   A button is as wide as its label plus the side padding, never stretched.
+   .ds-btn--icon makes either level a square icon-only button of that height.
+   The tertiary has one fixed size: 40px tall, a 124px pill and a 40px circle.
+
+   Primary    .ds-btn.ds-btn--primary     the one action a view is for
+   Secondary  .ds-btn.ds-btn--secondary   hairline ghost; everything else:
+                                          navigation,
+                                          repeated per-item actions, options
+   Tertiary   .ds-btn-talk                "Let's talk" only
+              .ds-btn-icon                its circle on its own: icon-only
+                                          controls (contact links, deck arrows)
+
+   The tertiary's glass edge and liquid stretch are SVG filters. They sit in
+   a hidden <svg class="ds-filters">
+   at the top of every page's <body>; build-case-studies.mjs keeps that
+   block (and this file's <link>) on every page.
+   ========================================================================== */
+
+.ds-filters { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* --------------------------------------------------------------------------
+   Base: shape, type and focus ring shared by primary and secondary.
+   Works on <a> and <button>. The size comes from --btn-h / --btn-pad /
+   --btn-size / --btn-gap, set per size below; width: fit-content and
+   flex: none keep a flex or grid parent from stretching the button.
+   Light text on a dark fill is drawn without the Mac's extra font
+   weighting (antialiased), which made the labels look bold.
+
+   The label is centred on its capital letters: the space from the top edge
+   to the top of a capital equals the space from the baseline to the bottom
+   edge. aktiv-grotesk 500 carries lopsided line metrics (its line box sits
+   0.12em above its capitals' centre), so centring the line box leaves the
+   label visibly high. Where the browser can trim a line box to the capital
+   height (text-box), the padding is computed from that and the font's
+   metrics no longer matter; elsewhere the label is nudged down by 0.12em
+   (--ds-btn-cap-nudge is twice that, as centring halves it).
+   -------------------------------------------------------------------------- */
+.ds-btn {
+  --btn-h: var(--ds-btn-md-height);
+  --btn-pad: var(--ds-btn-md-pad-x);
+  --btn-size: var(--ds-btn-md-size);
+  --btn-gap: var(--ds-btn-md-gap);
+  --btn-border: 0px;
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--btn-gap);
+  box-sizing: border-box;
+  width: fit-content;
+  height: var(--btn-h);
+  margin: 0;
+  padding: var(--ds-btn-cap-nudge) calc(var(--btn-pad) - var(--btn-border)) 0;
+  border: 0;
+  border-radius: var(--ds-btn-radius);
+  font-family: var(--ds-btn-font);
+  font-size: var(--btn-size);
+  font-weight: var(--ds-btn-weight);
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0;
+  text-transform: none;
+  text-decoration: none;
+  white-space: nowrap;
+  color: var(--ds-white);
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.ds-btn:hover { color: var(--ds-white); }
+.ds-btn:focus-visible,
+.ds-btn-talk:focus-visible { outline: 2px solid var(--ds-orange); outline-offset: 3px; }
+.ds-btn:disabled { opacity: .6; cursor: default; }
+.ds-btn--sm {
+  --btn-h: var(--ds-btn-sm-height);
+  --btn-pad: var(--ds-btn-sm-pad-x);
+  --btn-size: var(--ds-btn-sm-size);
+  --btn-gap: var(--ds-btn-sm-gap);
+}
+.ds-btn--lg {
+  --btn-h: var(--ds-btn-lg-height);
+  --btn-pad: var(--ds-btn-lg-pad-x);
+  --btn-size: var(--ds-btn-lg-size);
+  --btn-gap: var(--ds-btn-lg-gap);
+}
+.ds-btn svg { flex: none; width: 1.15em; height: 1.15em; vertical-align: middle; }
+@supports (text-box: trim-both cap alphabetic) and (height: 1cap) {
+  .ds-btn {
+    display: inline-block;
+    height: auto;
+    padding-block: calc((var(--btn-h) - 1cap) / 2 - var(--btn-border));
+    text-align: center;
+    text-box: trim-both cap alphabetic;
+  }
+}
+/* Icon-only (.ds-btn--icon, with a level): a square button the height of its
+   size, for a control whose meaning an icon carries, such as previous and
+   next. It needs an aria-label.
+   <button class="ds-btn ds-btn--primary ds-btn--icon" aria-label="Next"><svg …/></button> */
+.ds-btn--icon {
+  display: inline-flex;
+  width: var(--btn-h);
+  height: var(--btn-h);
+  padding: 0;
+  text-box: normal;
+}
+.ds-btn--icon svg { width: 18px; height: 18px; }
+
+/* --------------------------------------------------------------------------
+   Secondary: a ghost. A 1.5px outline (the standard button border, the same
+   weight as the primary's) with no fill; on hover the
+   outline brightens and a faint fill comes in. Nothing moves. In the top
+   menu the current page keeps the hover look.
+   -------------------------------------------------------------------------- */
+.ds-btn--secondary {
+  /* The border comes out of the padding (for the primary too), so every
+     button of a size is exactly the same height and side padding. */
+  --btn-border: var(--ds-btn-secondary-border-width);
+  background-color: transparent;
+  border: var(--btn-border) solid var(--ds-btn-secondary-border);
+  transition: border-color .22s ease, background-color .22s ease;
+}
+.ds-btn--secondary:hover,
+.ds-btn--secondary.w--current,
+.ds-btn--secondary[aria-current="page"] {
+  background-color: var(--ds-btn-secondary-fill-hover);
+  border-color: var(--ds-btn-secondary-border-hover);
+}
+
+/* --------------------------------------------------------------------------
+   Top menu: 12px between the buttons (Webflow had 15px on the desktop row
+   and 20px on the narrow one). The phone menu's stacked list keeps its own
+   spacing.
+   -------------------------------------------------------------------------- */
+.div-block-409,
+.div-block-409-left { gap: var(--ds-btn-row-gap); }
+/* Resume page: the two download buttons, stacked, the same 12px apart
+   (Webflow's own value was already 12px; this ties it to the token). */
+.flex-block-109 { gap: var(--ds-btn-row-gap); }
+/* (The menu's right edge and its tablet layout are in layout.css.) */
+
+/* --------------------------------------------------------------------------
+   Primary: a black button with a 1.5px border lit from one corner. The
+   border is orange where the light hits the bottom-left corner and fades to
+   a grey hairline around the rest. On hover the light spreads along the
+   border and the black fill drops to 80%, so the orange glows through from
+   the corner.
+
+   The border is a real, transparent CSS border (--ds-btn-primary-border-width)
+   with the light painted behind it, so it is the same weight on all four
+   sides and around the corners:
+     background  the light, a radial gradient from the bottom-left corner,
+                 laid out on the border box
+     ::before    the black fill, covering exactly the area inside the border
+   -------------------------------------------------------------------------- */
+.ds-btn--primary {
+  --btn-border: var(--ds-btn-primary-border-width);
+  border: var(--btn-border) solid transparent;
+  background: radial-gradient(130% 160% at 0% 100%, var(--ds-orange), rgb(var(--ds-glow-rgb) / .25) 40%, rgb(255 255 255 / .13) 70%) border-box;
+}
+.ds-btn--primary:hover {
+  background: radial-gradient(180% 220% at 0% 100%, var(--ds-orange), rgb(var(--ds-glow-rgb) / .35) 50%, rgb(255 255 255 / .2) 80%) border-box;
+}
+.ds-btn--primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: calc(var(--ds-btn-radius) - var(--btn-border));
+  background: var(--ds-black);
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+.ds-btn--primary:hover::before { opacity: var(--ds-btn-primary-fill-hover); }
+
+/* --------------------------------------------------------------------------
+   Tertiary: the "Let's talk" arrow button. A dark brown glass pill and an
+   arrow circle that read as one blob at rest; on hover the circle pulls
+   away with a liquid stretch, the arrow turns, and the ember inside spreads.
+
+   <a class="ds-btn-talk" href="…">
+     <span class="ds-btn-talk__glass"><span class="ds-btn-talk__pill"><i></i></span><span class="ds-btn-talk__dot"><i></i></span></span>
+     <span class="ds-btn-talk__rim"><i></i><i></i></span>
+     <span class="ds-btn-talk__label">Let’s talk</span>
+     <span class="ds-btn-talk__arrow"><svg …/></span>
+   </a>
+
+   __glass  the two shapes, merged by #ds-goo. Each shape is a window onto
+            the same light (its <i>, laid out in the button's coordinates),
+            so the sheen and the ember run across both without a seam. The
+            circle's light slides the other way as the circle moves.
+   __rim    the same two shapes again, turned into the glass edge by
+            #ds-glass-rim-goo.
+   -------------------------------------------------------------------------- */
+.ds-btn-talk {
+  --talk-pill: 124px;      /* pill width */
+  --talk-dot: 114px;       /* circle's left edge at rest: tucked 10px into the pill */
+  --talk-pull: 22px;       /* how far the circle travels on hover */
+  --talk-pad: 14px;        /* room around the shapes for the liquid filter */
+  --talk-ease: cubic-bezier(.135, .9, .15, 1);
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: calc(var(--talk-dot) + 40px);
+  height: var(--ds-btn-height);
+  font-family: var(--ds-btn-font);
+  font-size: var(--ds-btn-size);
+  font-weight: var(--ds-btn-weight);
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-decoration: none;
+  color: var(--ds-white);
+  cursor: pointer;
+}
+.ds-btn-talk:hover { color: var(--ds-white); }
+.ds-btn-talk__glass,
+.ds-btn-talk__rim {
+  position: absolute;
+  inset: calc(var(--talk-pad) * -1) calc((var(--talk-pad) + var(--talk-pull)) * -1) calc(var(--talk-pad) * -1) calc(var(--talk-pad) * -1);
+  pointer-events: none;
+}
+.ds-btn-talk__glass { filter: url(#ds-goo); }
+.ds-btn-talk__rim { filter: url(#ds-glass-rim-goo); }
+
+.ds-btn-talk__pill,
+.ds-btn-talk__dot,
+.ds-btn-talk__rim > i {
+  position: absolute;
+  top: var(--talk-pad);
+  height: var(--ds-btn-height);
+  overflow: hidden;
+}
+.ds-btn-talk__pill,
+.ds-btn-talk__rim > i:first-child { left: var(--talk-pad); width: var(--talk-pill); border-radius: 100px; }
+.ds-btn-talk__dot,
+.ds-btn-talk__rim > i:last-child { left: calc(var(--talk-pad) + var(--talk-dot)); width: 40px; border-radius: 50%; }
+.ds-btn-talk__rim > i { background: #000; }
+
+/* What moves on hover: the circle (in both layers) and the arrow. */
+.ds-btn-talk__dot,
+.ds-btn-talk__rim > i:last-child,
+.ds-btn-talk__arrow { transition: transform .9s var(--talk-ease); }
+.ds-btn-talk:hover .ds-btn-talk__dot,
+.ds-btn-talk:hover .ds-btn-talk__rim > i:last-child,
+.ds-btn-talk:hover .ds-btn-talk__arrow { transform: translateX(var(--talk-pull)); }
+
+/* The light: brown glass with a sheen, and the ember low on the left. */
+.ds-btn-talk__glass i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(var(--talk-dot) + 40px + var(--talk-pull));
+  height: 100%;
+  background:
+    linear-gradient(180deg, rgb(var(--ds-glass-tint-rgb) / .24), rgb(var(--ds-glass-tint-rgb) / 0) 60%, rgb(var(--ds-glass-tint-rgb) / 0) 81%, rgb(var(--ds-glass-tint-rgb) / .12)),
+    var(--ds-glass-brown);
+}
+.ds-btn-talk__dot i { left: calc(var(--talk-dot) * -1); transition: transform .9s var(--talk-ease); }
+.ds-btn-talk:hover .ds-btn-talk__dot i { transform: translateX(calc(var(--talk-pull) * -1)); }
+.ds-btn-talk__glass i::before {
+  content: "";
+  position: absolute;
+  left: -19px;
+  top: 20px;
+  width: 90px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgb(var(--ds-glow-rgb));
+  filter: blur(14px);
+  opacity: .75;
+  transition: width .6s var(--talk-ease), opacity .6s ease;
+}
+.ds-btn-talk:hover .ds-btn-talk__glass i::before { width: 180px; opacity: .95; }
+
+/* The circle's own light: a warm edge on its far side, and on hover an
+   ember of its own. */
+.ds-btn-talk__dot::before,
+.ds-btn-talk__dot::after { content: ""; position: absolute; z-index: 1; }
+.ds-btn-talk__dot::before {
+  left: -10px;
+  top: 0;
+  width: 60px;
+  height: 46px;
+  background: radial-gradient(75% 85% at 80% 85%, rgb(190 75 30 / .5), rgb(190 75 30 / 0) 75%);
+}
+.ds-btn-talk__dot::after {
+  left: -8px;
+  top: 24px;
+  width: 52px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgb(var(--ds-glow-rgb));
+  filter: blur(12px);
+  opacity: 0;
+  transition: opacity .6s ease;
+}
+.ds-btn-talk:hover .ds-btn-talk__dot::after { opacity: .6; }
+
+.ds-btn-talk__label,
+.ds-btn-talk__arrow {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ds-btn-talk__label { left: 0; box-sizing: border-box; width: var(--talk-pill); padding-top: var(--ds-btn-cap-nudge); white-space: nowrap; }
+/* The label is centred on its capitals, as on the other buttons. */
+@supports (text-box: trim-both cap alphabetic) and (height: 1cap) {
+  .ds-btn-talk__label {
+    display: block;
+    height: auto;
+    padding-block: calc((var(--ds-btn-height) - 1cap) / 2);
+    text-align: center;
+    text-box: trim-both cap alphabetic;
+  }
+}
+.ds-btn-talk__arrow { left: var(--talk-dot); width: 40px; }
+.ds-btn-talk__arrow svg { width: 18px; height: 18px; transition: transform .9s var(--talk-ease); }
+.ds-btn-talk:hover .ds-btn-talk__arrow svg { transform: rotate(45deg); }
+
+/* --------------------------------------------------------------------------
+   Tertiary, circle: an icon-only button in the tertiary's glass, the size
+   of its arrow circle (40px). Brown glass with the glass edge and a warm
+   light on its far side; on hover an ember lights inside. For icon-only
+   controls: the contact links (LinkedIn, X, email) beside the intro pill
+   and the testimonial deck's previous and next. Works on <a> and <button>.
+
+   <a class="ds-btn-icon" href="…" aria-label="LinkedIn" title="LinkedIn"><svg …/></a>
+   <button type="button" class="ds-btn-icon" aria-label="Next testimonial"><svg …/></button>
+
+     ::before  the glass edge (#ds-glass-rim)
+     ::after   the ember
+   -------------------------------------------------------------------------- */
+.ds-btn-icon {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--ds-btn-md-height);
+  height: var(--ds-btn-md-height);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 50%;
+  font: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  color: var(--ds-white);
+  text-decoration: none;
+  cursor: pointer;
+  background:
+    radial-gradient(45px 39px at 38px 39px, rgb(190 75 30 / .5), rgb(190 75 30 / 0) 75%),
+    linear-gradient(180deg, rgb(var(--ds-glass-tint-rgb) / .24), rgb(var(--ds-glass-tint-rgb) / 0) 60%, rgb(var(--ds-glass-tint-rgb) / 0) 81%, rgb(var(--ds-glass-tint-rgb) / .12)),
+    var(--ds-glass-brown);
+}
+.ds-btn-icon:hover { color: var(--ds-white); }
+.ds-btn-icon:focus-visible { outline: 2px solid var(--ds-orange); outline-offset: 3px; }
+.ds-btn-icon::before,
+.ds-btn-icon::after { content: ""; position: absolute; pointer-events: none; }
+.ds-btn-icon::before {
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: #000;
+  filter: url(#ds-glass-rim);
+}
+.ds-btn-icon::after {
+  left: -8px;
+  top: 24px;
+  z-index: -2;
+  width: 52px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgb(var(--ds-glow-rgb));
+  filter: blur(12px);
+  opacity: 0;
+  transition: opacity .6s ease;
+}
+.ds-btn-icon:hover::after { opacity: .8; }
+.ds-btn-icon svg { flex: none; width: 18px; height: 18px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-btn-icon::after,
+  .ds-btn,
+  .ds-btn::before,
+  .ds-btn::after,
+  .ds-btn-talk *,
+  .ds-btn-talk *::before,
+  .ds-btn-talk *::after { transition: none; }
+}

@@ -1,5 +1,5 @@
-// Homepage visitor feedback ("Drop your feedback"): a popover under the
-// button, in the manner of shadcn/ui's Popover.
+// Visitor feedback ("Drop your feedback", at the bottom of the About page):
+// a popover under the button, in the manner of shadcn/ui's Popover.
 // The button opens and closes it; Escape or a click outside closes it too,
 // and Escape hands focus back to the button. Opening puts the cursor in the
 // first field.

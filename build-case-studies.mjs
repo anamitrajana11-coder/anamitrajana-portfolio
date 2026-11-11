@@ -4,8 +4,8 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 // Builds the Yanta case-study pages (yanta-*.html) from the Markdown drafts in
-// case-studies/, and keeps the Yanta cards in index.html's "Selected works."
-// in sync. Only the page copy is used: each draft's notes block above the first
+// case-studies/, and keeps the Yanta cards in sync on index.html ("Selected
+// works") and works.html (All works, ahead of the older projects). Only the page copy is used: each draft's notes block above the first
 // `---` and its "Working notes" below the last `---` never reach the site.
 //
 //   node build-case-studies.mjs            the published studies
@@ -25,6 +25,7 @@ const root = path.dirname(fileURLToPath(import.meta.url));
 const draftsDir = path.join(root, "case-studies");
 const shellPage = path.join(root, "lab.html");
 const indexPage = path.join(root, "index.html");
+const worksPage = path.join(root, "works.html");
 
 const arrow = "assets/cdn.prod.website-files.com/67c3b93e479d760fe2f17a64_Brand-hyperlink-arrow-294a7c5550.png";
 // The gallery every Yanta page closes with: the images in this folder, in
@@ -35,6 +36,37 @@ const arrow = "assets/cdn.prod.website-files.com/67c3b93e479d760fe2f17a64_Brand-
 // and read the details.
 const galleryDir = "assets/yanta/gallery";
 const squareBullet = "assets/cdn.prod.website-files.com/67c7b27105b66f93baf3beb7_square-o-5a223c45ec.png";
+
+// ---------------------------------------------------------------------------
+// Buttons (design-system/buttons.css)
+// ---------------------------------------------------------------------------
+
+// The SVG filters the tertiary buttons need, kept in a hidden <svg> at the
+// top of every page's <body>:
+//   ds-goo            merges the tertiary button's pill and circle into one
+//                     liquid shape
+//   ds-glass-rim      turns a shape into a glass edge: a soft band inside
+//                     the outline, lit pale from the top left and orange
+//                     from the bottom right (the tertiary circle)
+//   ds-glass-rim-goo  the same edge, following the merged liquid shape
+const glassRim = '<feGaussianBlur in="g" stdDeviation="1.5" result="h"/><feComposite in="g" in2="h" operator="out" result="band"/><feFlood flood-color="#c8562a" flood-opacity=".9" result="fc"/><feComposite in="fc" in2="band" operator="in" result="bezel"/>'
+  + '<feSpecularLighting in="h" surfaceScale="2.5" specularConstant="1" specularExponent="10" lighting-color="#ffcfb5" result="s1"><feDistantLight azimuth="235" elevation="30"/></feSpecularLighting><feComponentTransfer in="s1" result="t1"><feFuncA type="linear" slope="1.7" intercept="-.45"/></feComponentTransfer>'
+  + '<feSpecularLighting in="h" surfaceScale="2.5" specularConstant="1" specularExponent="10" lighting-color="#f15a24" result="s2"><feDistantLight azimuth="55" elevation="30"/></feSpecularLighting><feComponentTransfer in="s2" result="t2"><feFuncA type="linear" slope="1.4" intercept="-.45"/></feComponentTransfer>'
+  + '<feMerge result="m"><feMergeNode in="bezel"/><feMergeNode in="t1"/><feMergeNode in="t2"/></feMerge><feComposite in="m" in2="g" operator="in"/>';
+const plainShape = '<feColorMatrix in="SourceAlpha" mode="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0" result="g"/>';
+const gooShape = '<feGaussianBlur in="SourceAlpha" stdDeviation="5" result="b"/><feColorMatrix in="b" mode="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 19 -9" result="g"/>';
+const buttonFilters = '<svg class="ds-filters" width="0" height="0" aria-hidden="true" focusable="false"><defs>'
+  + '<filter id="ds-goo" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="g"/><feBlend in="SourceGraphic" in2="g"/></filter>'
+  + `<filter id="ds-glass-rim" color-interpolation-filters="sRGB">${plainShape}${glassRim}</filter>`
+  + `<filter id="ds-glass-rim-goo" color-interpolation-filters="sRGB">${gooShape}${glassRim}</filter>`
+  + "</defs></svg>";
+
+const arrowUpRight = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+
+// Tertiary: the "Let's talk" arrow button, and nothing else.
+function talkButton(href) {
+  return `<a href="${href}" class="ds-btn-talk"><span class="ds-btn-talk__glass" aria-hidden="true"><span class="ds-btn-talk__pill"><i></i></span><span class="ds-btn-talk__dot"><i></i></span></span><span class="ds-btn-talk__rim" aria-hidden="true"><i></i><i></i></span><span class="ds-btn-talk__label">Let’s talk</span><span class="ds-btn-talk__arrow" aria-hidden="true">${arrowUpRight}</span></a>`;
+}
 
 // Everyone who can appear in a case study's team, with their photo in
 // assets/team/<key>.jpg (240px). A study's `team` lists these keys.
@@ -68,20 +100,10 @@ const people = {
 // ### parts sit two to a row, their texts side by side and the row's 3:2
 // visuals below them (one visual, or a part alone in its row, takes the
 // full width). `gridPerRow: 1` gives every part a row of its own.
+// The order here is the cards' order on the homepage and All works (Ask AI,
+// Data Transformer, Identity, Scheduler, set by Anamitra on 2026-11-11) and
+// the order the "Next case study" cards follow.
 const caseStudies = [
-  {
-    slug: "yanta-identity",
-    source: "cs-01-identity-brand-website-design-system.md",
-    shortName: "Identity, website & design system",
-    tags: ["PRODUCT", "BRAND/WEB", "DESIGN SYSTEM"],
-    summary: "Gave a lab product its name and mark, its public face, and the design system that carries both into code, in one year.",
-    impact: "Shipped in three weeks:",
-    highlight: "280+ component variants",
-    team: ["michael-tai", "ted-netland", "anupam-chowdhury", "vinit-vasant-khatavkar", "abhinav-sriram", "nanguan-lin", "rohith-chimpiri", "grace-li"],
-    heroVideo: "assets/yanta/identity-hero.mp4",
-    thumbnail: "assets/yanta/identity-thumbnail.webp",
-    leadCards: ["The problem", "Constraints", "Approach"],
-  },
   {
     slug: "yanta-ask-ai",
     source: "cs-02-ask-ai.md",
@@ -98,21 +120,6 @@ const caseStudies = [
     team: ["anupam-chowdhury", "vinit-vasant-khatavkar", "rohith-chimpiri"],
   },
   {
-    slug: "yanta-scheduler",
-    source: "cs-03-scheduler.md",
-    shortName: "Scheduler",
-    leadCards: ["The problem", "What I did", "Outcome"],
-    gridSections: ["Key design decisions"],
-    gridPerRow: 1,
-    heroImage: "assets/yanta/scheduler-hero.jpg",
-    thumbnail: "assets/yanta/scheduler-thumbnail.mp4",
-    tags: ["PRODUCT", "B2B", "SAAS/WEB"],
-    summary: "Replaced scattered planning spreadsheets with one scheduler where the plan becomes the batch record, traceable to audit.",
-    impact: "V1 testing –",
-    highlight: "93.8/100 on UX-Lite",
-    team: ["johannes-kung", "anupam-chowdhury", "mackenzie-bower", "vinit-vasant-khatavkar", "abhinav-sriram"],
-  },
-  {
     slug: "yanta-data-transformer",
     source: "cs-04-data-transformer.md",
     shortName: "Data Transformer",
@@ -126,6 +133,34 @@ const caseStudies = [
     impact: "V1 testing –",
     highlight: "91.7/100 on UX-Lite",
     team: ["anupam-chowdhury", "fan-lu", "vinit-vasant-khatavkar", "nanguan-lin"],
+  },
+  {
+    slug: "yanta-identity",
+    source: "cs-01-identity-brand-website-design-system.md",
+    shortName: "Identity, website & design system",
+    tags: ["PRODUCT", "BRAND/WEB", "DESIGN SYSTEM"],
+    summary: "Gave a lab product its name and mark, its public face, and the design system that carries both into code, in one year.",
+    impact: "Shipped in three weeks:",
+    highlight: "280+ component variants",
+    team: ["michael-tai", "ted-netland", "anupam-chowdhury", "vinit-vasant-khatavkar", "abhinav-sriram", "nanguan-lin", "rohith-chimpiri", "grace-li"],
+    heroVideo: "assets/yanta/identity-hero.mp4",
+    thumbnail: "assets/yanta/identity-thumbnail.webp",
+    leadCards: ["The problem", "Constraints", "Approach"],
+  },
+  {
+    slug: "yanta-scheduler",
+    source: "cs-03-scheduler.md",
+    shortName: "Scheduler",
+    leadCards: ["The problem", "What I did", "Outcome"],
+    gridSections: ["Key design decisions"],
+    gridPerRow: 1,
+    heroImage: "assets/yanta/scheduler-hero.jpg",
+    thumbnail: "assets/yanta/scheduler-thumbnail.mp4",
+    tags: ["PRODUCT", "B2B", "SAAS/WEB"],
+    summary: "Replaced scattered planning spreadsheets with one scheduler where the plan becomes the batch record, traceable to audit.",
+    impact: "V1 testing –",
+    highlight: "93.8/100 on UX-Lite",
+    team: ["johannes-kung", "anupam-chowdhury", "mackenzie-bower", "vinit-vasant-khatavkar", "abhinav-sriram"],
   },
 ];
 
@@ -521,19 +556,20 @@ function renderGallery() {
 }
 
 // The filter gives the button its gooey join between label and arrow.
-const ctaButtonFilter = '<svg width="0" height="0" class="absolute hidden" color-interpolation-filters="sRGB"><defs><filter id="buttonFilter"><feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur"></feGaussianBlur><feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="buttonFilter"></feColorMatrix><feComposite in="SourceGraphic" in2="buttonFilter" operator="atop"></feComposite><feBlend in="SourceGraphic" in2="buttonFilter"></feBlend></filter></defs></svg>';
 const ctaArrow = '<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" class="iconify iconify--tabler" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 7L7 17M8 7h9v9"></path></svg>';
 
 function renderCta() {
-  return `<section class="section-37 cs-cta"><div class="div-block-495"><div class="div-block-494"><div class="div-block-496"><div class="div-block-497"><h1 class="ms-heading-2 ca">Curious about the journey? Let’s dive deeper</h1></div><div class="div-block-498"><p class="ms-body-text-1 ocp50 ca">This showcase is merely a glimpse; the true essence lies in the journey itself. If you&#x27;re intrigued, let&#x27;s chat—I’ll happily share insights, challenges, and even some juicy gossip from behind the scenes.</p></div><div class="div-block-499"><a href="mailto:anamitrajana@outlook.com?subject=Lets%20connect" class="button-1 w-inline-block"><div class="svg-filter_embed w-embed">${ctaButtonFilter}</div><div class="button-1_content-wrap"><div class="ms-body-text-1-b black">Let’s talk</div></div><div class="button-1_arrow-wrapper"><div class="button_arrow-icon w-embed">${ctaArrow}</div></div></a></div></div></div></div></section>`;
+  return `<section class="section-37 cs-cta"><div class="div-block-495"><div class="div-block-494"><div class="div-block-496"><div class="div-block-497"><h1 class="ms-heading-2 ca">Curious about the journey? Let’s dive deeper</h1></div><div class="div-block-498"><p class="ms-body-text-1 ocp50 ca">This showcase is merely a glimpse; the true essence lies in the journey itself. If you&#x27;re intrigued, let&#x27;s chat—I’ll happily share insights, challenges, and even some juicy gossip from behind the scenes.</p></div><div class="div-block-499">${talkButton("mailto:anamitrajana@outlook.com?subject=Lets%20connect")}</div></div></div></div></section>`;
 }
 
-// The two cards that end every case study: All work (the homepage) and the
-// next study in homepage order, named in one line.
+// The two cards that end every case study: back to Selected works on the
+// homepage (tagged "Home", landing on the works through the #selected-works
+// anchor), and the next study in All works order, named in one line. (All works
+// itself is reached only from the homepage's "View all works" button.)
 function renderPager(study) {
   const at = allStudies.findIndex((s) => s.slug === study.slug);
   const next = allStudies[(at + 1) % allStudies.length];
-  return `<nav class="cs-pager" aria-label="More work"><a class="cs-next cs-next--back" href="index.html"><span><span class="cs-tag">All work</span><span class="cs-next-title">Back to Selected works</span></span><img class="cs-next-arrow" src="${arrow}" loading="lazy" alt=""/></a>`
+  return `<nav class="cs-pager" aria-label="More work"><a class="cs-next cs-next--back" href="index.html#selected-works"><span><span class="cs-tag">Home</span><span class="cs-next-title">Back to Selected works</span></span><img class="cs-next-arrow" src="${arrow}" loading="lazy" alt=""/></a>`
     + `<a class="cs-next" href="${next.slug}.html"><span><span class="cs-tag">Next case study</span><span class="cs-next-title">${escapeHtml(next.nextName || next.shortName)}</span></span><img class="cs-next-arrow" src="${arrow}" loading="lazy" alt=""/></a></nav>`;
 }
 
@@ -606,7 +642,7 @@ ${renderPager(study)}
     .replace(/<meta content="[^"]*" property="og:title"\/>/, `<meta content="${escapeHtml(title)}" property="og:title"/>`)
     .replace(/<meta content="[^"]*" name="twitter:title"\/>/, `<meta content="${escapeHtml(title)}" name="twitter:title"/>`);
 
-  return `${head}<link href="design-system/tokens.css" rel="stylesheet" type="text/css"/><link href="design-system/case-study.css" rel="stylesheet" type="text/css"/></head>${shell.nav}${main}${shell.footer}${shell.scripts}\n<script src="design-system/toc.js"></script>\n<script src="design-system/gallery.js"></script>${main.includes("<video") ? '\n<script src="design-system/video.js"></script>' : ""}\n</body></html>\n`;
+  return `${head}<link href="design-system/tokens.css" rel="stylesheet" type="text/css"/><link href="design-system/buttons.css" rel="stylesheet" type="text/css"/><link href="design-system/layout.css" rel="stylesheet" type="text/css"/><link href="design-system/case-study.css" rel="stylesheet" type="text/css"/></head>${shell.nav}${main}${shell.footer}${shell.scripts}\n<script src="design-system/toc.js"></script>\n<script src="design-system/gallery.js"></script>${main.includes("<video") ? '\n<script src="design-system/video.js"></script>' : ""}\n</body></html>\n`;
 }
 
 // ---------------------------------------------------------------------------
@@ -638,7 +674,7 @@ function desktopCard(study) {
 
 function mobileCard(study) {
   const field = (cls, name, value, valueClass) => `<div class="${cls}"><div class="w-layout-vflex flex-block-97-mob"><h1 class="v25-h4 orange">${name}</h1><div class="project-mob-box"><p class="${valueClass}">${value}</p></div></div></div>`;
-  return `<div class="div-block-451"><div class="heading-wrapper-mob"><div class="heading-box-wrapper"><div class="div-block-452"><h1 class="heading-55">0</h1><img src="${squareBullet}" loading="lazy" alt="" class="image-282"/></div><div class="div-block-453"><section class="project-detail-block-mob">${field("client-mob", "Company", "Boston Bioprocess · Yanta", "v25-h2 none")}${field("project-des-mob", "Project", escapeHtml(study.summary), "v25-b1")}${field("impact-mob", "Impact", `${escapeHtml(study.impact)} ${escapeHtml(study.highlight)}`, "v25-b1")}</section><div class="project-image-block-mob">${cardVisual(study, true)}<div class="div-block-461"><div class="v25-button-01"><a href="${study.slug}.html" class="link-block-8 w-inline-block"><p class="v25-b2 button">Showcase</p></a></div></div></div></div></div></div></div>`;
+  return `<div class="div-block-451"><div class="heading-wrapper-mob"><div class="heading-box-wrapper"><div class="div-block-452"><h1 class="heading-55">0</h1><img src="${squareBullet}" loading="lazy" alt="" class="image-282"/></div><div class="div-block-453"><section class="project-detail-block-mob">${field("client-mob", "Company", "Boston Bioprocess · Yanta", "v25-h2 none")}${field("project-des-mob", "Project", escapeHtml(study.summary), "v25-b1")}${field("impact-mob", "Impact", `${escapeHtml(study.impact)} ${escapeHtml(study.highlight)}`, "v25-b1")}</section><div class="project-image-block-mob">${cardVisual(study, true)}<div class="div-block-461"><a href="${study.slug}.html" class="ds-btn ds-btn--secondary">Showcase</a></div></div></div></div></div></div>`;
 }
 
 // Removes any previous copy of the block, then inserts it at the anchor, so
@@ -662,6 +698,34 @@ function updateOlderPages() {
     const anchor = { after: '<section class="section-37">', marker: "</section>", insertAfterMarker: true };
     fs.writeFileSync(file, placeBlock(fs.readFileSync(file, "utf8"), "cs-pager", anchor, renderPager(study)));
   }
+}
+
+// Every page carries the buttons and the page frame: tokens.css, buttons.css
+// and layout.css after the Webflow stylesheet, and the buttons' SVG filters
+// at the top of <body>.
+function updateButtonsEverywhere() {
+  const webflowCss = /(<link href="assets\/cdn\.prod\.website-files\.com\/anamitras-portfolio\.webflow\.shared[^>]*>)/;
+  const link = (name) => `<link href="design-system/${name}" rel="stylesheet" type="text/css"/>`;
+  let pages = 0;
+  for (const page of fs.readdirSync(root).filter((file) => file.endsWith(".html"))) {
+    const file = path.join(root, page);
+    let html = fs.readFileSync(file, "utf8");
+    if (webflowCss.test(html)) {
+      if (!html.includes("design-system/tokens.css")) html = html.replace(webflowCss, `$1${link("tokens.css")}`);
+      if (!html.includes("design-system/buttons.css")) html = html.replace(/(<link href="design-system\/tokens\.css[^>]*>)/, `$1${link("buttons.css")}`);
+      if (!html.includes("design-system/layout.css")) html = html.replace(/(<link href="design-system\/buttons\.css[^>]*>)/, `$1${link("layout.css")}`);
+    }
+    // The style guide links buttons.css itself; it gets the filters too.
+    if (!html.includes("design-system/buttons.css")) continue;
+    const start = "<!-- ds-filters:start -->";
+    const end = "<!-- ds-filters:end -->";
+    const from = html.indexOf(start);
+    if (from !== -1) html = html.slice(0, from) + html.slice(html.indexOf(end, from) + end.length);
+    html = html.replace(/(<body[^>]*>)/, `$1${start}${buttonFilters}${end}`);
+    fs.writeFileSync(file, html);
+    pages += 1;
+  }
+  return pages;
 }
 
 function stampDesignSystemLinks() {
@@ -691,24 +755,41 @@ function updateIndex() {
     html = html.replace(/(<link href="assets\/cdn\.prod\.website-files\.com\/anamitras-portfolio\.webflow\.shared[^>]*>)/, `$1${links}`);
   }
 
-  // The Yanta cards come first, then an "Earlier work" label above the older
-  // projects. Desktop: their own grid, placed before the hidden legacy
-  // .project-flex list. Mobile: the head of the numbered list.
-  const earlierWork = (modifier) => `<div class="ds-work-group${modifier}"><span class="cs-tag">Earlier work</span></div>`;
-  html = placeBlock(html, "yanta-desktop", { after: '<section class="section-49">', marker: '<div class="w-layout-vflex project-flex">' },
-    `<div class="w-layout-grid grid-10">${caseStudies.map(desktopCard).join("")}</div>${earlierWork("")}`);
-  html = placeBlock(html, "yanta-mobile", { after: '<section class="section-35">', marker: '<div class="div-block-451">' },
-    caseStudies.map(mobileCard).join("") + earlierWork(" ds-work-group--mobile"));
+  // "Selected works" is the Yanta cards. Its heading row (.ds-section-head,
+  // in index.html itself) ends with the small "View all works" button; the
+  // cards go right after that row.
+  // Desktop: their grid. Mobile: the numbered list.
+  const afterHead = { marker: "</a></div>", insertAfterMarker: true };
+  html = placeBlock(html, "yanta-desktop", { after: '<section class="section-49">', ...afterHead },
+    `<div class="w-layout-grid grid-10">${caseStudies.map(desktopCard).join("")}</div>`);
+  html = placeBlock(html, "yanta-mobile", { after: '<section class="section-35">', ...afterHead },
+    caseStudies.map(mobileCard).join(""));
 
-  // The mobile list is numbered by hand in Webflow; renumber it in order.
-  const from = html.indexOf('<section class="section-35">');
-  const to = html.indexOf('<section class="section-49">');
+  const [out, n] = renumber(html);
+  fs.writeFileSync(indexPage, out);
+  return n;
+}
+
+// All works: every project in one list, the Yanta cards first. Desktop: at
+// the head of the page's one grid. Mobile: at the head of the numbered list.
+function updateWorks() {
+  let html = fs.readFileSync(worksPage, "utf8");
+  html = placeBlock(html, "yanta-desktop", { after: '<section class="section-49 ds-works">', marker: '<div class="w-layout-grid grid-10 ds-works-grid">', insertAfterMarker: true },
+    caseStudies.map(desktopCard).join(""));
+  html = placeBlock(html, "yanta-mobile", { after: '<section class="section-35 ds-works-list">', marker: '<div class="div-block-451">' },
+    caseStudies.map(mobileCard).join(""));
+  const [out, n] = renumber(html);
+  fs.writeFileSync(worksPage, out);
+  return n;
+}
+
+// The mobile list is numbered by hand in Webflow; renumber it in order.
+function renumber(html) {
+  const from = html.indexOf('<section class="section-35');
+  const to = html.indexOf('<section class="section-49');
   let n = 0;
   const renumbered = html.slice(from, to).replace(/<h1 class="heading-55">\d+<\/h1>/g, () => `<h1 class="heading-55">${++n}</h1>`);
-  html = html.slice(0, from) + renumbered + html.slice(to);
-
-  fs.writeFileSync(indexPage, html);
-  return n;
+  return [html.slice(0, from) + renumbered + html.slice(to), n];
 }
 
 // ---------------------------------------------------------------------------
@@ -742,9 +823,13 @@ caseStudies.forEach((study, i) => {
 });
 
 const cards = updateIndex();
+const works = updateWorks();
 updateOlderPages();
-console.log(`Added the All work / Next case study cards to ${olderStudies.length} older project pages`);
+console.log(`Added the back / Next case study cards to ${olderStudies.length} older project pages`);
 console.log(`Updated index.html — ${caseStudies.length} Yanta cards, mobile list renumbered 1–${cards}`);
+console.log(`Updated works.html — ${caseStudies.length} Yanta cards, mobile list renumbered 1–${works}`);
+
+console.log(`Buttons: stylesheet and filters on ${updateButtonsEverywhere()} pages`);
 
 // Every page links design-system files with ?v=<content hash>, so a browser
 // that cached an older copy fetches the new one as soon as the file changes.

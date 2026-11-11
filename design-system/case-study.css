@@ -615,18 +615,11 @@ ol.cs-list li::before {
 .cs-gallery-slot .cs-tag { background: var(--ds-black); }
 /* Followed by the next-study link, not the footer. */
 .cs-cta { margin-bottom: 0; }
-/* Hovering the button slides its arrow out and turns it, as on the older pages. */
-.cs-cta .button-1_arrow-wrapper { transition: transform .9s cubic-bezier(.135, .9, .15, 1); }
-.cs-cta .button-1:hover .button-1_arrow-wrapper,
-.cs-cta .button-1:focus-visible .button-1_arrow-wrapper { transform: translateX(1rem) rotate(45deg); }
 
 /* ------------------------------------------------------------------
    Responsive
    ------------------------------------------------------------------ */
 @media screen and (max-width: 991px) {
-  /* .section-36 drops its 10px left padding here and the opening relies on
-     Webflow's 10px column padding instead; match it. */
-  .cs { padding-left: 10px; padding-right: 10px; }
   .cs-status { grid-template-columns: 1fr; gap: 24px; }
   .cs-tldr { grid-template-columns: 1fr; margin-top: 48px; }
   .cs-section p, .cs-list li, .cs-tldr-item p, .cs-tldr-list li > span, .cs-status li, .cs-status p,
@@ -716,6 +709,79 @@ ol.cs-list li::before {
 @media (max-width: 479px) { .ds-section-label { font-size: var(--ds-section-label-size-compact); } }
 
 /* ==========================================================================
+   Homepage — intro (top left)
+   The globe, Webflow's own headline ("I'm Anamitra, / Product Designer.",
+   .v25-title-text.extra-large), its line on years of experience, then the
+   "Available for work" pill (Webflow .flex-block-106, its pulsing dot
+   unchanged). The block keeps Webflow's 500px width.
+   ========================================================================== */
+/* 20px between the headline, line and pill at every width (Webflow
+   tightens .div-block-448 to 10px below 1280px). */
+.ds-hero .div-block-448 { gap: 20px; }
+.ds-hero-badge { margin-top: 0; align-items: center; flex-wrap: wrap; gap: var(--ds-btn-row-gap); }
+/* The pill is 40px tall (Webflow: 37px), the height of the contact buttons
+   beside it. */
+.ds-hero-badge .flex-block-105 { padding-top: 7.5px; padding-bottom: 7.5px; }
+/* Contact links after the pill: LinkedIn, X and email as tertiary circle
+   buttons (.ds-btn-icon, buttons.css). On narrow phones they wrap under it. */
+.ds-hero-links { display: flex; gap: var(--ds-btn-row-gap); }
+/* 12px between the dot and the text (Webflow has 10px). */
+.ds-hero-badge .flex-block-105 { column-gap: 12px; }
+
+/* The pill draws the eye three ways, all still for reduced motion:
+   - a faint, broad wash of orange (10%, spread over three quarters of
+     the outline, peaking softly in the middle) travels round it (a conic
+     gradient in the 2px border, turned by --ds-beam-angle);
+   - the dot's glow breathes slowly;
+   - "Available for work", "Based in US" (with a US flag) and "Open to
+     relocate" take turns, 3s each (the first line
+     repeats at the end so the loop has no jump; screen readers get all
+     three once, from .ds-sr-only). */
+@property --ds-beam-angle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+.ds-hero-badge .flex-block-105 {
+  /* How strongly the light shows over the resting border: 10%, a faint
+     broad shimmer rather than a bright point (it was a narrow full-strength
+     spark until 2026-11-11, which read as sharp and distracting). */
+  --ds-beam-strength: 10%;
+  border-color: transparent;
+  background:
+    linear-gradient(var(--ds-orange-darkest), var(--ds-orange-darkest)) padding-box,
+    conic-gradient(from var(--ds-beam-angle), var(--ds-orange-ember) 0 25%, color-mix(in srgb, var(--ds-orange) var(--ds-beam-strength), var(--ds-orange-ember)) 62.5%, var(--ds-orange-ember) 100%) border-box;
+  animation: ds-beam 3.5s linear infinite;
+}
+@keyframes ds-beam { to { --ds-beam-angle: 360deg; } }
+
+.ds-hero-badge .div-block-534 { background-image: none; }
+.ds-hero-badge .div-block-534::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--ds-orange) 25%, transparent);
+  animation: ds-glow 2.8s ease-in-out infinite;
+}
+@keyframes ds-glow {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0; }
+}
+
+.ds-hero-badge-roll { display: inline-block; height: 1.5em; line-height: 1.5em; overflow: hidden; vertical-align: top; }
+.ds-hero-badge-track { display: block; animation: ds-roll 9s ease-in-out infinite; }
+.ds-hero-badge-track > span { display: block; white-space: nowrap; }
+@keyframes ds-roll {
+  0%, 26.7% { transform: translateY(0); }
+  33.3%, 60% { transform: translateY(-1.5em); }
+  66.7%, 93.3% { transform: translateY(-3em); }
+  100% { transform: translateY(-4.5em); }
+}
+.ds-flag { display: inline-block; width: 1.15em; height: .6em; margin-left: 2px; vertical-align: -.02em; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-hero-badge .flex-block-105 { animation: none; background: var(--ds-orange-darkest); border-color: var(--ds-orange-ember); }
+  .ds-hero-badge .div-block-534::before, .ds-hero-badge-track { animation: none; }
+}
+
+/* ==========================================================================
    Homepage — gap above "Selected works."
    The "Every pixel tells a story" section between the intro and the works is
    gone; the works keep the 100px it left above them (Webflow .section-49 on
@@ -727,15 +793,83 @@ ol.cs-list li::before {
 /* The visitor notes' intro sits 20px under its title at every width
    (Webflow only adds it from 1280px). */
 .flex-block-136 > .div-block-558 { margin-top: 20px; }
+/* The visitor notes' cards have 8px corners (Webflow: 4px), the same as the
+   buttons. */
+.feedback-card { border-radius: var(--ds-radius-md); }
+
+/* About — "The other half" is a Section title too. Where its text column
+   stacks under it (phones), it keeps the same 20px gap. */
+.section-53 .ds-section-title { margin-bottom: 20px; }
+
+/* ==========================================================================
+   Page edges
+   Everything lines up on one left and one right edge: the logo's left edge
+   and the same distance in from the right (.mid-body's side padding plus a
+   10px gutter: 50px, 30px on phones, wider on very wide screens). These
+   rules bring the pieces that missed those edges back onto them. The top
+   menu's and the footer's fixes are in layout.css, which every page loads.
+   ========================================================================== */
+/* Case studies, from 1280px: Webflow makes .section-36 full width with a
+   10px right margin, so everything in it ran 10px past the right edge. */
+@media (min-width: 1280px) { .section-36 { width: auto; margin-right: 0; padding-right: 10px; } }
+@media (max-width: 1279px) {
+  /* The generated case-study body gets the 10px gutter at every width (it
+     only had it up to 991px). */
+  .cs { padding-left: 10px; padding-right: 10px; }
+  /* Older case studies: the closing box and the end cards sat 10px outside
+     both edges, beside a body that keeps to them. */
+  .section-36:not(.cs) > .section-37,
+  .section-36:not(.cs) > .cs-pager { margin-left: 10px; margin-right: 10px; }
+}
+/* Homepage, "What I've been up to": the three cards stopped at 350px, so on
+   very wide screens the row ended short of the right edge; on phones the
+   cards started 10px outside the left edge. */
+@media (min-width: 1280px) { .section-45 .div-block-530 { max-width: none; } }
+@media (max-width: 767px) { .section-45 .div-block-530 { margin-left: 10px; } }
+/* Homepage, "What others think" on phones: Webflow narrows the one column
+   to .75fr and centres it, which left the title and the cards 9px inside
+   both edges. Its rule is an ID selector, hence the !important. */
+@media (max-width: 479px) { .section-31 .quick-stack-10 { grid-template-columns: minmax(0, 1fr) !important; } }
+/* Homepage and All works, the numbered list on tablets: it ran 10px outside
+   both edges (it has the 10px margins on phones only). */
+@media (min-width: 480px) and (max-width: 991px) { .section-35 { margin-left: 10px; margin-right: 10px; } }
 
 /* ==========================================================================
    Homepage — Yanta cards in "Selected works."
    The cards reuse the existing Webflow card markup; this only adds the
-   "Earlier work" divider and the image placeholder until the visuals exist.
+   heading row and the image placeholder until the visuals exist.
    ========================================================================== */
-.ds-work-group { margin: 72px 0 20px; }
-.ds-work-group .cs-tag { color: var(--ds-white); border-color: var(--ds-orange-deep); }
-.ds-work-group--mobile { margin: 48px 0 8px; }
+/* Section heading row: the title on the left and one secondary button
+   at the far right, in line with the cards' right edge ("Selected works" +
+   "View all works", on desktop and on the phone list). */
+.ds-section-head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  align-self: stretch;
+  gap: 16px;
+}
+/* Webflow gives the title row (.flex-block-78) auto margins, and on phones
+   20px under it; inside the heading row either would move the title off the
+   button's centre line, so the row drops them and the 20px moves to the
+   heading row as a whole. */
+.ds-section-head > .flex-block-78 { margin-top: 0; margin-bottom: 0; }
+@media (max-width: 479px) { .section-35 .ds-section-head { margin-bottom: 20px; } }
+
+/* ==========================================================================
+   All works (works.html)
+   Every project in one list: the homepage's cards in one grid from 992px,
+   its numbered list below that. The page title (.v25-title-text, as
+   "Welcome to the Lab.") sits where the homepage intro does.
+   ========================================================================== */
+.ds-works-head { margin: 60px 10px 0; }
+@media (min-width: 1280px) { .ds-works-head { margin-top: 80px; } }
+@media (max-width: 767px) { .ds-works-head { margin-top: 40px; } }
+@media (max-width: 479px) { .ds-works-head { margin-top: 20px; } }
+.ds-works-head .v25-title-text { margin: 0; }
+.section-49.ds-works { margin-top: 0; }
+.section-35.ds-works-list { margin-top: 20px; }
 
 .ds-card-visual {
   position: relative;
@@ -776,8 +910,34 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
    card's edges to the text and from the text to the divider on both sides
    (Webflow had 15–20px at the edges but 50px at the divider). The divider
    keeps the footer's full height. */
+/* 8px corners (Webflow: 4px), as the buttons and the other cards; the card
+   clips its picture so the top corners follow the curve. */
+.new-project-card { border-radius: var(--ds-radius-md); overflow: hidden; }
+/* The case studies' "Back to Selected works" card lands here
+   (index.html#selected-works): an empty marker just before the works, so it
+   works for the desktop grid and the phone list alike. */
+.ds-anchor { display: block; height: 0; scroll-margin-top: -60px; }
+/* It sits 100px above the "Selected works" heading (140px below 480px);
+   the negative margin lands the heading 40px from the top of the window. */
+@media (max-width: 479px) { .ds-anchor { scroll-margin-top: -100px; } }
+/* Every line in a work card is 2px (--ds-card-border-width): the card's
+   frame, the tags' frames, the line under the picture and the divider in
+   the footer. */
+.new-project-card { border-width: var(--ds-card-border-width); }
+.new-project-card .interaction-tag,
+.new-project-card .interaction-tag-client { border-width: var(--ds-card-border-width); }
+/* The frame over the picture (Webflow .div-block-578, which holds the client
+   tag) keeps only its bottom line, the divider between picture and text;
+   from 1280px Webflow draws it on all four sides, at 1px. */
+.new-project-card .div-block-578 { border-top: 0; border-right: 0; border-left: 0; border-bottom-width: var(--ds-card-border-width); }
+/* The picture itself has square corners (Webflow gave the picture box and
+   the image 4px each, which showed as small notches where the picture meets
+   the divider); the card's own 8px corners still round its top. */
+.new-project-card .div-block-583,
+.new-project-card .div-block-583 > img,
+.new-project-card .div-block-583 > video { border-radius: 0; }
 .new-project-card .div-block-579 { align-items: center; gap: 20px; padding: 20px; }
-.new-project-card .div-block-580 { align-self: stretch; }
+.new-project-card .div-block-580 { align-self: stretch; flex: none; width: var(--ds-card-border-width); }
 
 /* ==========================================================================
    Homepage — "Hover to reveal" spotlight (Webflow .spotlight1_*)
@@ -811,23 +971,9 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
 /* Neutralise the Webflow element defaults (blockquote bar and padding,
    centred figcaption) at class-level specificity. */
 .ds-deck-cell :where(p, figure, blockquote, figcaption) { margin: 0; padding: 0; border: 0; text-align: left; }
-.ds-deck-nav { display: flex; justify-content: flex-end; gap: 10px; }
-.ds-round {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  border: 1px solid var(--ds-orange);
-  border-radius: var(--ds-radius-circle);
-  background: var(--ds-black);
-  color: var(--ds-white);
-  cursor: pointer;
-  transition: background-color .2s;
-}
-.ds-round:hover, .ds-round:focus-visible { background: var(--ds-orange); outline: none; }
-.ds-round svg { width: 18px; height: 18px; }
+/* Previous and next are tertiary circle buttons (.ds-btn-icon, buttons.css),
+   12px apart. */
+.ds-deck-nav { display: flex; justify-content: flex-end; gap: var(--ds-btn-row-gap); }
 .ds-deck {
   --fan: 1;
   display: grid;
@@ -849,7 +995,7 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
   padding: 40px 40px 32px;
   background: var(--ds-surface-1);
   border: 2px solid var(--ds-border-strong);
-  border-radius: var(--ds-radius-lg);
+  border-radius: var(--ds-radius-md);  /* 8px, as the buttons and the visitor-note cards */
   box-shadow: 0 28px 56px rgba(0, 0, 0, .65);
   font-family: var(--ds-font-primary);
   color: var(--ds-white);
@@ -1028,8 +1174,8 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
   font-size: var(--ds-text-xs);
   color: var(--ds-red);
 }
-/* The pill and the badge share a line, pill on the left; where they don't
-   fit (phones), the badge moves under the pill. */
+/* Submit and the badge share a line, Submit on the left; where they don't
+   fit (phones), the badge moves under it. */
 .ds-feedback-foot {
   display: flex;
   flex-wrap: wrap;
@@ -1038,10 +1184,9 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
   gap: 12px;
   padding: 14px 16px 16px;
 }
-/* The Submit pill (Webflow .button-1) as a real button. */
-.ds-feedback .button-1 { flex: none; margin: 0; padding: 0; font: inherit; background: none; border: 0; cursor: pointer; }
-.ds-feedback .button-1:disabled { cursor: progress; opacity: .7; }
-.ds-feedback .button-1:focus-visible .button-1_content-wrap { box-shadow: 0 0 0 2px var(--ds-white); }
+/* Submit is the form's primary button (buttons.css). */
+.ds-feedback .ds-btn { flex: none; }
+.ds-feedback .ds-btn:disabled { cursor: progress; }
 
 /* Info badge: a soft pill with an info icon, for a quiet note beside an
    action (the mono .cs-tag is for labels). */
