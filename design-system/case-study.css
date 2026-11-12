@@ -87,7 +87,19 @@
    1. Opening — hero placeholder and team hover (rest is Webflow markup)
    ------------------------------------------------------------------ */
 /* Same proportions as the older pages' hero images (1440 × 582) */
-.cs-visual.cs-visual--hero { aspect-ratio: 1440 / 582; border-radius: 0; }
+.cs-visual.cs-visual--hero { aspect-ratio: 1440 / 582; }
+
+/* The hero (the picture or video at the top of every case study) has the
+   pictures' 8px corners too (square until 2026-11-11). The corners are on
+   the picture itself, not clipped by its box, so the video's focus ring
+   (outside it) still shows. The older studies: Featurely and Red Lab
+   (.image-182), TMF 2 (.image-288), Crayon (.image-301), and TMF 1's pair
+   of moving pictures side by side (.div-block-457, clipped as one). */
+.cs-hero-media,
+.cs-hero-image,
+.cs-hero-video,
+.image-182, .image-288, .image-301 { border-radius: var(--ds-media-radius); }
+.div-block-457 { border-radius: var(--ds-media-radius); overflow: hidden; }
 
 /* Hero video (1440 × 582): loops muted; click pauses / plays (video.js).
    While paused, a tag in the corner says how to resume. */
@@ -196,7 +208,7 @@
   padding: 24px;
   background: var(--ds-surface-card);
   border: 2px solid var(--ds-border-strong);
-  border-radius: var(--ds-radius-sm);
+  border-radius: var(--ds-card-radius);
 }
 .cs-tldr-item p {
   margin-top: 14px;
@@ -272,11 +284,19 @@ ol.cs-tldr-list li::before {
    ------------------------------------------------------------------ */
 .cs-figure { margin-top: 40px; }
 /* margin: Webflow gives every img a 10px bottom margin. */
-.cs-figure img { display: block; width: 100%; height: auto; margin: 0; border-radius: var(--ds-radius-sm); }
+.cs-figure img { display: block; width: 100%; height: auto; margin: 0; border-radius: var(--ds-media-radius); }
 /* A video in the body (an image line pointing at an .mp4): loops muted and
    pauses on click, like the hero video. */
 .cs-figure-media { position: relative; container-type: inline-size; }
-.cs-figure-video { display: block; width: 100%; height: auto; border-radius: var(--ds-radius-sm); cursor: pointer; }
+.cs-figure-video { display: block; width: 100%; height: auto; border-radius: var(--ds-media-radius); cursor: pointer; }
+/* Pictures and videos in the older case studies and the closing photo
+   gallery: the same 8px corners (Webflow: 4px, or square on Crayon). The
+   heroes stay square, and so do Crayon's three small illustrations. */
+.utility-aspect-1x1 > .utility-image-cover,
+.image-257, .image-257-copy-2, .image-289, .image-290,
+.image-303, .image-304, .image-305,
+.div-block-192, .div-block-194,
+.video-6, .video-7, .code-embed-9, .youtube { border-radius: var(--ds-media-radius); }
 /* A credit (an image title that starts with "Credit:"): a tag in the
    bottom-right corner, across from the "Paused" tag. */
 .cs-credit { position: absolute; right: 20px; bottom: 20px; background: var(--ds-black); pointer-events: none; }
@@ -304,7 +324,7 @@ ol.cs-tldr-list li::before {
   background-color: var(--ds-surface-card);
   background-image: repeating-linear-gradient(135deg, transparent 0 18px, var(--ds-overlay-white-5) 18px 19px);
   border: 2px dashed var(--ds-border-strong);
-  border-radius: var(--ds-radius-sm);
+  border-radius: var(--ds-media-radius);
   overflow: hidden;
   font-family: var(--ds-font-primary);
 }
@@ -561,7 +581,7 @@ ol.cs-list li::before {
   padding: 32px;
   background: var(--ds-surface-card);
   border: 2px solid var(--ds-border-strong);
-  border-radius: var(--ds-radius-sm);
+  border-radius: var(--ds-card-radius);
   text-decoration: none;
   transition: border-color .2s;
 }
@@ -610,7 +630,7 @@ ol.cs-list li::before {
   background-color: var(--ds-surface-card);
   background-image: repeating-linear-gradient(135deg, transparent 0 18px, var(--ds-overlay-white-5) 18px 19px);
   border: 2px dashed var(--ds-border-strong);
-  border-radius: var(--ds-radius-sm);
+  border-radius: var(--ds-media-radius);
 }
 .cs-gallery-slot .cs-tag { background: var(--ds-black); }
 /* Followed by the next-study link, not the footer. */
@@ -793,9 +813,9 @@ ol.cs-list li::before {
 /* The visitor notes' intro sits 20px under its title at every width
    (Webflow only adds it from 1280px). */
 .flex-block-136 > .div-block-558 { margin-top: 20px; }
-/* The visitor notes' cards have 8px corners (Webflow: 4px), the same as the
-   buttons. */
-.feedback-card { border-radius: var(--ds-radius-md); }
+/* The visitor notes' cards: card corners (Webflow: 4px). */
+.feedback-card { border-radius: var(--ds-card-radius); }
+
 
 /* About — "The other half" is a Section title too. Where its text column
    stacks under it (phones), it keeps the same 20px gap. */
@@ -901,6 +921,12 @@ ol.cs-list li::before {
    phones overlay when they hold back autoplay (Low Power Mode). */
 video.ds-card-video { display: block; max-width: 100%; object-fit: cover; pointer-events: none; }
 video.ds-card-video::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }
+/* The phone-size work cards (homepage and All works, up to 991px): the
+   picture has the pictures' 8px corners, and the Showcase button (primary)
+   sits 20px under it at every width. Webflow left 0px under the videos on
+   tablets, 10px under the pictures, and 20px only on small phones. */
+.project-image-block-mob > .image-283 { margin-bottom: 0; border-radius: var(--ds-media-radius); }
+.project-image-block-mob > :is(.div-block-461, .div-block-462, .div-block-463, .div-block-464) { margin-top: 20px; }
 .new-project-card:hover .ds-card-thumb { width: 105%; height: 105%; }
 @media (prefers-reduced-motion: reduce) { .ds-card-thumb { transition: none; } }
 .ds-card-visual--mobile .ds-card-visual-title { font-size: var(--ds-text-lg); }
@@ -912,7 +938,7 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
    keeps the footer's full height. */
 /* 8px corners (Webflow: 4px), as the buttons and the other cards; the card
    clips its picture so the top corners follow the curve. */
-.new-project-card { border-radius: var(--ds-radius-md); overflow: hidden; }
+.new-project-card { border-radius: var(--ds-card-radius); overflow: hidden; }
 /* The case studies' "Back to Selected works" card lands here
    (index.html#selected-works): an empty marker just before the works, so it
    works for the desktop grid and the phone list alike. */
@@ -995,7 +1021,7 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
   padding: 40px 40px 32px;
   background: var(--ds-surface-1);
   border: 2px solid var(--ds-border-strong);
-  border-radius: var(--ds-radius-md);  /* 8px, as the buttons and the visitor-note cards */
+  border-radius: var(--ds-card-radius);  /* 8px, as every card */
   box-shadow: 0 28px 56px rgba(0, 0, 0, .65);
   font-family: var(--ds-font-primary);
   color: var(--ds-white);
@@ -1074,7 +1100,7 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
   color: var(--ds-white);
   background: var(--ds-surface-1);
   border: 1px solid var(--ds-overlay-white-10);
-  border-radius: var(--ds-radius-lg);
+  border-radius: var(--ds-card-radius);  /* 8px, as every card (12px until 2026-11-11) */
   box-shadow: 0 16px 48px var(--ds-overlay-black-70);
   opacity: 0;
   transform: translateY(-4px) scale(.98);

@@ -115,10 +115,13 @@ Both use `--ds-section-arrow-width` and `--ds-section-arrow-height` for the arro
 
 ## 3. Shape & radius
 
-- **`20px` is the signature card radius** (78 uses — the roundest, most recognizable trait of the site).
 - **`8px` for buttons** (primary and secondary, `--ds-btn-radius`, since 2026-11-11).
-- **`8px` for cards** too: the work cards, the testimonial cards and the visitor-note cards (since 2026-11-11).
+- **`8px` for every card** (`--ds-card-radius`, since 2026-11-11). The design system's cards use the token where they are defined in `case-study.css`: the case-study summary cards, the "Home" and "Next case study" cards, the work cards, the testimonial cards and the visitor-note cards. Webflow's own boxes get it in `layout.css` ("Cards"), which every page loads: the case studies' closing box ("Curious about the journey?"; its dotted panel is 6px inside the 2px orange frame, so the frame stays even), the phone-size work cards, and the Lab frames and live embeds. The résumé page's cards were already 8px. A new card takes `--ds-card-radius`.
+- **`8px` for the feedback popup** on About (`--ds-card-radius`; 12px until 2026-11-11).
+- **`8px` for pictures and videos in the case studies** (`--ds-media-radius`, since 2026-11-11): figures, videos, embeds, the closing photo gallery, and the placeholders that stand in for a missing picture. The Yanta studies' rules use the token where they are defined; the older studies' Webflow pictures and videos get it from one rule in `case-study.css`. The heroes (the picture or video at the top of each study) have them too; only Crayon's three small illustrations stay square.
+- **Not cards:** the footer has no corners.
 - **`4px` for small chips and tags**, with `2px` for elements nested inside them.
+- Webflow's original card radius was `20px` (78 uses); no card on the site uses it now.
 - Full scale: `2, 4, 8, 12, 16, 20, 24` px, then `100px` pill and `50%` circle.
 
 ---
@@ -183,7 +186,7 @@ The tertiary has one size: 40px tall, a 124px pill and a 40px circle.
 | Homepage, What I've been up to | Explore the Lab | Secondary | A side path |
 | About, visitor notes | Drop your feedback | Secondary | Opens the form; optional |
 | About, feedback form | Submit | **Primary** | The form's one committing action |
-| Homepage and All works, phone list | Showcase | Secondary | Repeated on every project |
+| Homepage and All works, phone list | Showcase | **Primary** | Each card's one action, under its picture with a 20px gap; a card fills most of a phone screen, so one shows at a time (Anamitra's call, 2026-11-11) |
 | Lab | View | Secondary | Repeated on every experiment |
 | Resume | Human optimized version · ATS optimized version | Secondary | Two versions of the same file, offered side by side as equals |
 | Homepage, What others think | Previous · Next | Tertiary, circle | Icon-only controls that turn the cards, in the same circle as the contact links |
@@ -221,7 +224,7 @@ Black fill, `1px #111` hairline border, `20px` gaps, generous padding.
 ### Work card — v25 (`new-project-card`)
 The newest card, used in the homepage "Selected works" grid and on the All works page. Tighter than the older cards:
 ```css
-card:   background: #090909 (--ds-surface-card); border: 2px solid #2c2c2c (--ds-border-strong); border-radius: 8px (--ds-radius-md; Webflow had 4px); the card clips its picture;
+card:   background: #090909 (--ds-surface-card); border: 2px solid #2c2c2c (--ds-border-strong); border-radius: 8px (--ds-card-radius; Webflow had 4px); the card clips its picture;
 lines:  every line in the card is 2px (--ds-card-border-width): the frame, the tags, the line under the picture, the footer divider;
 picture: square corners; a 2px #2c2c2c line under it (from 1280px);
 tags:   Spline Sans Mono 12px/500, letter-spacing .5px, #a1a1a1, 2px #2c2c2c frame, 3px padding
@@ -244,17 +247,17 @@ The homepage's testimonials are one card deck (`.ds-deck` of `.ds-quote` cards i
 - **Layout:** the cards share one grid cell, so they are all as tall as the longest quote. Four are fanned behind the front one. Cards are up to 600px wide (at most 70% of the slots), against the slots' right edge.
 - **Motion:** every 7 seconds, or on the previous and next buttons (tertiary circles, `.ds-btn-icon`), the front card slides out to the left and settles at the back. The 7 seconds only run while the deck is on screen: they start once (nearly) all of it is in view and stop once more than half has scrolled away, so a visitor always starts on the first card; the previous arrow brings the back card forward. From 768px the leaving card stops at the slots' left edge (`--deck-out`), so it never covers the title column. The deck holds still for reduced motion.
 - **Text:** the quote is the site's body copy (`--ds-body-*`, as `.ms-body-text-1.ocp75`), with a few keywords per quote in `<strong>`: full white at medium weight, the body copy's emphasis. Quotes have no quotation marks, since the coral mark above each one does that job. Name and role match the testimonials' `.v25-h3` (aktiv-grotesk 16px) and `.v25-h4.grey` (aktiv-grotesk 12px medium, muted).
-- **Card details:** each card has 8px corners (`--ds-radius-md`, as the buttons and the visitor-note cards), a client tag (`.cs-tag--accent`), the position dots, a Cabin quote mark in coral and the person's photo.
+- **Card details:** each card has 8px corners (`--ds-card-radius`, as every card), a client tag (`.cs-tag--accent`), the position dots, a Cabin quote mark in coral and the person's photo.
 
 ### Visitor feedback popover ("Drop your feedback", About page)
 Since 2026-11-05 the button opens a popover in the manner of shadcn/ui's Popover (`.ds-popover`, styled in [`case-study.css`](case-study.css), run by [`feedback.js`](feedback.js)). Webflow no longer touches it.
-- **Panel:** 380px wide, 8px under the button, right-aligned to it. It uses `--ds-surface-1`, a 1px `--ds-overlay-white-10` border, `--ds-radius-lg` corners and a soft shadow, and fades and scales in over .15s.
+- **Panel:** 380px wide, 8px under the button, right-aligned to it. It uses `--ds-surface-1`, a 1px `--ds-overlay-white-10` border, 8px corners (`--ds-card-radius`) and a soft shadow, and fades and scales in over .15s.
 - **Opening and closing:** the button opens and closes it; Escape or a click outside closes it too. There's no title and no ✕. Opening puts the cursor in Name.
 - **Form:** hairline rows with the label on the left and a borderless field on the right (Name, Role, Company marked "Optional"), then the message. A row lightens while its field has focus. An empty required field gets a small red dot (`--ds-red`, 6px) at the end of its row; the message's sits at its top right. Hovering the dot shows a "Required field" tooltip to its left. Screen readers hear "Required". There are no red lines. The labels reset Webflow's uppercase `label` style.
 - **Footer:** Submit on the left, the form's primary button, and an info badge ("Goes straight to my inbox") on the right. On phones the badge moves under it.
 - **Sending:** the form's `action` is Formspree (`https://formspree.io/f/xdeejpvv`). Formspree emails each note under the subject "New portfolio feedback" and keeps 30 days in its dashboard; the free plan allows 50 a month. On success a thank-you replaces the rows, and the next opening brings a fresh form. On failure a red line shows and the text stays. A hidden `_gotcha` field catches bots.
 - **Webflow:** the button links to plain `#`. A link to `#feedback-popover` would set off Webflow's smooth scroll.
-- **The wall:** the visitor notes are a fixed copy of Webflow's list, each note a `.feedback-card` with 8px corners (`--ds-radius-md`, the buttons' radius). A new note only shows up when it's added to `about.html` by hand.
+- **The wall:** the visitor notes are a fixed copy of Webflow's list, each note a `.feedback-card` with 8px corners (`--ds-card-radius`, as every card). A new note only shows up when it's added to `about.html` by hand.
 - **Where:** the section ("Unfiltered notes from visitors") is the last one on the About page, above the footer; it moved there from the homepage on 2026-11-11. About loads `feedback.js`; the homepage no longer does.
 
 ### Homepage intro pill ("Available for work")
@@ -296,7 +299,7 @@ To swap a placeholder for a real visual, replace the `<div class="cs-visual">…
 1. **Use tokens, not raw hex.** The stylesheet has 238 unique hardcoded colors; every new color choice should come from this document or be added here first.
 2. **aktiv-grotesk for text, Cabin for titles**; project fonts stay inside their case study.
 3. **Project palettes stay scoped** to their pages.
-4. **No new radii.** Older pages use 20px cards and 4px buttons; new v25 work (cards, case studies) uses 4px with a 2px `#2c2c2c` frame.
+4. **No new radii.** Buttons, cards, the popup, and case-study pictures and videos are 8px (`--ds-btn-radius`, `--ds-card-radius`, `--ds-media-radius`); chips and tags are 4px.
 5. **New sizes come from the type scale** above.
 6. `tokens.css` only defines `--ds-*` variables, so linking it changes nothing on its own. It is linked from `index.html` and the case-study pages.
 

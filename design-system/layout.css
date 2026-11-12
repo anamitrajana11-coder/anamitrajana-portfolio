@@ -1,8 +1,8 @@
 /* ==========================================================================
    ANA™ Page frame
    ==========================================================================
-   Rules for the parts every page shares, the top menu, the footer and the
-   scrollbar, so they keep to the page's two edges: the logo's left edge and the same
+   Rules for the parts every page shares (the top menu, the footer, the
+   scrollbar and the cards' corners) so they keep to the page's two edges: the logo's left edge and the same
    distance in from the right (50px; 30px below 768px; wider on very wide
    screens). Linked from every page; build-case-studies.mjs keeps the link.
    Section-level edge fixes for the homepage, All works and the case studies
@@ -38,3 +38,24 @@
 @supports not selector(::-webkit-scrollbar) {
   html { scrollbar-color: rgb(100, 100, 100) rgb(15, 15, 15); }
 }
+
+/* --------------------------------------------------------------------------
+   Cards: every card on the site has 8px corners (--ds-card-radius).
+   The design system's cards (case-study summary and next/back, work,
+   testimonial, visitor note) use the token where they are defined in
+   case-study.css; these are Webflow's own boxes, here because Lab doesn't
+   load case-study.css. Pictures and videos keep 4px; the footer is not a
+   card.
+   -------------------------------------------------------------------------- */
+/* Case studies, closing box ("Curious about the journey?"): a 2px orange
+   gradient frame around the dotted panel, so the panel's corners are 2px
+   tighter to keep the frame even all round. */
+.div-block-495 { border-radius: var(--ds-card-radius); }
+.div-block-494 { border-radius: calc(var(--ds-card-radius) - 2px); }
+/* Homepage and All works on phones: the work cards. */
+.div-block-451 { border-radius: var(--ds-card-radius); }
+/* Lab: the framed pictures and the two live embeds. The frame clips its
+   picture so the corners follow the curve. */
+.div-block-537,
+.embed-div-block-1,
+.embed-div-block-2 { border-radius: var(--ds-card-radius); overflow: hidden; }

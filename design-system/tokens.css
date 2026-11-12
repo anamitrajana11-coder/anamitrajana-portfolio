@@ -100,15 +100,18 @@
   --ds-leading-heading: 1.15;
 
   /* ------------------------------------------------------------------
-     6. RADII — 8px for buttons and cards (the v25 work cards, testimonial
-        and visitor-note cards; 4px until 2026-11-11); 4px for chips and tags
+     6. RADII — 8px for buttons, every card (--ds-card-radius) and the
+        pictures and videos in the case studies (--ds-media-radius); 4px for
+        chips and tags
      ------------------------------------------------------------------ */
   --ds-radius-xs: 2px;     /* inner button label                          */
   --ds-radius-sm: 4px;     /* small chips and tags (56x)                  */
   --ds-radius-md: 8px;
   --ds-radius-lg: 12px;
   --ds-radius-xl: 16px;
-  --ds-radius-2xl: 20px;   /* cards — most used radius (78x)              */
+  --ds-radius-2xl: 20px;   /* Webflow's old card radius; unused now       */
+  --ds-card-radius: var(--ds-radius-md);  /* 8px: every card on the site (see "Cards" in layout.css) */
+  --ds-media-radius: var(--ds-radius-md); /* 8px: pictures and videos in the case studies */
   --ds-radius-3xl: 24px;
   --ds-radius-pill: 100px;
   --ds-radius-circle: 50%;
