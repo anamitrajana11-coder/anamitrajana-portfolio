@@ -192,6 +192,8 @@ The tertiary has one size: 40px tall, a 124px pill and a 40px circle.
 
 **How they're built.** Primary and secondary need no extra markup: `<a class="ds-btn ds-btn--primary">Label</a>` (or a `<button>`). The tertiary has its own markup, written by `talkButton()` in `build-case-studies.mjs`. The tertiary's glass edge and liquid stretch are SVG filters (`#ds-glass-rim`, `#ds-glass-rim-goo`, `#ds-goo`) in a hidden `<svg class="ds-filters">` at the top of every page's `<body>`; the build keeps that block and the `buttons.css` link on every page. Reduced motion turns the transitions off.
 
+**Safari rule for anything inside an SVG filter.** Animate it with `left`, `width` or `background-color`, never with `transform` or `opacity`. While a transform or opacity animation runs, Safari moves the element onto a layer of its own, outside its parent's SVG filter. Until 2026-11-11 the tertiary's circle slid with `transform`, so in Safari it showed as a bare black disc for the whole 0.9s slide: no glass, no edge, no melting into the pill. It now moves with `left`, and the embers fade with `background-color`. Chrome looks the same either way, so check the tertiary in Safari after any change to it.
+
 ### Page edges (`layout.css`, and "Page edges" in `case-study.css`)
 Everything on a page lines up on two edges: the logo's left edge and the same distance in from the right. That is `.mid-body`'s side padding plus a 10px gutter: 50px, 30px below 768px, and wider on screens past 1728px. On 2026-11-11 every page was measured at 1918, 1440, 1024, 820, 600 and 390px and the pieces that missed those edges were brought back:
 

@@ -251,13 +251,17 @@
 .ds-btn-talk__rim > i:last-child { left: calc(var(--talk-pad) + var(--talk-dot)); width: 40px; border-radius: 50%; }
 .ds-btn-talk__rim > i { background: #000; }
 
-/* What moves on hover: the circle (in both layers) and the arrow. */
+/* What moves on hover: the circle (in both layers) and the arrow.
+   Animated with `left`, never `transform` or `opacity`: Safari lifts an
+   element whose transform or opacity is animating onto a layer of its own,
+   outside its parent's SVG filter, so for the whole slide the circle
+   showed as the rim layer's raw black disc, with no glass and no melt. */
 .ds-btn-talk__dot,
 .ds-btn-talk__rim > i:last-child,
-.ds-btn-talk__arrow { transition: transform .9s var(--talk-ease); }
+.ds-btn-talk__arrow { transition: left .9s var(--talk-ease); }
 .ds-btn-talk:hover .ds-btn-talk__dot,
-.ds-btn-talk:hover .ds-btn-talk__rim > i:last-child,
-.ds-btn-talk:hover .ds-btn-talk__arrow { transform: translateX(var(--talk-pull)); }
+.ds-btn-talk:hover .ds-btn-talk__rim > i:last-child { left: calc(var(--talk-pad) + var(--talk-dot) + var(--talk-pull)); }
+.ds-btn-talk:hover .ds-btn-talk__arrow { left: calc(var(--talk-dot) + var(--talk-pull)); }
 
 /* The light: brown glass with a sheen, and the ember low on the left. */
 .ds-btn-talk__glass i {
@@ -270,8 +274,8 @@
     linear-gradient(180deg, rgb(var(--ds-glass-tint-rgb) / .24), rgb(var(--ds-glass-tint-rgb) / 0) 60%, rgb(var(--ds-glass-tint-rgb) / 0) 81%, rgb(var(--ds-glass-tint-rgb) / .12)),
     var(--ds-glass-brown);
 }
-.ds-btn-talk__dot i { left: calc(var(--talk-dot) * -1); transition: transform .9s var(--talk-ease); }
-.ds-btn-talk:hover .ds-btn-talk__dot i { transform: translateX(calc(var(--talk-pull) * -1)); }
+.ds-btn-talk__dot i { left: calc(var(--talk-dot) * -1); transition: left .9s var(--talk-ease); }
+.ds-btn-talk:hover .ds-btn-talk__dot i { left: calc((var(--talk-dot) + var(--talk-pull)) * -1); }
 .ds-btn-talk__glass i::before {
   content: "";
   position: absolute;
@@ -280,12 +284,11 @@
   width: 90px;
   height: 44px;
   border-radius: 50%;
-  background: rgb(var(--ds-glow-rgb));
+  background-color: rgb(var(--ds-glow-rgb) / .75);
   filter: blur(14px);
-  opacity: .75;
-  transition: width .6s var(--talk-ease), opacity .6s ease;
+  transition: width .6s var(--talk-ease), background-color .6s ease;
 }
-.ds-btn-talk:hover .ds-btn-talk__glass i::before { width: 180px; opacity: .95; }
+.ds-btn-talk:hover .ds-btn-talk__glass i::before { width: 180px; background-color: rgb(var(--ds-glow-rgb) / .95); }
 
 /* The circle's own light: a warm edge on its far side, and on hover an
    ember of its own. */
@@ -304,12 +307,11 @@
   width: 52px;
   height: 40px;
   border-radius: 50%;
-  background: rgb(var(--ds-glow-rgb));
+  background-color: rgb(var(--ds-glow-rgb) / 0);
   filter: blur(12px);
-  opacity: 0;
-  transition: opacity .6s ease;
+  transition: background-color .6s ease;
 }
-.ds-btn-talk:hover .ds-btn-talk__dot::after { opacity: .6; }
+.ds-btn-talk:hover .ds-btn-talk__dot::after { background-color: rgb(var(--ds-glow-rgb) / .6); }
 
 .ds-btn-talk__label,
 .ds-btn-talk__arrow {
