@@ -155,21 +155,31 @@
 .team-flex-block .image-295 { width: 52px; height: 52px; }
 /* Team avatars and name cards on every project page (Anamitra, 2026-11-20):
    - Avatars: a 2px mid-grey ring in place of Webflow's 2–3px orange one.
-   - Name card: grey with white text in the regular weight, no border, 6px
-     corners, and 4px top, 8px sides, 6px under the role (was white with black
-     text, bold, in a 2px orange frame, 2px corners, 4 / 8 / 5). */
+   - Name card: dark grey, no border, 6px corners, 4px top, 8px sides, 6px
+     under the role. Name and role in the body copy's type (as the summary
+     cards' text): the name white, the role the body's 75% white. (Was white
+     with black bold text in a 2px orange frame, 2px corners, 4 / 8 / 5.) */
 .image-295 { border: 2px solid var(--ds-grey-600); }
 .div-block-502 {
   border: 0;
   background: var(--ds-grey-800);
   border-radius: var(--ds-name-card-radius);
   padding: 4px 8px 6px;
-  margin-top: 68px;  /* 16px below the 52px photo (Webflow's 75px left 23px) */
+  margin-top: 64px;  /* 12px below the 52px photo (Webflow's 75px left 23px) */
 }
 .div-block-502 > * { margin-bottom: 0; }
-/* The name and role carry Webflow's .black; two classes, to outrank it.
-   Both in the regular weight (Webflow had the name 600, the role 500). */
-.div-block-502 > .black { color: var(--ds-white); -webkit-text-fill-color: currentcolor; font-weight: var(--ds-weight-regular); }
+/* The name and role carry Webflow's .black (and its font classes); two
+   classes, to outrank them. */
+.div-block-502 > .black {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-body-size);
+  line-height: var(--ds-body-leading);
+  font-weight: var(--ds-weight-regular);
+  letter-spacing: normal;
+  color: var(--ds-white);
+  -webkit-text-fill-color: currentcolor;
+}
+.div-block-502 > .v25-h4.black { color: var(--ds-body-color); }
 
 /* Teams of 7+ don't fit one row in the 4-of-12 column: rows of four, with
    room left for the hover widening so nothing reflows while hovering
@@ -661,7 +671,7 @@ ol.cs-list li::before {
   .cs-status { grid-template-columns: 1fr; gap: 24px; }
   .cs-tldr { grid-template-columns: 1fr; margin-top: 48px; }
   .cs-section p, .cs-list li, .cs-tldr-item p, .cs-tldr-list li > span, .cs-status li, .cs-status p,
-  .cs-credits p:not(.cs-note), .v25-b2.grey { font-size: var(--ds-body-size-compact); }
+  .cs-credits p:not(.cs-note), .v25-b2.grey, .div-block-502 > .black { font-size: var(--ds-body-size-compact); }
   .cs-lead .cs-tldr { margin-top: 60px; }
   .cs-body, .cs-credits { grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: 72px; }
   .cs-toc { display: none; }
