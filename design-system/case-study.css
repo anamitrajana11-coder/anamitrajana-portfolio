@@ -173,8 +173,9 @@
 
 /* Teams of 7+ don't fit one row in the 4-of-12 column: rows of four, with
    room left for the hover widening so nothing reflows while hovering
-   (4 × 43 + 9 overhang + 18 hover = 199). */
-.cs-team--rows { flex-wrap: wrap; row-gap: 6px; max-width: 199px; }
+   (4 × 43 + 9 overhang + 18 hover = 199). Rows 10px apart (6px until
+   2026-11-20, when Anamitra added 4px). */
+.cs-team--rows { flex-wrap: wrap; row-gap: 10px; max-width: 199px; }
 .cs-avatar-placeholder {
   display: flex;
   align-items: center;
@@ -682,8 +683,9 @@ ol.cs-list li::before {
 }
 @media screen and (max-width: 479px) {
   .cs-visual-desc { font-size: 13px; }
-  /* Seven avatars are wider than a phone; let the row wrap. */
-  .cs-team { flex-wrap: wrap; row-gap: 6px; }
+  /* Seven avatars are wider than a phone; let the row wrap, rows 10px
+     apart as in .cs-team--rows. */
+  .cs-team { flex-wrap: wrap; row-gap: 10px; }
 }
 
 /* ==========================================================================
