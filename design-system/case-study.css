@@ -153,6 +153,23 @@
 .team-flex-block .div-block-504:focus-visible { width: 61px !important; }
 .team-flex-block .div-block-503,
 .team-flex-block .image-295 { width: 52px; height: 52px; }
+/* Team avatars and name cards on every project page (Anamitra, 2026-11-20):
+   - Avatars: a 2px mid-grey ring in place of Webflow's 2–3px orange one.
+   - Name card: grey with white text in the regular weight, no border, 6px
+     corners, and 4px top, 8px sides, 6px under the role (was white with black
+     text, bold, in a 2px orange frame, 2px corners, 4 / 8 / 5). */
+.image-295 { border: 2px solid var(--ds-grey-600); }
+.div-block-502 {
+  border: 0;
+  background: var(--ds-grey-800);
+  border-radius: var(--ds-name-card-radius);
+  padding: 4px 8px 6px;
+  margin-top: 68px;  /* 16px below the 52px photo (Webflow's 75px left 23px) */
+}
+.div-block-502 > * { margin-bottom: 0; }
+/* The name and role carry Webflow's .black; two classes, to outrank it.
+   Both in the regular weight (Webflow had the name 600, the role 500). */
+.div-block-502 > .black { color: var(--ds-white); -webkit-text-fill-color: currentcolor; font-weight: var(--ds-weight-regular); }
 
 /* Teams of 7+ don't fit one row in the 4-of-12 column: rows of four, with
    room left for the hover widening so nothing reflows while hovering

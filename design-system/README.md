@@ -119,10 +119,11 @@ Both use `--ds-section-arrow-width` and `--ds-section-arrow-height` for the arro
 - **`8px` for every card** (`--ds-card-radius`, since 2026-11-11). The design system's cards use the token where they are defined in `case-study.css`: the case-study summary cards, the "Home" and "Next case study" cards, the work cards, the testimonial cards and the visitor-note cards. Webflow's own boxes get it in `layout.css` ("Cards"), which every page loads: the case studies' closing box ("Curious about the journey?"; its dotted panel is 6px inside the 2px orange frame, so the frame stays even), the phone-size work cards, and the Lab frames and live embeds. The résumé page's cards were already 8px. A new card takes `--ds-card-radius`.
 - **`8px` for the feedback popup** on About (`--ds-card-radius`; 12px until 2026-11-11).
 - **`8px` for pictures and videos in the case studies** (`--ds-media-radius`, since 2026-11-11): figures, videos, embeds, the closing photo gallery, and the placeholders that stand in for a missing picture. The Yanta studies' rules use the token where they are defined; the older studies' Webflow pictures and videos get it from one rule in `case-study.css`. The heroes (the picture or video at the top of each study) have them too; only Crayon's three small illustrations stay square.
+- **`6px` for the team's hover name card** (`--ds-name-card-radius`, Anamitra's call, 2026-11-20; Webflow had 2px).
 - **Not cards:** the footer has no corners.
 - **`4px` for small chips and tags**, with `2px` for elements nested inside them.
 - Webflow's original card radius was `20px` (78 uses); no card on the site uses it now.
-- Full scale: `2, 4, 8, 12, 16, 20, 24` px, then `100px` pill and `50%` circle.
+- Full scale: `2, 4, 8, 12, 16, 20, 24` px (plus the name card's `6px`), then `100px` pill and `50%` circle.
 
 ---
 
@@ -277,7 +278,7 @@ The Yanta case studies (`yanta-*.html`) are generated from the drafts by `build-
 | Block | Class | Notes |
 |---|---|---|
 | Opening | Webflow `.section-36` markup | Same as `featurely.html` / `tmf1.html`: full-width hero visual (`.cs-visual--hero`, 1440 × 582; replaced by a study's `heroVideo` or `heroImage` once it exists), orange Cabin claim (`.ms-heading-2.orange`), Company / Role / Product, and Project details with Timeline and Team. A timeline in phases (separated by "; " in the draft) shows one phase per line, below the label (`.cs-timeline`) |
-| Team avatars | `.cs-team` | The older pages' hover (slot widens 50 → 70px, white name card with an orange frame), done in CSS instead of Webflow interactions; names and photos go in the script's `team` config |
+| Team avatars | `.cs-team` | The older pages' hover (slot widens 43 → 61px and the name card appears), done in CSS instead of Webflow interactions; names and photos go in the script's `team` config. On every project page the photos have a 2px mid-grey ring (`--ds-grey-600`, #555) and the name card is dark grey (`--ds-grey-800`, #222) with white text in the regular weight (`--ds-weight-regular`), no border, 6px corners, 4px top / 8px sides / 6px bottom, 16px below the photo (Anamitra, 2026-11-20; was white with black text in a 2px orange frame, and orange rings on the photos) |
 | Status | `.cs-status` | Status list (orange dash bullets), Built with, link chips (`.cs-tag--pending` until the link exists) |
 | TL;DR | `.cs-tldr` | Problem / What I did / Result — three v25 cards; Result gets the orange-deep frame. A study with `leadCards` (Identity: The problem / Constraints / Approach; Ask AI: The problem / The decision / What I did; a study with four gets `.cs-tldr--4`, two by two below 1280px) shows those draft sections here instead, out of the body: lists become `.cs-tldr-list` items (lead-in as the title line; ↳, or 01, 02… for a sequence) and the last card gets the frame. In a card list, `**Lead.** {Status} [View](https://…)` puts a status tag (`.cs-tag--status`: a dark brand-green tint with a mid-green border and light-green text and dot, the usual dark-mode success tag; a Live tag's dot pulses, still for reduced motion) and a View button (`.cs-tag--link`, opens in a new tab) beside the lead |
 | List | `.cs-list` | Body-copy lists from `* item` / `1. item` lines in a draft: orange dash bullets, or orange mono step numbers (01, 02…) for a sequence; a bold lead-in reads as the item's title |
@@ -299,7 +300,7 @@ To swap a placeholder for a real visual, replace the `<div class="cs-visual">…
 1. **Use tokens, not raw hex.** The stylesheet has 238 unique hardcoded colors; every new color choice should come from this document or be added here first.
 2. **aktiv-grotesk for text, Cabin for titles**; project fonts stay inside their case study.
 3. **Project palettes stay scoped** to their pages.
-4. **No new radii.** Buttons, cards, the popup, and case-study pictures and videos are 8px (`--ds-btn-radius`, `--ds-card-radius`, `--ds-media-radius`); chips and tags are 4px.
+4. **No new radii.** Buttons, cards, the popup, and case-study pictures and videos are 8px (`--ds-btn-radius`, `--ds-card-radius`, `--ds-media-radius`); the team's name card is 6px (`--ds-name-card-radius`); chips and tags are 4px.
 5. **New sizes come from the type scale** above.
 6. `tokens.css` only defines `--ds-*` variables, so linking it changes nothing on its own. It is linked from `index.html` and the case-study pages.
 

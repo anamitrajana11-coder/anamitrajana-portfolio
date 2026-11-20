@@ -51,6 +51,7 @@
   --ds-grey-200: #eee;
   --ds-grey-300: #ddd;
   --ds-grey-400: #ccc;
+  --ds-grey-600: #555;   /* team avatars' 2px ring (Anamitra, 2026-11-20) */
   --ds-grey-700: #333;
   --ds-grey-800: #222;
   --ds-border-grey: #e4e4e4;     /* = --border-grey                       */
@@ -102,7 +103,7 @@
   /* ------------------------------------------------------------------
      6. RADII — 8px for buttons, every card (--ds-card-radius) and the
         pictures and videos in the case studies (--ds-media-radius); 4px for
-        chips and tags
+        chips and tags; 6px for the team's name card (--ds-name-card-radius)
      ------------------------------------------------------------------ */
   --ds-radius-xs: 2px;     /* inner button label                          */
   --ds-radius-sm: 4px;     /* small chips and tags (56x)                  */
@@ -112,6 +113,7 @@
   --ds-radius-2xl: 20px;   /* Webflow's old card radius; unused now       */
   --ds-card-radius: var(--ds-radius-md);  /* 8px: every card on the site (see "Cards" in layout.css) */
   --ds-media-radius: var(--ds-radius-md); /* 8px: pictures and videos in the case studies */
+  --ds-name-card-radius: 6px;  /* the team avatars' hover name card (Anamitra, 2026-11-20) */
   --ds-radius-3xl: 24px;
   --ds-radius-pill: 100px;
   --ds-radius-circle: 50%;
