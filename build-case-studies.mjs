@@ -146,7 +146,7 @@ const caseStudies = [
     source: "cs-01-identity-brand-website-design-system.md",
     shortName: "Identity, website & design system",
     tags: ["PRODUCT", "BRAND/WEB", "DESIGN SYSTEM"],
-    summary: "Shaping Yanta’s brand, website, and design system as one, creating a recognizable identity that holds together across every touchpoint.",
+    summary: "Building a cohesive visual system across Yanta’s brand, website, and UI component library to anchor 0→1 growth.",
     intro: { title: "Identity, website & design system", text: ["Shaping Yanta’s brand, website, and design system as one, creating a recognizable identity that holds together across every touchpoint."] },
     impact: "Shipped in three weeks:",
     highlight: "280+ component variants",
