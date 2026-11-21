@@ -5,7 +5,7 @@
    Tokens: tokens.css, "Buttons" in the component tier. Linked from every page.
 
    Sizes (primary and secondary): fixed height, side padding and text size.
-     .ds-btn--sm   32px tall · 16px sides · 14px text   dense rows; unused so far
+     .ds-btn--sm   32px tall · 16px sides · 14px text   dense rows: the case studies' View link
      (default)     40px tall · 24px sides · 14px text   every button today
      .ds-btn--lg   48px tall · 32px sides · 16px text   one stand-out action
    Side padding is twice the vertical padding (8 × 16, 12 × 24, 16 × 32).

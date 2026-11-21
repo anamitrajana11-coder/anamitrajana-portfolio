@@ -434,11 +434,13 @@ function renderFigure(figure, tagText) {
 }
 
 // ---------------------------------------------------------------------------
-// Opening — the intro block, a full-width hero visual, then the project facts:
-// one card of four cells, Company / Role / Timeline / Team (Anamitra's pick,
-// option C, 2026-11-20). It replaced the older pages' row of the orange
-// claim, Company / Role / Product and "Project details"; the intro above the
-// hero now says what the project is.
+// Opening — the intro block and a full-width hero visual. The body then
+// starts with the overview (renderOverview): one framed block, the project
+// facts in its first row (Company / Role / Timeline / Team; Anamitra's pick,
+// option C, 2026-11-20) and the lead cards in its second, boxes split by
+// hairlines. It replaced the older pages' row of the orange claim, Company /
+// Role / Product and "Project details" (the intro above the hero now says
+// what the project is), and the lead cards' separate cards.
 // ---------------------------------------------------------------------------
 
 const silhouette = '<svg viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="23" r="10"/><path d="M11 53c2-11 9-16 19-16s17 5 19 16z"/></svg>';
@@ -447,10 +449,10 @@ function heading(text) {
   return `<div class="w-layout-hflex flex-block-78"><h1 class="v25-h3">${escapeHtml(text)}</h1><img src="${arrow}" loading="lazy" alt="" class="image-266"/></div>`;
 }
 
-// One cell of the project facts card: the label (with the pixel arrow) and
+// One box of the overview's facts row: the label (with the pixel arrow) and
 // its value.
 function fact(name, html) {
-  return `<div class="cs-fact">${heading(name)}<p class="v25-h3 grey">${html}</p></div>`;
+  return `<div class="cs-fact">${label(name)}<p class="cs-fact-value">${html}</p></div>`;
 }
 
 // Same structure as the older pages' avatars; the hover card is driven by
@@ -488,10 +490,21 @@ function renderHeroVideo(src, hero) {
 }
 
 // A timeline in phases, separated by "; " in the draft, puts each phase on
-// its own line, below the "Timeline:" label.
+// its own line. A {Status} in a phase becomes the status badge ({Live}: the
+// green badge with the pulsing dot), as in the lead cards.
 function renderTimeline(text) {
+  const tag = (status) => `<span class="cs-tag cs-tag--status${/\blive$/i.test(status) ? " cs-tag--live" : ""}">${escapeHtml(status)}</span>`;
+  // "Name: date {Status}" (Status may be "V2 live"): the date, a divider and
+  // the status (.cs-timeline-when); a long name wraps above them, and in a
+  // narrow box the status drops under the date, without its divider.
+  const phase = (part) => {
+    const m = part.match(/^(?:(.*?:)\s+)?(.*?)\s*\{([^}]+)\}\s*$/);
+    if (!m) return inline(part);
+    const [, name, when, status] = m;
+    return `${name ? `${inline(name)} ` : ""}<span class="cs-timeline-when"><span class="cs-timeline-date">${inline(when)}</span><span class="cs-timeline-status"><span class="cs-timeline-divider" aria-hidden="true"></span>${tag(status)}</span></span>`;
+  };
   const phases = text.split(/;\s*/);
-  return phases.length > 1 ? `<span class="cs-timeline">${phases.map(inline).join("<br/>")}</span>` : inline(text);
+  return phases.length > 1 ? `<span class="cs-timeline">${phases.map((part) => `<span class="cs-timeline-phase">${phase(part)}</span>`).join("")}</span>` : phase(text);
 }
 
 // A still hero; the draft's hero description is its alt text.
@@ -511,18 +524,22 @@ function renderIntro(intro) {
 }
 
 function renderOpening(study, page) {
-  const context = Object.fromEntries(contextLabels.map((name, i) => [name, page.context[i]]));
-  const team = study.team.map(teamMember).join("");
   const hero = study.heroVideo ? renderHeroVideo(study.heroVideo, page.hero)
     : study.heroImage ? renderHeroImage(study.heroImage, page.hero)
     : renderHeroVisual(page.hero);
-  return `<section class="section-36">${renderIntro(study.intro)}<section class="tmf-header"><div class="div-block-474">${hero}</div></section>`
-    + `<div class="cs-facts">`
+  return `<section class="section-36 cs-opening">${renderIntro(study.intro)}<section class="tmf-header"><div class="div-block-474">${hero}</div></section></section>`;
+}
+
+// The top of the body: one framed block, the facts row over the lead cards.
+function renderOverview(study, page) {
+  const context = Object.fromEntries(contextLabels.map((name, i) => [name, page.context[i]]));
+  const team = study.team.map(teamMember).join("");
+  return `<div class="cs-overview"><div class="cs-facts">`
     + fact("Company", inline(context.Company || ""))
     + fact("Role", inline(capitalize(context.Role || "")))
     + fact("Timeline", renderTimeline(context.Timeline || ""))
-    + `<div class="cs-fact">${heading("Team")}<div class="w-layout-hflex team-flex-block cs-team${study.team.length > 6 ? " cs-team--rows" : ""}">${team}</div></div>`
-    + `</div></section>`;
+    + `<div class="cs-fact">${label("Team")}<div class="w-layout-hflex team-flex-block cs-team${study.team.length > 6 ? " cs-team--rows" : ""}">${team}</div></div>`
+    + `</div>${renderSummary(study, page)}</div>`;
 }
 
 // "**Website.** Visibility was…": the lead-in becomes the item's title line,
@@ -537,7 +554,7 @@ function leadCardItem(item) {
   const link = match[2].match(/\[([^\]]+)\]\((https?:[^)\s]+)\)/);
   const text = match[2].replace(status?.[0] ?? "", "").replace(link?.[0] ?? "", "").trim();
   const extras = (status ? `<span class="cs-tag cs-tag--status${/^live$/i.test(status[1]) ? " cs-tag--live" : ""}">${escapeHtml(status[1])}</span>` : "")
-    + (link ? `<a class="cs-tag cs-tag--link" href="${escapeHtml(link[2])}" target="_blank" rel="noopener">${escapeHtml(link[1])}${ctaArrow}</a>` : "");
+    + (link ? `<a class="ds-btn ds-btn--secondary ds-btn--sm" href="${escapeHtml(link[2])}" target="_blank" rel="noopener">${escapeHtml(link[1])}</a>` : "");
   const lead = `<strong>${inline(match[1])}</strong>`;
   return `<li>${extras ? `<div class="cs-tldr-head">${lead}${extras}</div>` : lead}${text ? `<span>${inline(text)}</span>` : ""}</li>`;
 }
@@ -656,7 +673,8 @@ function renderPage(study, page, index, shell) {
   const main = `<section class="mid-body">
 ${renderOpening(study, page)}
 <main class="section-36 cs">
-${status}${renderSummary(study, page)}
+${renderOverview(study, page)}
+${status}
 <div class="cs-body">
 <nav class="cs-toc" aria-label="On this page">${label("On this page")}<ol>${toc}</ol></nav>
 <article class="cs-article">${sections.join("\n")}</article>

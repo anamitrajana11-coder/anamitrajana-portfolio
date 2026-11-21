@@ -150,20 +150,69 @@
 }
 .is-paused > .cs-video-paused { opacity: 1; }
 
-/* A timeline in phases: one per line, below the label. */
+/* A timeline in phases: one per line, below the label. A phase with a
+   status ({Live} in the draft) keeps the date and its status together
+   (.cs-timeline-when, the status centred on the date after a divider), with
+   4px between phases; a long phase name wraps above them. */
 .cs-timeline { display: block; }
+.cs-timeline-phase { display: block; }
+/* The date, then the divider and status. Where they don't fit on one line
+   (a long date, a narrow box), the status drops under the date and its
+   divider is clipped away: it sits 14px + its width to the left of the
+   status, beyond the 12px of room this box keeps for the dot's glow. */
+.cs-timeline-when {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  overflow: hidden;
+  padding: 8px 0 8px 12px;
+  margin: -8px 0 -8px -12px;
+}
+.cs-timeline-date { margin-right: calc(28px + var(--ds-border-divider-width)); }
+.cs-timeline-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 24px;
+  white-space: nowrap;
+  margin-left: calc(-14px - var(--ds-border-divider-width));
+}
+/* A divider between the date and its status: "Jan 2026 | ● LIVE"
+   (Anamitra, 2026-11-21). A faint 1.5px line the status's height with
+   rounded ends, 14px either side (2px on standard screens; tokens.css). */
+.cs-timeline-divider {
+  flex: none;
+  width: var(--ds-border-divider-width);
+  height: 18px;
+  border-radius: 999px;
+  background: var(--ds-color-border-divider);
+}
+.cs-timeline-phase + .cs-timeline-phase:has(.cs-tag),
+.cs-timeline-phase:has(.cs-tag) + .cs-timeline-phase { margin-top: 4px; }
 
-/* Project facts, under the hero (Anamitra, 2026-11-20, option C): one card,
-   four cells split by hairlines (Company, Role, Timeline, Team), each a
-   label with the pixel arrow over its value. 2 × 2 on tablets, one column
-   on phones. */
-.cs-facts {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin: 60px 10px 0;  /* the 10px gutter puts it on the page edges, as the hero */
+/* Overview, the top of a Yanta study's body (Anamitra, 2026-11-20): one
+   framed block, boxes split by quiet 1px hairlines (white at 8%,
+   --ds-color-border-subtle, frame included; was 2px #2c2c2c) with no gaps. First row the
+   project facts (Company, Role, Timeline, Team; option C), second row the
+   lead cards (.cs-tldr). The facts are 2 × 2 on tablets and one column on
+   phones; the lead cards stack below 992px. */
+/* 60px under the hero at every width: the opening and the body add none of
+   Webflow's section spacing (100px from 1280px and on phones) between them. */
+.cs-opening { margin-bottom: 0; }
+.cs-opening + .cs { margin-top: 0; }
+.cs-overview {
+  margin-top: 60px;
   background: var(--ds-color-surface-card);
-  border: 2px solid var(--ds-color-border-default);
+  border: 1px solid var(--ds-color-border-subtle);
   border-radius: var(--ds-card-radius);
+}
+.cs-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+/* From 1280px a Timeline with status badges is at least as wide as its
+   longest phase, so each phase and its badge sit on one line (Identity's
+   three phases); the other three boxes share the rest. A timeline that fits,
+   or one without badges, keeps four equal boxes. */
+@media screen and (min-width: 1280px) {
+  .cs-facts:has(.cs-timeline-when) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(max-content, 1fr) minmax(0, 1fr); }
 }
 .cs-fact {
   display: flex;
@@ -172,24 +221,32 @@
   min-width: 0;
   padding: 24px 28px;
 }
-.cs-fact + .cs-fact { border-left: 2px solid var(--ds-color-border-default); }
-.cs-fact > .flex-block-78,
-.cs-fact > .v25-h3 { margin: 0; }
-/* A team wider than its cell wraps, rows 12px apart as elsewhere. */
+.cs-fact + .cs-fact { border-left: 1px solid var(--ds-color-border-subtle); }
+.cs .cs-fact-value {
+  font-family: var(--ds-font-family-sans);
+  font-size: var(--ds-font-size-16);
+  line-height: 24px;
+  color: var(--ds-color-text-soft);
+}
+/* A team wider than its box wraps, rows apart as elsewhere. */
 .cs-fact .cs-team { flex-wrap: wrap; row-gap: var(--ds-team-gap); }
-/* From 1280px the page's container already carries the 10px gutter. */
-@media screen and (min-width: 1280px) { .cs-facts { margin-left: 0; margin-right: 0; } }
+/* The lead cards inside it: boxes, not cards. */
+.cs-overview .cs-tldr { gap: 0; margin: 0; border-top: 1px solid var(--ds-color-border-subtle); }
+.cs-overview .cs-tldr-item { padding: 24px 28px; background: none; border: 0; border-radius: 0; }
+.cs-overview .cs-tldr-item + .cs-tldr-item { border-left: 1px solid var(--ds-color-border-subtle); }
 @media screen and (max-width: 991px) {
   .cs-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cs-fact + .cs-fact { border-left: 0; }
-  .cs-fact:nth-child(even) { border-left: 2px solid var(--ds-color-border-default); }
-  .cs-fact:nth-child(n + 3) { border-top: 2px solid var(--ds-color-border-default); }
+  .cs-fact:nth-child(even) { border-left: 1px solid var(--ds-color-border-subtle); }
+  .cs-fact:nth-child(n + 3) { border-top: 1px solid var(--ds-color-border-subtle); }
+  .cs-overview .cs-tldr-item + .cs-tldr-item { border-left: 0; border-top: 1px solid var(--ds-color-border-subtle); }
 }
 @media screen and (max-width: 479px) {
   .cs-facts { grid-template-columns: minmax(0, 1fr); }
   .cs-fact:nth-child(even) { border-left: 0; }
-  .cs-fact + .cs-fact { border-top: 2px solid var(--ds-color-border-default); }
-  .cs-fact { padding: 20px 24px; }
+  .cs-fact + .cs-fact { border-top: 1px solid var(--ds-color-border-subtle); }
+  .cs-fact,
+  .cs-overview .cs-tldr-item { padding: 20px 24px; }
 }
 
 /* Team avatars: the older pages animate these with Webflow interactions
@@ -326,26 +383,43 @@
 /* margin: the tags are 3px taller than the lead's line; this keeps the lead
    level with its 01 / 02 / 03. */
 .cs-tldr-list .cs-tag { display: inline-flex; margin: -2px 0; }
-/* Status tag, as dark-mode products show success (Railway, Render): a dark
-   brand-green tint, a mid-green border, light-green text and dot. */
+/* Status (Live, Shipped): a vivid-green dot and word in the tags' mono
+   capitals, with no box; the dot glows like a status light (option C2,
+   Anamitra, 2026-11-21; was a boxed tag, 28px tall, with a green tint and
+   border). 18px tall, so it sits inside a line of text without pushing the
+   lines apart. */
 .cs-tag--status {
+  gap: 7px;
   color: var(--ds-color-text-success);
-  background: color-mix(in srgb, var(--ds-color-success) 16%, transparent);
-  border-color: color-mix(in srgb, var(--ds-color-success) 55%, transparent);
+  background: none;
+  border: 0;
+  padding: 0;
 }
-.cs-tag--status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-/* Live: the dot pulses, like a live indicator. */
+.cs-tag--status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ds-color-text-success) 18%, transparent),
+              0 0 10px 1px color-mix(in srgb, var(--ds-color-text-success) 85%, transparent);
+}
+/* Live: the ring around the dot pulses outwards, like a live indicator; the
+   glow stays. */
 .cs-tag--live::before { animation: cs-live 2s ease-out infinite; }
 @keyframes cs-live {
-  from { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ds-color-text-success) 60%, transparent); }
-  to { box-shadow: 0 0 0 5px transparent; }
+  from { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ds-color-text-success) 60%, transparent),
+                     0 0 10px 1px color-mix(in srgb, var(--ds-color-text-success) 85%, transparent); }
+  to { box-shadow: 0 0 0 5px transparent,
+                   0 0 10px 1px color-mix(in srgb, var(--ds-color-text-success) 85%, transparent); }
 }
 @media (prefers-reduced-motion: reduce) { .cs-tag--live::before { animation: none; } }
-.cs .cs-tag--link { color: var(--ds-color-text-primary); border-color: var(--ds-color-border-accent); transition: border-color .2s; }
-.cs .cs-tag--link:hover { border-color: var(--ds-color-orange-500); }
-.cs-tag--link svg { width: 16px; height: 16px; color: var(--ds-color-text-accent); }
-/* A little more room between a status tag and the View button (16px). */
-.cs-tldr-head .cs-tag--status + .cs-tag--link { margin-left: 6px; }
+/* A [View](…) link beside a lead is the small secondary button (buttons.css;
+   Anamitra, 2026-11-20, was an orange-framed tag). White label: the page's
+   ".cs a { color: inherit }" would otherwise grey it. A little more room
+   between a status tag and the button (16px). */
+.cs a.ds-btn { color: var(--ds-color-text-primary); }
+.cs-tldr-head .cs-tag--status + .ds-btn { margin-left: 6px; }
 /* A sequence (1. 2. 3. in the draft) counts 01, 02… instead of the ↳. */
 ol.cs-tldr-list { counter-reset: cs-step; }
 ol.cs-tldr-list li { counter-increment: cs-step; padding-left: 30px; }
@@ -356,6 +430,12 @@ ol.cs-tldr-list li::before {
   font-weight: var(--ds-font-weight-medium);
   line-height: 1.55;
 }
+/* Steps that are titles only (Identity's Approach; Anamitra, 2026-11-20):
+   every row is the small button's height (32px), with its number, title and
+   any View button centred on one line, so the rows sit evenly apart. */
+ol.cs-tldr-list li:not(:has(> span)) { display: flex; align-items: center; min-height: var(--ds-btn-sm-height); }
+ol.cs-tldr-list li:not(:has(> span))::before { top: 0; bottom: 0; display: flex; align-items: center; }
+ol.cs-tldr-list li:not(:has(> span)) > strong { margin: 0; }
 /* A body row whose framing moved into the cards gets the whole width
    (Featurely's Summary, otherwise capped at 500px by Webflow). */
 .cs-fill > .div-block-590 { max-width: none; }
@@ -725,8 +805,8 @@ ol.cs-list li::before {
 }
 
 /* ==========================================================================
-   Section headings — two levels, each followed by the orange pixel arrow
-   (tokens: "10. SECTION HEADINGS" in tokens.css).
+   Section headings — two levels, each once followed by the orange pixel
+   arrow, now hidden (below) (tokens: "10. SECTION HEADINGS" in tokens.css).
    .ds-section-title (level 1): the one-pager's section headings, on the
      homepage's main sections ("Selected works", "What others think",
      "What I've been up to", "Unfiltered notes from visitors"). Below
@@ -782,6 +862,16 @@ ol.cs-list li::before {
 }
 .ds-section-label img { width: var(--ds-section-arrow-width); height: var(--ds-section-arrow-height); margin: 0; }
 @media (max-width: 479px) { .ds-section-label { font-size: var(--ds-type-section-label-size-phone); } }
+
+/* No arrows on headings or labels (Anamitra, 2026-11-20): the pixel arrow
+   beside every section title and label repeated on each one and did
+   nothing, so it's hidden here, in one place, everywhere: the homepage and
+   About section titles, "Experience", the case studies' labels (facts,
+   lead boxes, "On this page", "Role & team") and the older studies'
+   Company / Role / Project details. Arrows on links stay: the "Next case
+   study" cards (.cs-next-arrow), the buttons, the footer. To bring them
+   back, delete this rule. */
+img[src*="Brand-hyperlink-arrow"]:not(.cs-next-arrow) { display: none; }
 
 /* ==========================================================================
    Homepage — intro (top left)

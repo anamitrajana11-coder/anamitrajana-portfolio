@@ -14,6 +14,9 @@
             the homepage testimonials.
    Caption  aktiv-grotesk 500, 12px / 18px, +0.5px, grey, at every width.
             Meta text: people's roles, dates, picture captions.
+   Overline Spline Sans Mono 500, 14px / 21px, +0.5px, capitals, 50% white. Labels
+            over values (trial: the case-study overview, the side menu's
+            "On this page", the homepage's "Experience").
 
    Colour is separate from the role. Body text is 75% white (secondary)
    unless the Webflow markup marks it: .ocp75 secondary, .ocp50 tertiary
@@ -104,6 +107,25 @@
    keep their colour, at medium weight like bold words in Body 1. */
 .new-project-card .div-block-579 .text-span-1050,
 .div-block-524 > .ms-body-text-1 > .text-span-1005 { font-weight: var(--ds-type-body-2-strong-weight); }
+
+/* --------------------------------------------------------------------------
+   Overline (trial, Anamitra, 2026-11-20): small capitals in the tags' mono
+   over a value. The case-study overview's labels (Company, Role, Timeline,
+   Team, and the lead boxes' titles), the side menu's "On this page" and the
+   homepage's "Experience" (Anamitra, 2026-11-21). Delete this block to go
+   back to the white aktiv-grotesk labels.
+   -------------------------------------------------------------------------- */
+.cs-overview .cs-label,
+.cs-toc .cs-label,
+.flex-block-119 .flex-block-78 > .v25-h3 {    /* homepage: "Experience" */
+  font-family: var(--ds-type-overline-font);
+  font-size: var(--ds-type-overline-size);
+  line-height: var(--ds-type-overline-line-height);
+  font-weight: var(--ds-type-overline-weight);
+  letter-spacing: var(--ds-type-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--ds-type-overline-color);
+}
 
 /* --------------------------------------------------------------------------
    Caption

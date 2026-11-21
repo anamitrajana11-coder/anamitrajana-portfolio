@@ -74,6 +74,7 @@
   --ds-color-red-500: #ff4632;
   --ds-color-green-600: #1d8e6b;    /* = Yanta design system brand-60      */
   --ds-color-green-200: #86ceb8;    /* = Yanta design system brand-20      */
+  --ds-color-green-400: #34d399;    /* vivid green: the Live / Shipped status (option C2) */
 
   /* Font families */
   --ds-font-family-display: Cabin, sans-serif;          /* titles, headings */
@@ -122,7 +123,7 @@
   --ds-color-text-muted: var(--ds-color-grey-400);        /* captions, tags, meta         */
   --ds-color-text-accent: var(--ds-color-orange-500);     /* orange headlines and marks   */
   --ds-color-text-highlight: var(--ds-color-orange-400);  /* impact figures, quote marks  */
-  --ds-color-text-success: var(--ds-color-green-200);     /* "Live" status                */
+  --ds-color-text-success: var(--ds-color-green-400);     /* Live / Shipped status, and its dot's glow (was green-200 until 2026-11-21) */
   --ds-color-text-error: var(--ds-color-red-500);         /* form errors                  */
 
   /* Surfaces and overlays */
@@ -139,6 +140,9 @@
 
   /* Borders and focus */
   --ds-color-border-default: var(--ds-color-grey-800);    /* card and tag frames          */
+  --ds-color-border-subtle: var(--ds-color-white-a8);     /* quiet 1px hairlines: the case-study overview's frame and grid */
+  --ds-color-border-divider: var(--ds-color-white-a14);   /* a short divider inside a line of text: the timeline's "Jan 2026 | ● LIVE" */
+  --ds-border-divider-width: 2px;                         /* that divider's weight: 1.5px on sharp screens, see the end of this file */
   --ds-color-border-accent: var(--ds-color-orange-800);   /* highlighted frames, hover    */
   --ds-color-focus-ring: var(--ds-color-orange-500);      /* keyboard focus outline       */
 
@@ -173,6 +177,14 @@
   --ds-type-caption-weight: var(--ds-font-weight-medium);
   --ds-type-caption-letter-spacing: var(--ds-letter-spacing-wide);
   --ds-type-caption-color: var(--ds-color-text-muted);
+  /* Overline: small capitals over a value, in the tags' mono (Spline Sans Mono
+     500, 14px / 21px, +0.5px, 50% white). Tried on the case-study overview's labels. */
+  --ds-type-overline-font: var(--ds-font-family-mono);
+  --ds-type-overline-size: var(--ds-font-size-14);
+  --ds-type-overline-line-height: var(--ds-line-height-normal);
+  --ds-type-overline-weight: var(--ds-font-weight-medium);
+  --ds-type-overline-letter-spacing: var(--ds-letter-spacing-wide);
+  --ds-type-overline-color: var(--ds-color-text-tertiary);
 
   /* Section title (level 1): the homepage's main sections ("Selected
      works"); below 992px it takes the section label's style. */
@@ -264,6 +276,10 @@
    border is 2px on those screens and 1.5px wherever the screen can draw it,
    2x and sharper. */
 @media (min-resolution: 2dppx) { :root { --ds-btn-border-width: 1.5px; } }
+/* The timeline's divider is 1.5px too (Anamitra, 2026-11-21; 1px was tried
+   and turned down), by the same rule: 2px on standard screens, 1.5px on 2x
+   and sharper. */
+@media (min-resolution: 2dppx) { :root { --ds-border-divider-width: 1.5px; } }
 
 /* Text sizes on phones: each role's size becomes its -phone size, so
    every rule that uses the role follows without a media query of its own. */
