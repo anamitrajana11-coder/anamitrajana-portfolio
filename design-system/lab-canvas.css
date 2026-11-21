@@ -1,0 +1,321 @@
+/* ==========================================================================
+   Lab canvas: the homepage section after "What others think" (it replaced
+   "What I've been up to", removed 2026-11-20).
+   A dark card with a dotted background. Lab experiments, tools and cursors
+   are scattered over it, and an orange particle sphere turns at the top.
+
+   The pieces are laid out on a fixed 1336 × 532 stage, the size they were
+   designed at (the card is 1340 × 536 with its 2px border). lab-canvas.js
+   scales the stage to fill the card:
+   - from 768px the card keeps the design's 2.5 : 1 shape and the whole stage
+     shows;
+   - below that the card gets taller and the stage is cropped at the sides,
+     so the pieces stay readable.
+   The "Explore the Lab" button sits on top at its real size, not scaled.
+
+   Markup (index.html):
+   <section class="lab-canvas-section">
+     <div class="lab-canvas">
+       <div class="lab-canvas__stage"> …pieces, each placed by inline style… </div>
+       <div class="lab-canvas__cta"><div class="lab-textbox">…</div><a class="ds-btn-talk" href="lab.html">…</a></div>
+     </div>
+   </section>
+   ========================================================================== */
+
+/* In .mid-body, so it takes the 10px gutter to sit on the page edges.
+   140px above (after "What others think") and before the footer, the
+   homepage's section spacing. */
+.lab-canvas-section { margin: 140px 10px; }
+
+.lab-canvas {
+  position: relative;
+  aspect-ratio: 1340 / 536;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 2px solid var(--ds-color-border-default);
+  border-radius: var(--ds-radius-8);
+  background-color: var(--ds-color-surface-canvas);
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.072) 1px, transparent 1.4px);
+  background-size: 24px 24px;
+  background-position: 12px 12px;
+  isolation: isolate;
+}
+@media (max-width: 767px) { .lab-canvas { aspect-ratio: 3 / 2; } }
+@media (max-width: 479px) { .lab-canvas { aspect-ratio: 1 / 1; } }
+
+/* The stage: design size, enlarged with CSS zoom (and centred) by
+   lab-canvas.js. Zoom, not a scale transform: it lays the stage out at its
+   real size, so text stays sharp on big screens. Before the script runs it
+   sits unscaled at the top left. */
+.lab-canvas__stage {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1336px;
+  height: 532px;
+  font-family: var(--ds-font-family-sans);
+  color: var(--ds-color-text-primary);
+}
+/* Webflow's stylesheet gives every <img> a 10px bottom margin (and a max
+   width), which left a 10px gap under the pictures inside the frames. */
+.lab-canvas__stage img { max-width: none; margin: 0; }
+.lab-canvas__sphere { pointer-events: none; }
+
+/* The button, centred on the card at its real size. Its pill is wider than
+   "Let's talk"'s, to fit "Explore the Lab" (100px at 14px, 115px at 16px)
+   with 30px either side, 36px at the large size. Centred with flex, not a
+   transform: Safari can drop the button's glass filter under a transform. */
+.lab-canvas__cta {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.lab-canvas__cta > a { pointer-events: auto; }
+
+/* The line above the button: a Figma text layer, shown selected (Figma's
+   blue outline and a white square on each corner), at real size like the
+   button. It sits 24px above the button, which stays centred on the card.
+   From 1500px it grows with the button's large size: 20px text (Body 1's
+   1.5 line height) and 36px above the button.
+   Figma's selection blue: an illustration, as on the toolbar. */
+.lab-canvas__cta { --cta-h: var(--ds-btn-md-height); --cta-gap: var(--ds-lab-line-gap); }
+@media (min-width: 1500px) {
+  .lab-canvas__cta { --cta-h: var(--ds-btn-lg-height); --cta-gap: var(--ds-lab-line-gap-lg); }
+  .lab-textbox__text { font-size: var(--ds-lab-line-size-lg); }  /* after type.css, so it wins */
+}
+.lab-textbox {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(50% + var(--cta-h) / 2 + var(--cta-gap));
+  width: max-content;
+  max-width: calc(100% - 32px);
+  margin: 0 auto;
+  padding: 2px 6px;
+  box-shadow: inset 0 0 0 1px #0d99ff;
+}
+/* The text is Body 1 (type.css). */
+.lab-textbox__text { margin: 0; white-space: nowrap; }
+.lab-textbox__handle {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid #0d99ff;
+}
+.lab-textbox__handle:nth-of-type(1) { left: -3px; top: -3px; }
+.lab-textbox__handle:nth-of-type(2) { right: -3px; top: -3px; }
+.lab-textbox__handle:nth-of-type(3) { left: -3px; bottom: -3px; }
+.lab-textbox__handle:nth-of-type(4) { right: -3px; bottom: -3px; }
+.lab-canvas .ds-btn-talk { --talk-pill-md: 160px; --talk-pill-lg: 186px; }
+
+/* The Figma toolbar, centred at the bottom of the canvas (28px in, like the
+   framed pictures), as Figma's sits at the bottom of its canvas. It behaves like Figma's
+   own (UI3, dark): tools turn grey on hover and darker while pressed, and
+   a click makes a tool the selected one, in Figma blue. The chevrons open
+   Figma's menus for that slot (Move, Frame, Shape, Pen) 8px above the
+   bar: a dark rounded panel whose rows turn blue on hover; picking a row puts
+   that tool in the slot, ticks it and selects it (lab-canvas.js).
+   "Image/video…" highlights but isn't a tool to select.
+   Figma's own colours and sizes: an illustration, scoped to the canvas. */
+.lab-figma-bar,
+.lab-ai {
+  --figma-bar: #2c2c2c;
+  --figma-bar-border: #404040;
+  --figma-hover: #383838;
+  --figma-pressed: #444444;
+  --figma-selected: #0d99ff;
+  --figma-menu: #1e1e1e;
+}
+.lab-figma-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: fit-content;
+  margin: 0 auto;
+  height: 40px;
+  box-sizing: border-box;
+  padding: 0 6px;
+  display: flex;
+  align-items: center;
+  border-radius: 11px;
+  background: var(--figma-bar);
+  border: 1px solid var(--figma-bar-border);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 12px 26px rgba(0, 0, 0, 0.55);
+}
+/* An open menu: its piece above the other pieces, and the stage above the
+   "Explore the Lab" button (the Shape menu reaches the button's bottom
+   edge). The raised stage lets clicks through to the button. */
+.lab-figma-bar.has-open-menu,
+.lab-ai.has-open-menu { z-index: 5; }
+.lab-canvas.is-menu-open .lab-canvas__stage { z-index: 2; }
+.lab-canvas__stage { pointer-events: none; }
+.lab-canvas__stage > * { pointer-events: auto; }
+.lab-canvas__stage > .lab-canvas__sphere { pointer-events: none; }
+
+.lab-figma-tool,
+.lab-figma-caret,
+.lab-figma-item {
+  display: flex;
+  flex: none;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  line-height: 0;
+  text-align: left;
+  cursor: default;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.lab-figma-tool:focus,
+.lab-figma-caret:focus,
+.lab-figma-item:focus { outline: none; }
+.lab-figma-tool { justify-content: center; width: 27px; height: 27px; border-radius: 6px; }
+.lab-figma-caret { justify-content: center; width: 14px; height: 27px; margin-left: 2px; border-radius: 5px; }
+.lab-figma-group { position: relative; display: flex; flex: none; align-items: center; }
+.lab-figma-group + .lab-figma-group,
+.lab-figma-group + .lab-figma-tool { margin-left: 9px; }
+.lab-figma-tool + .lab-figma-tool { margin-left: 9px; }
+@media (hover: hover) {
+  .lab-figma-tool:hover,
+  .lab-figma-caret:hover { background: var(--figma-hover); }
+}
+.lab-figma-tool:active,
+.lab-figma-caret:active { background: var(--figma-pressed); }
+.lab-figma-group.is-open .lab-figma-caret { background: var(--figma-hover); }
+.lab-figma-tool.is-selected { background: var(--figma-selected); }
+
+/* The menu, inside its owner. Toolbar: 8px above the bar (the slot sits
+   6.5px inside it), the row icons (40px in) in line with the tool's
+   (13.5px in). Model picker: 8px below it, the names (34px in) in line with
+   the picker's label (10px in). */
+.lab-figma-menu {
+  position: absolute;
+  display: none;
+  flex-direction: column;
+  width: max-content;
+  min-width: 150px;
+  padding: 8px;
+  border-radius: 13px;
+  background: var(--figma-menu);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 10px 24px rgba(0, 0, 0, 0.5), 0 2px 7px rgba(0, 0, 0, 0.35);
+}
+.is-open > .lab-figma-menu { display: flex; }
+.lab-figma-group > .lab-figma-menu { left: -26.5px; bottom: calc(100% + 14.5px); }
+.lab-ai-model-wrap > .lab-figma-menu { left: -24px; top: calc(100% + 8px); }
+.lab-figma-item {
+  height: 24px;
+  padding: 0 8px 0 6px;
+  border-radius: 5px;
+  font-family: var(--ds-font-family-sans);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 16px;
+  white-space: nowrap;
+}
+.lab-figma-check { flex: none; width: 12px; height: 12px; margin-right: 2px; visibility: hidden; }
+.lab-figma-item.is-checked .lab-figma-check { visibility: visible; }
+.lab-figma-item-icon { display: flex; flex: none; align-items: center; justify-content: center; width: 24px; height: 24px; margin-right: 6px; }
+.lab-figma-label { flex: 1; }
+.lab-figma-key { margin-left: 24px; color: rgba(255, 255, 255, 0.7); }
+.lab-figma-item:hover { background: var(--figma-selected); }
+.lab-figma-item:hover .lab-figma-key { color: #fff; }
+/* A menu without icons (the Ask AI model picker). */
+.lab-figma-menu--plain .lab-figma-check { margin-right: 8px; }
+
+/* The Ask AI prompt box (Yanta's prototype, dark). The question types
+   itself, waits, erases and types again, in a loop (lab-canvas.js); it
+   can't be edited. The plus, mic and send buttons and the model picker
+   have hover and pressed states; the picker opens the toolbar's menu with
+   the prototype's three models, the trade-off in plain words beside each.
+   Yanta's colours: an illustration, scoped to the canvas. */
+.lab-ai {
+  --ai-hover: rgba(146, 158, 170, 0.20);
+  --ai-pressed: rgba(146, 158, 170, 0.28);
+  --ai-send: #1a7187;
+  --ai-send-hover: #1f8199;
+  --ai-send-pressed: #155f71;
+  --ai-menu-hover: #525e6f;  /* Yanta gray-70: white text on it is 6.6:1 (WCAG AA); gray-60 would be 4.2:1 */
+  cursor: default;
+}
+/* The model menu's hover is Yanta grey, not Figma blue (the toolbar keeps
+   Figma's). */
+.lab-ai .lab-figma-item:hover { background: var(--ai-menu-hover); }
+.lab-ai-caret {
+  display: inline-block;
+  width: 1px;
+  height: 14px;
+  margin-left: 1px;
+  vertical-align: -3px;
+  background: #5ba0b0;
+  animation: lab-caret-blink 1.06s linear infinite;
+}
+.lab-ai-input.is-typing .lab-ai-caret { animation: none; }
+@keyframes lab-caret-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+.lab-ai-icon,
+.lab-ai-model,
+.lab-ai-send {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  line-height: 0;
+  cursor: default;
+  -webkit-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.lab-ai-icon:focus,
+.lab-ai-model:focus,
+.lab-ai-send:focus { outline: none; }
+.lab-ai-icon { width: 28px; height: 28px; border-radius: 6px; color: #929eaa; }
+.lab-ai-model {
+  height: 24px;
+  padding: 0 10px;
+  gap: 6px;
+  border-radius: 4px;
+  font: 500 12px/1.18 var(--ds-font-family-sans);  /* medium, as the site's buttons (the prototype had 600) */
+  letter-spacing: 0.1px;
+  color: #edf0f2;
+}
+.lab-ai-model-wrap { position: relative; display: inline-flex; }
+.lab-ai-send { width: 28px; height: 28px; border-radius: 9999px; background: var(--ai-send); color: #fff; }
+@media (hover: hover) {
+  .lab-ai-icon:hover,
+  .lab-ai-model:hover { background: var(--ai-hover); color: #edf0f2; }
+  .lab-ai-send:hover { background: var(--ai-send-hover); }
+}
+.lab-ai-icon:active,
+.lab-ai-model:active { background: var(--ai-pressed); color: #edf0f2; }
+.lab-ai-model-wrap.is-open .lab-ai-model { background: var(--ai-hover); }
+.lab-ai-send:active { background: var(--ai-send-pressed); }
+
+/* Slow floating. Three paths and three offsets, so the pieces don't move
+   together. Off for people who ask for less motion. */
+@keyframes lab-float-1 { 0%, 100% { translate: 0 0; } 50% { translate: 0 -7px; } }
+@keyframes lab-float-2 { 0%, 100% { translate: 0 0; } 50% { translate: 4px 5px; } }
+@keyframes lab-float-3 { 0%, 100% { translate: 0 0; } 50% { translate: -5px -4px; } }
+.lab-canvas .fl1 { animation: lab-float-1 8s ease-in-out infinite; }
+.lab-canvas .fl2 { animation: lab-float-2 10s ease-in-out infinite; }
+.lab-canvas .fl3 { animation: lab-float-3 12s ease-in-out infinite; }
+.lab-canvas .d1 { animation-delay: -2s; }
+.lab-canvas .d2 { animation-delay: -4s; }
+.lab-canvas .d3 { animation-delay: -6s; }
+@media (prefers-reduced-motion: reduce) {
+  .lab-canvas .fl1, .lab-canvas .fl2, .lab-canvas .fl3, .lab-ai-caret { animation: none; }
+}

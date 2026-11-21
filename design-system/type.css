@@ -1,0 +1,128 @@
+/* ==========================================================================
+   ANA™ Text styles
+   ==========================================================================
+   The site's text roles. Each role is one spec everywhere it appears; the
+   values are tokens ("Text styles" in tokens.css), which also switch the
+   sizes to their -phone values at ≤ 479px. Linked on every page after the
+   other stylesheets, so these rules win over the Webflow stylesheet and
+   case-study.css; build-case-studies.mjs keeps the link.
+
+   Body 1   Montserrat 400, 16px / 24px (14px on phones). All reading text:
+            paragraphs, lists, page and section intros.
+   Body 2   Montserrat 400, 14px / 21px (12px on phones). Smaller supporting
+            text: card descriptions and results, lists of facts, notes,
+            the homepage testimonials.
+   Caption  aktiv-grotesk 500, 12px / 18px, +0.5px, grey, at every width.
+            Meta text: people's roles, dates, picture captions.
+
+   Colour is separate from the role. Body text is 75% white (secondary)
+   unless the Webflow markup marks it: .ocp75 secondary, .ocp50 tertiary
+   (50%), no mark primary (white). Those classes used to fade the whole
+   element with opacity, which faded its bold words too; here they set the
+   text colour, so bold words are always white. Bold words in body text
+   (<strong>, and the "Timeline:" and "Team:" labels) are white at medium
+   weight.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Body 1
+   -------------------------------------------------------------------------- */
+.cs-section p,                                /* case-study body             */
+.cs-list li,
+.cs-tldr-item p,                              /* summary cards               */
+.cs-tldr-list li > span,
+.cs-status li,                                /* Status box                  */
+.cs-status p,
+.cs-credits p:not(.cs-note),                  /* credits                     */
+.div-block-502 > .black,                      /* team name card              */
+.section-36 .ms-body-text-1:not(.ocp50),      /* project pages' Webflow text: intro, Timeline and Team lines, the older studies' paragraphs and cards */
+.section-36 .ms-body-text-1-b:not(.black),    /* older studies' subheads (medium, below) */
+.ds-hero .div-block-448 > .ms-body-text-1,    /* homepage intro              */
+.div-block-519 > .ms-body-text-1,             /* homepage section intros     */
+.section-43 .ms-body-text-1,                  /* About and Lab openings      */
+.section-53 .ms-body-text-1,                  /* About: away from work       */
+.div-block-558 > .ms-body-text-1,             /* About: the visitor notes' intro */
+.div-block-539 > .ms-body-text-1,             /* Résumé intro                */
+.lab-textbox__text {                          /* homepage Lab canvas, the line above the button */
+  font-family: var(--ds-type-body-1-font);
+  font-size: var(--ds-type-body-1-size);
+  line-height: var(--ds-type-body-1-line-height);
+  font-weight: var(--ds-type-body-1-weight);
+  letter-spacing: normal;
+}
+/* The design system's own body text carries no colour mark. */
+.cs-section p,
+.cs-list li,
+.cs-tldr-item p,
+.cs-tldr-list li > span,
+.cs-status li,
+.cs-status p,
+.cs-credits p:not(.cs-note),
+.lab-textbox__text { color: var(--ds-type-body-1-color); }
+/* Subheads in the older studies: Body 1 at medium weight, colour as marked
+   (orange, or 75% white). */
+.section-36 .ms-body-text-1-b:not(.black) { font-weight: var(--ds-type-body-1-strong-weight); }
+/* Team name card: the name white, the role the body's 75% white. */
+.div-block-502 > .black { color: var(--ds-color-text-primary); -webkit-text-fill-color: currentcolor; }
+.div-block-502 > .v25-h4.black { color: var(--ds-type-body-1-color); }
+
+/* Bold words in body text */
+.cs-section strong,
+.cs-list li strong,
+.cs-tldr-item p strong,
+.cs-status strong,
+.section-36 .ms-body-text-1 strong,
+.section-36 .ms-body-text-1 > .ms-body-text-1-b,
+.section-36 .text-span-1049,
+.section-43 .ms-body-text-1 strong,
+.section-53 .ms-body-text-1 strong {
+  font-weight: var(--ds-type-body-1-strong-weight);
+  color: var(--ds-type-body-1-strong-color);
+}
+
+/* --------------------------------------------------------------------------
+   Body 2
+   -------------------------------------------------------------------------- */
+.new-project-card .div-block-579 .ms-body-text-1,  /* work cards: description and results line */
+.ds-quote blockquote,                               /* homepage testimonials       */
+.project-mob-box > .v25-b1,                         /* phone work cards: project and impact */
+.experience-blocks .ms-body-text-1,                 /* homepage Experience list    */
+.div-block-532 > .ms-body-text-1,                   /* homepage "What I've been up to" cards */
+.feedback-card .ms-body-text-1,                     /* About: visitor notes        */
+.div-block-524 > .ms-body-text-1,                   /* Lab cards                   */
+.section-37 .ms-body-text-1.ocp50 {                 /* case studies: the line under "Curious about the journey?" */
+  font-family: var(--ds-type-body-2-font);
+  font-size: var(--ds-type-body-2-size);
+  line-height: var(--ds-type-body-2-line-height);
+  font-weight: var(--ds-type-body-2-weight);
+  letter-spacing: normal;
+}
+.project-mob-box > .v25-b1,
+.ds-quote blockquote { color: var(--ds-type-body-2-color); }
+/* Bold words in Body 2 (the testimonials' keywords) are white at medium weight. */
+.ds-quote blockquote strong { font-weight: var(--ds-type-body-2-strong-weight); color: var(--ds-color-text-primary); }
+/* Highlighted words in Body 2 (the work cards' result, the Lab cards' titles)
+   keep their colour, at medium weight like bold words in Body 1. */
+.new-project-card .div-block-579 .text-span-1050,
+.div-block-524 > .ms-body-text-1 > .text-span-1005 { font-weight: var(--ds-type-body-2-strong-weight); }
+
+/* --------------------------------------------------------------------------
+   Caption
+   -------------------------------------------------------------------------- */
+.v25-h4.grey,                 /* About: visitors' roles and dates (Webflow shrank these to 10px on phones) */
+.ds-person-role,              /* testimonials: role                         */
+.div-block-501 > .v25-b1,     /* TMF studies: picture captions              */
+.cs-tldr-meta {               /* summary cards: a quote's attribution       */
+  font-family: var(--ds-type-caption-font);
+  font-size: var(--ds-type-caption-size);
+  line-height: var(--ds-type-caption-line-height);
+  font-weight: var(--ds-type-caption-weight);
+  letter-spacing: var(--ds-type-caption-letter-spacing);
+  color: var(--ds-type-caption-color);
+}
+
+/* --------------------------------------------------------------------------
+   Colour marks on the Webflow body text: colour instead of opacity
+   -------------------------------------------------------------------------- */
+:is(.ms-body-text-1, .ms-body-text-1-b).ocp75 { opacity: 1; color: var(--ds-color-text-secondary); }
+:is(.ms-body-text-1, .ms-body-text-1-b).ocp50 { opacity: 1; color: var(--ds-color-text-tertiary); }

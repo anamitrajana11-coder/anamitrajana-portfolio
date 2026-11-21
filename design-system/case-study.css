@@ -18,9 +18,9 @@
    same wrappers as the opening, so the side margins match it.
    ------------------------------------------------------------------ */
 .cs {
-  color: var(--ds-text-body);
-  font-family: var(--ds-font-primary);
-  font-size: var(--ds-text-md);
+  color: var(--ds-color-text-soft);
+  font-family: var(--ds-font-family-sans);
+  font-size: var(--ds-font-size-18);
   line-height: 1.65;
 }
 .cs *, .cs *::before, .cs *::after { box-sizing: border-box; }
@@ -33,12 +33,12 @@
 }
 .cs ul, .cs ol { list-style: none; }
 .cs a { color: inherit; }
-.cs strong { color: var(--ds-white); font-weight: var(--ds-weight-medium); }
+.cs strong { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-medium); }
 .cs code {
-  font-family: var(--ds-font-mono);
+  font-family: var(--ds-font-family-mono);
   font-size: .85em;
-  background: var(--ds-overlay-white-8);
-  border-radius: var(--ds-radius-xs);
+  background: var(--ds-color-overlay-hover);
+  border-radius: var(--ds-radius-2);
   padding: 1px 5px;
 }
 
@@ -50,23 +50,23 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-family: var(--ds-font-mono);
-  font-size: var(--ds-text-xs);
-  font-weight: var(--ds-weight-medium);
+  font-family: var(--ds-font-family-mono);
+  font-size: var(--ds-font-size-12);
+  font-weight: var(--ds-font-weight-medium);
   letter-spacing: .5px;
   line-height: 18px;
   text-transform: uppercase;
-  color: var(--ds-text-muted);
-  border: 2px solid var(--ds-border-strong);
+  color: var(--ds-color-text-muted);
+  border: 2px solid var(--ds-color-border-default);
   padding: 3px 8px;
   text-decoration: none;
   white-space: nowrap;
 }
-.cs-tag--accent { border-color: var(--ds-orange-deep); }
+.cs-tag--accent { border-color: var(--ds-color-border-accent); }
 .cs-tag--pending { border-style: dashed; cursor: default; }
 .cs-tag--pending::after {
   content: "soon";
-  color: var(--ds-orange);
+  color: var(--ds-color-text-accent);
   font-size: 10px;
 }
 
@@ -75,11 +75,11 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: var(--ds-font-primary);
-  font-size: var(--ds-text-base);
-  font-weight: var(--ds-weight-regular);
+  font-family: var(--ds-font-family-sans);
+  font-size: var(--ds-font-size-16);
+  font-weight: var(--ds-font-weight-regular);
   line-height: 24px;
-  color: var(--ds-white);
+  color: var(--ds-color-text-primary);
 }
 .cs-label img { width: 16px; height: 15px; }
 
@@ -88,6 +88,23 @@
    ------------------------------------------------------------------ */
 /* Same proportions as the older pages' hero images (1440 × 582) */
 .cs-visual.cs-visual--hero { aspect-ratio: 1440 / 582; }
+
+/* Intro above the hero on every case study (Anamitra, 2026-11-20): the
+   About page's opening layout, its Webflow markup and classes (title left,
+   paragraphs right, stacked below 768px); written by build-case-studies.mjs
+   from each study's `intro`. Its columns carry Webflow's 10px gutters;
+   from 1280px the page adds 10px of its own, so there the row reaches 10px
+   past both sides to keep the title and the text on the hero's edges. The
+   space to the hero matches the space above the summary cards. */
+.cs-intro { margin-bottom: 72px; }
+@media (min-width: 1280px) { .cs-intro { margin-left: -10px; margin-right: -10px; } }
+/* The box holding the paragraphs: at most 360px wide, always against the
+   right edge of its column (the hero's right edge), at every width
+   (Anamitra, 2026-11-20). The paragraphs inside keep their left alignment. */
+.cs-intro .flex-block-126 { max-width: 360px; margin-left: auto; }
+/* The product before a feature's name ("Yanta /" in "Yanta / Ask AI") is
+   muted grey; the feature's name stays white. */
+.cs-intro-prefix { color: var(--ds-color-text-muted); }
 
 /* The hero (the picture or video at the top of every case study) has the
    pictures' 8px corners too (square until 2026-11-11). The corners are on
@@ -103,7 +120,7 @@
 
 /* Hero video (1440 × 582): loops muted; click pauses / plays (video.js).
    While paused, a tag in the corner says how to resume. */
-.cs-hero-media { position: relative; background: var(--ds-black); }
+.cs-hero-media { position: relative; background: var(--ds-color-black); }
 .cs-hero-video {
   display: block;
   width: 100%;
@@ -121,12 +138,12 @@
   object-fit: cover;
 }
 .cs-hero-video:focus-visible,
-.cs-figure-video:focus-visible { outline: 2px solid var(--ds-orange); outline-offset: 4px; }
+.cs-figure-video:focus-visible { outline: 2px solid var(--ds-color-focus-ring); outline-offset: 4px; }
 .cs-video-paused {
   position: absolute;
   left: 20px;
   bottom: 20px;
-  background: var(--ds-black);
+  background: var(--ds-color-black);
   opacity: 0;
   pointer-events: none;
   transition: opacity .2s;
@@ -143,7 +160,7 @@
 .cs-team .div-block-504 { outline: none; }
 .cs-team .div-block-504:hover .div-block-502,
 .cs-team .div-block-504:focus-visible .div-block-502 { display: block !important; }
-.cs-team .div-block-504:focus-visible .image-295 { outline: 2px solid var(--ds-white); outline-offset: 2px; }
+.cs-team .div-block-504:focus-visible .image-295 { outline: 2px solid var(--ds-color-white); outline-offset: 2px; }
 /* Avatar size on every project page: 52px photos in 43px slots (Webflow's
    60 in 50), and the hover widens the slot to 61px (was 70) — the same
    overlap and spread in proportion. On the older pages this overrides the
@@ -159,27 +176,16 @@
      under the role. Name and role in the body copy's type (as the summary
      cards' text): the name white, the role the body's 75% white. (Was white
      with black bold text in a 2px orange frame, 2px corners, 4 / 8 / 5.) */
-.image-295 { border: 2px solid var(--ds-grey-600); }
+.image-295 { border: 2px solid var(--ds-team-avatar-ring); }
 .div-block-502 {
   border: 0;
-  background: var(--ds-grey-800);
-  border-radius: var(--ds-name-card-radius);
+  background: var(--ds-color-surface-tooltip);
+  border-radius: var(--ds-team-card-radius);
   padding: 4px 8px 6px;
   margin-top: 64px;  /* 12px below the 52px photo (Webflow's 75px left 23px) */
 }
 .div-block-502 > * { margin-bottom: 0; }
-/* The name and role carry Webflow's .black (and its font classes); two
-   classes, to outrank them. */
-.div-block-502 > .black {
-  font-family: var(--ds-font-body);
-  font-size: var(--ds-body-size);
-  line-height: var(--ds-body-leading);
-  font-weight: var(--ds-weight-regular);
-  letter-spacing: normal;
-  color: var(--ds-white);
-  -webkit-text-fill-color: currentcolor;
-}
-.div-block-502 > .v25-h4.black { color: var(--ds-body-color); }
+/* The name and role are Body 1 (type.css). */
 
 /* Teams of 7+ don't fit one row in the 4-of-12 column: rows of four, with
    room left for the hover widening so nothing reflows while hovering
@@ -191,9 +197,9 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: var(--ds-surface-card);
+  background: var(--ds-color-surface-card);
 }
-.cs-avatar-placeholder svg { width: 100%; height: 100%; fill: var(--ds-text-muted); }
+.cs-avatar-placeholder svg { width: 100%; height: 100%; fill: var(--ds-color-text-muted); }
 
 /* ------------------------------------------------------------------
    2. Status
@@ -203,22 +209,22 @@
   grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
   gap: 32px;
   padding: 24px;
-  background: var(--ds-surface-card);
-  border: 2px solid var(--ds-border-strong);
-  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-surface-card);
+  border: 2px solid var(--ds-color-border-default);
+  border-radius: var(--ds-radius-4);
 }
 .cs-status ul { margin-top: 10px; display: grid; gap: 6px; }
 .cs-status li, .cs-status p {
-  font-size: var(--ds-text-sm);
+  font-size: var(--ds-font-size-14);
   line-height: 1.55;
-  color: var(--ds-text-muted);
+  color: var(--ds-color-text-muted);
 }
 .cs-status li { padding-left: 18px; position: relative; }
 .cs-status li::before {
   content: "";
   position: absolute; left: 0; top: .6em;
   width: 8px; height: 2px;
-  background: var(--ds-orange);
+  background: var(--ds-color-orange-500);
 }
 .cs-status p { margin-top: 10px; }
 .cs-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
@@ -234,17 +240,17 @@
 }
 .cs-tldr-item {
   padding: 24px;
-  background: var(--ds-surface-card);
-  border: 2px solid var(--ds-border-strong);
+  background: var(--ds-color-surface-card);
+  border: 2px solid var(--ds-color-border-default);
   border-radius: var(--ds-card-radius);
 }
 .cs-tldr-item p {
   margin-top: 14px;
-  font-size: var(--ds-text-base);
+  font-size: var(--ds-font-size-16);
   line-height: 1.6;
 }
-.cs-tldr-item--result { border-color: var(--ds-orange-deep); }
-.cs-tldr-item--result p { color: var(--ds-white); }
+.cs-tldr-item--result { border-color: var(--ds-color-border-accent); }
+.cs-tldr-item--result p { color: var(--ds-color-text-primary); }
 
 /* Older project pages lead with the same cards (Problem / underlying issue /
    Solution), wrapped in .cs.cs-lead above their contents and body. */
@@ -253,17 +259,17 @@
 /* Four cards (Ask AI) sit in one row, two by two on smaller laptops. */
 .cs-tldr--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 @media screen and (max-width: 1279px) { .cs-tldr--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.cs-tldr-meta { font-size: var(--ds-text-sm); color: var(--ds-text-muted); }
+/* .cs-tldr-meta (a quote's attribution) is a Caption (type.css). */
 .cs-tldr-list { display: grid; gap: 14px; margin-top: 14px; }
 .cs-tldr-list li {
   position: relative;
   padding-left: 22px;
-  font-size: var(--ds-text-sm);
+  font-size: var(--ds-font-size-14);
   line-height: 1.55;
-  color: var(--ds-text-muted);
+  color: var(--ds-color-text-muted);
 }
-.cs-tldr-list li::before { content: "↳"; position: absolute; left: 0; color: var(--ds-orange); }
-.cs-tldr-list strong { display: block; margin-bottom: 2px; font-size: var(--ds-text-base); }
+.cs-tldr-list li::before { content: "↳"; position: absolute; left: 0; color: var(--ds-color-text-accent); }
+.cs-tldr-list strong { display: block; margin-bottom: 2px; font-size: var(--ds-font-size-16); }
 .cs-tldr-list span { display: block; }
 /* A list after the card's opening line gets a little more room. */
 .cs-tldr-item p + .cs-tldr-list { margin-top: 24px; }
@@ -276,21 +282,21 @@
 /* Status tag, as dark-mode products show success (Railway, Render): a dark
    brand-green tint, a mid-green border, light-green text and dot. */
 .cs-tag--status {
-  color: var(--ds-brand-green-light);
-  background: color-mix(in srgb, var(--ds-brand-green) 16%, transparent);
-  border-color: color-mix(in srgb, var(--ds-brand-green) 55%, transparent);
+  color: var(--ds-color-text-success);
+  background: color-mix(in srgb, var(--ds-color-success) 16%, transparent);
+  border-color: color-mix(in srgb, var(--ds-color-success) 55%, transparent);
 }
 .cs-tag--status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 /* Live: the dot pulses, like a live indicator. */
 .cs-tag--live::before { animation: cs-live 2s ease-out infinite; }
 @keyframes cs-live {
-  from { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ds-brand-green-light) 60%, transparent); }
+  from { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ds-color-text-success) 60%, transparent); }
   to { box-shadow: 0 0 0 5px transparent; }
 }
 @media (prefers-reduced-motion: reduce) { .cs-tag--live::before { animation: none; } }
-.cs .cs-tag--link { color: var(--ds-white); border-color: var(--ds-orange-deep); transition: border-color .2s; }
-.cs .cs-tag--link:hover { border-color: var(--ds-orange); }
-.cs-tag--link svg { width: 16px; height: 16px; color: var(--ds-orange); }
+.cs .cs-tag--link { color: var(--ds-color-text-primary); border-color: var(--ds-color-border-accent); transition: border-color .2s; }
+.cs .cs-tag--link:hover { border-color: var(--ds-color-orange-500); }
+.cs-tag--link svg { width: 16px; height: 16px; color: var(--ds-color-text-accent); }
 /* A little more room between a status tag and the View button (16px). */
 .cs-tldr-head .cs-tag--status + .cs-tag--link { margin-left: 6px; }
 /* A sequence (1. 2. 3. in the draft) counts 01, 02… instead of the ↳. */
@@ -298,9 +304,9 @@ ol.cs-tldr-list { counter-reset: cs-step; }
 ol.cs-tldr-list li { counter-increment: cs-step; padding-left: 30px; }
 ol.cs-tldr-list li::before {
   content: counter(cs-step, decimal-leading-zero);
-  font-family: var(--ds-font-mono);
-  font-size: var(--ds-text-base);
-  font-weight: var(--ds-weight-medium);
+  font-family: var(--ds-font-family-mono);
+  font-size: var(--ds-font-size-16);
+  font-weight: var(--ds-font-weight-medium);
   line-height: 1.55;
 }
 /* A body row whose framing moved into the cards gets the whole width
@@ -327,7 +333,7 @@ ol.cs-tldr-list li::before {
 .video-6, .video-7, .code-embed-9, .youtube { border-radius: var(--ds-media-radius); }
 /* A credit (an image title that starts with "Credit:"): a tag in the
    bottom-right corner, across from the "Paused" tag. */
-.cs-credit { position: absolute; right: 20px; bottom: 20px; background: var(--ds-black); pointer-events: none; }
+.cs-credit { position: absolute; right: 20px; bottom: 20px; background: var(--ds-color-black); pointer-events: none; }
 /* Too narrow for both tags along the bottom: "Paused" moves to the top-left. */
 @container (max-width: 480px) {
   .cs-figure-media:has(> .cs-credit) > .cs-video-paused { top: 14px; bottom: auto; left: 14px; }
@@ -349,41 +355,41 @@ ol.cs-tldr-list li::before {
   justify-content: flex-end;
   gap: 10px;
   padding: 28px;
-  background-color: var(--ds-surface-card);
-  background-image: repeating-linear-gradient(135deg, transparent 0 18px, var(--ds-overlay-white-5) 18px 19px);
-  border: 2px dashed var(--ds-border-strong);
+  background-color: var(--ds-color-surface-card);
+  background-image: repeating-linear-gradient(135deg, transparent 0 18px, var(--ds-color-overlay-subtle) 18px 19px);
+  border: 2px dashed var(--ds-color-border-default);
   border-radius: var(--ds-media-radius);
   overflow: hidden;
-  font-family: var(--ds-font-primary);
+  font-family: var(--ds-font-family-sans);
 }
-.cs-visual .cs-tag { position: absolute; top: 20px; left: 20px; background: var(--ds-black); }
+.cs-visual .cs-tag { position: absolute; top: 20px; left: 20px; background: var(--ds-color-black); }
 .cs-visual-desc {
   margin: 0;
   max-width: 60ch;
-  font-size: var(--ds-text-sm);
+  font-size: var(--ds-font-size-14);
   line-height: 1.55;
-  color: var(--ds-text-muted);
+  color: var(--ds-color-text-muted);
 }
 .cs-visual-desc b {
   display: block;
   margin-bottom: 4px;
-  font-family: var(--ds-font-mono);
-  font-size: var(--ds-text-xs);
-  font-weight: var(--ds-weight-medium);
+  font-family: var(--ds-font-family-mono);
+  font-size: var(--ds-font-size-12);
+  font-weight: var(--ds-font-weight-medium);
   letter-spacing: .5px;
   text-transform: uppercase;
-  color: var(--ds-white);
+  color: var(--ds-color-text-primary);
 }
 
 .cs-figure figcaption {
   opacity: 1;
   margin-top: 12px;
-  font-family: var(--ds-font-mono);
+  font-family: var(--ds-font-family-mono);
   font-size: 13px;
   line-height: 1.5;
-  color: var(--ds-text-muted);
+  color: var(--ds-color-text-muted);
 }
-.cs-figure figcaption::before { content: "↳ "; color: var(--ds-orange); }
+.cs-figure figcaption::before { content: "↳ "; color: var(--ds-color-text-accent); }
 
 /* ------------------------------------------------------------------
    5. Body — sticky contents + decisions
@@ -399,21 +405,21 @@ ol.cs-tldr-list li::before {
 }
 /* The contents list is self-contained (font, list reset) because the older
    project pages use it outside .cs — see .cs-toc-layout below. */
-.cs-toc { position: sticky; top: 32px; align-self: start; max-width: 280px; font-family: var(--ds-font-primary); }
+.cs-toc { position: sticky; top: 32px; align-self: start; max-width: 280px; font-family: var(--ds-font-family-sans); }
 .cs-toc ol { display: grid; gap: 2px; margin: 16px 0 0; padding: 0; list-style: none; }
 .cs-toc li { margin: 0; }
 .cs-toc a {
   display: block;
   padding: 7px 0 7px 14px;
-  border-left: 2px solid var(--ds-border-strong);
-  font-size: var(--ds-text-sm);
+  border-left: 2px solid var(--ds-color-border-default);
+  font-size: var(--ds-font-size-14);
   line-height: 1.4;
-  color: var(--ds-text-muted);
+  color: var(--ds-color-text-muted);
   text-decoration: none;
   transition: color .2s, border-color .2s;
 }
-.cs-toc a:hover { color: var(--ds-white); }
-.cs-toc a.is-active { color: var(--ds-white); border-left-color: var(--ds-orange); }
+.cs-toc a:hover { color: var(--ds-color-text-primary); }
+.cs-toc a.is-active { color: var(--ds-color-text-primary); border-left-color: var(--ds-color-orange-500); }
 
 /* Older project pages (featurely, tmf1, tmf2, redlab, crayon): their
    full-width rows sit beside the same contents, in a narrower column so the
@@ -451,11 +457,11 @@ ol.cs-tldr-list li::before {
    heading is the Webflow label in the row's first column; its arrow goes. */
 .cs-section h2,
 .cs-toc-content > .w-row > .w-col-3 .v25-h3 {
-  font-family: var(--ds-font-display);
-  font-size: clamp(24px, 2.2vw, var(--ds-text-3xl));
-  font-weight: var(--ds-weight-medium);
+  font-family: var(--ds-font-family-display);
+  font-size: clamp(24px, 2.2vw, var(--ds-font-size-32));
+  font-weight: var(--ds-font-weight-medium);
   line-height: 1.2;
-  color: var(--ds-white);
+  color: var(--ds-color-text-primary);
   text-wrap: balance;
 }
 .cs-section h2 { margin-bottom: 32px; }
@@ -466,11 +472,11 @@ ol.cs-tldr-list li::before {
    they are. */
 .cs-section h3,
 .cs-toc-content .ms-heading-2:not(.orange) {
-  font-family: var(--ds-font-display);
-  font-size: clamp(20px, 1.7vw, var(--ds-text-xl));
-  font-weight: var(--ds-weight-medium);
+  font-family: var(--ds-font-family-display);
+  font-size: clamp(20px, 1.7vw, var(--ds-font-size-24));
+  font-weight: var(--ds-font-weight-medium);
   line-height: 1.3;
-  color: var(--ds-white);
+  color: var(--ds-color-text-primary);
 }
 .cs-section h3 { margin-bottom: 20px; }
 /* A sub-heading (### in a draft) opens a new part of its section. */
@@ -526,36 +532,14 @@ ol.cs-tldr-list li::before {
    older pages' 600 / 700 bold labels and <strong> come down to medium. */
 .cs-toc-content :is(strong, b, .ms-body-text-1-b, .bas-label-before-h, .bas-label-after-h),
 .cs-lead :is(strong, b) {
-  font-weight: var(--ds-weight-medium);
+  font-weight: var(--ds-font-weight-medium);
 }
 .cs-toc-content > .w-row > .w-col-3 .image-266 { display: none; }
 /* The title wrapper was capped at 250px for the old side column. */
 .cs-toc-content > .w-row > .w-col-3 .div-block-460 { max-width: none; }
 
-.cs-section p {
-  font-family: var(--ds-font-body);
-  font-size: var(--ds-body-size);
-  line-height: var(--ds-body-leading);
-  color: var(--ds-body-color);
-}
-/* Bold in the body (a list item's lead, a key term) is full white, a step
-   up from the 75% body copy, so it stands out. */
-.cs-section strong { color: var(--ds-white); }
-/* Body copy is one style on every page: these runs of text used the card
-   font (Aktiv Grotesk, 14–16px) and now match .cs-section p — the cards'
-   paragraphs and list detail lines (not their titles), the Status box,
-   the credits, and the homepage testimonials. */
-.cs-tldr-item p,
-.cs-tldr-list li > span,
-.cs-status li,
-.cs-status p,
-.cs-credits p:not(.cs-note),
-.v25-b2.grey {
-  font-family: var(--ds-font-body);
-  font-size: var(--ds-body-size);
-  line-height: var(--ds-body-leading);
-  color: var(--ds-body-color);
-}
+/* Body copy (paragraphs, list items, the summary cards' text, the Status
+   box, the credits) and its bold words are Body 1, set in type.css. */
 .cs-section :is(p, .cs-list) + :is(p, .cs-list) { margin-top: 18px; }
 
 /* Lists in the body copy: orange dashes (as in the status block), or orange
@@ -564,25 +548,21 @@ ol.cs-tldr-list li::before {
 .cs-list li {
   position: relative;
   padding-left: 32px;
-  font-family: var(--ds-font-body);
-  font-size: var(--ds-body-size);
-  line-height: var(--ds-body-leading);
-  color: var(--ds-body-color);
 }
 ul.cs-list li::before {
   content: "";
   position: absolute; left: 0; top: calc(.75em - 1px);
   width: 8px; height: 2px;
-  background: var(--ds-orange);
+  background: var(--ds-color-orange-500);
 }
 ol.cs-list { counter-reset: cs-step; }
 ol.cs-list li { counter-increment: cs-step; }
 ol.cs-list li::before {
   content: counter(cs-step, decimal-leading-zero);
   position: absolute; left: 0; top: 0;
-  font-family: var(--ds-font-mono);
-  font-weight: var(--ds-weight-medium);
-  color: var(--ds-orange);
+  font-family: var(--ds-font-family-mono);
+  font-weight: var(--ds-font-weight-medium);
+  color: var(--ds-color-text-accent);
 }
 
 /* ------------------------------------------------------------------
@@ -594,11 +574,11 @@ ol.cs-list li::before {
   gap: 24px 48px;
   margin-top: 104px;
   padding-top: 32px;
-  border-top: 2px solid var(--ds-border-strong);
+  border-top: 2px solid var(--ds-color-border-default);
 }
 .cs-credits > .cs-label { align-self: start; justify-self: start; }
-.cs-credits p { font-size: var(--ds-text-sm); line-height: 1.6; color: var(--ds-text-muted); }
-.cs-credits .cs-note { font-family: var(--ds-font-mono); font-size: var(--ds-text-xs); }
+.cs-credits p { font-size: var(--ds-font-size-14); line-height: 1.6; color: var(--ds-color-text-muted); }
+.cs-credits .cs-note { font-family: var(--ds-font-family-mono); font-size: var(--ds-font-size-12); }
 
 .cs-next {
   display: grid;
@@ -607,23 +587,23 @@ ol.cs-list li::before {
   align-items: end;
   margin-top: 72px;
   padding: 32px;
-  background: var(--ds-surface-card);
-  border: 2px solid var(--ds-border-strong);
+  background: var(--ds-color-surface-card);
+  border: 2px solid var(--ds-color-border-default);
   border-radius: var(--ds-card-radius);
   text-decoration: none;
   transition: border-color .2s;
 }
-.cs-next:hover { border-color: var(--ds-orange-deep); }
+.cs-next:hover { border-color: var(--ds-color-border-accent); }
 /* Tag above title, stacked, so the page's line height doesn't add space. */
 .cs-next > span { display: flex; flex-direction: column; align-items: flex-start; }
 .cs-next-title {
   display: block;
   margin-top: 14px;
-  font-family: var(--ds-font-display);
-  font-size: clamp(var(--ds-text-lg), 1.9vw, var(--ds-text-2xl));
-  font-weight: var(--ds-weight-medium);
+  font-family: var(--ds-font-family-display);
+  font-size: clamp(var(--ds-font-size-20), 1.9vw, var(--ds-font-size-28));
+  font-weight: var(--ds-font-weight-medium);
   line-height: 1.2;
-  color: var(--ds-white);
+  color: var(--ds-color-text-primary);
 }
 .cs-next-arrow { width: 28px; height: 26px; }
 .cs-next .cs-tag { white-space: normal; }
@@ -643,7 +623,7 @@ ol.cs-list li::before {
    ------------------------------------------------------------------ */
 .cs-closing { margin-top: 72px; }
 /* The older pages' Montserrat, which .cs swaps for its own font. */
-.cs-closing, .cs-cta { font-family: var(--ds-font-secondary); }
+.cs-closing, .cs-cta { font-family: var(--ds-font-family-body); }
 /* Rows drift sideways by up to 13svh as --cs-gallery-progress runs 0 → 1
    (gallery.js), the distance of the Webflow scroll interaction. */
 .cs-gallery ._01 { transform: translateX(calc(var(--cs-gallery-progress, 0) * -13svh)); }
@@ -655,12 +635,12 @@ ol.cs-list li::before {
   justify-content: center;
   width: 100%;
   height: 100%;
-  background-color: var(--ds-surface-card);
-  background-image: repeating-linear-gradient(135deg, transparent 0 18px, var(--ds-overlay-white-5) 18px 19px);
-  border: 2px dashed var(--ds-border-strong);
+  background-color: var(--ds-color-surface-card);
+  background-image: repeating-linear-gradient(135deg, transparent 0 18px, var(--ds-color-overlay-subtle) 18px 19px);
+  border: 2px dashed var(--ds-color-border-default);
   border-radius: var(--ds-media-radius);
 }
-.cs-gallery-slot .cs-tag { background: var(--ds-black); }
+.cs-gallery-slot .cs-tag { background: var(--ds-color-black); }
 /* Followed by the next-study link, not the footer. */
 .cs-cta { margin-bottom: 0; }
 
@@ -670,15 +650,14 @@ ol.cs-list li::before {
 @media screen and (max-width: 991px) {
   .cs-status { grid-template-columns: 1fr; gap: 24px; }
   .cs-tldr { grid-template-columns: 1fr; margin-top: 48px; }
-  .cs-section p, .cs-list li, .cs-tldr-item p, .cs-tldr-list li > span, .cs-status li, .cs-status p,
-  .cs-credits p:not(.cs-note), .v25-b2.grey, .div-block-502 > .black { font-size: var(--ds-body-size-compact); }
+  .cs-intro { margin-bottom: 48px; }
   .cs-lead .cs-tldr { margin-top: 60px; }
   .cs-body, .cs-credits { grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: 72px; }
   .cs-toc { display: none; }
   .cs-credits { gap: 12px; }
 }
 @media screen and (max-width: 767px) {
-  .cs { font-size: var(--ds-text-base); }
+  .cs { font-size: var(--ds-font-size-16); }
   .cs-figure-row { grid-auto-flow: row; }
   .cs-visual { aspect-ratio: 4 / 3; padding: 20px; }
   .cs-visual.cs-visual--hero { aspect-ratio: auto; min-height: 280px; }
@@ -710,11 +689,11 @@ ol.cs-list li::before {
    ========================================================================== */
 .ds-section-title {
   margin: 0;
-  font-family: var(--ds-section-title-font);
-  font-size: var(--ds-section-title-size);
-  font-weight: var(--ds-section-title-weight);
-  line-height: var(--ds-section-title-leading);
-  color: var(--ds-white);
+  font-family: var(--ds-type-section-title-font);
+  font-size: var(--ds-type-section-title-size);
+  font-weight: var(--ds-type-section-title-weight);
+  line-height: var(--ds-type-section-title-line-height);
+  color: var(--ds-color-text-primary);
   text-align: left;
 }
 /* The arrow follows the last word with no space (so it never wraps onto a
@@ -735,27 +714,27 @@ ol.cs-list li::before {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-family: var(--ds-section-label-font);
-    font-size: var(--ds-section-label-size);
-    font-weight: var(--ds-section-label-weight);
-    line-height: var(--ds-section-label-leading);
+    font-family: var(--ds-type-section-label-font);
+    font-size: var(--ds-type-section-label-size);
+    font-weight: var(--ds-type-section-label-weight);
+    line-height: var(--ds-type-section-label-line-height);
   }
   .ds-section-title img { flex: none; margin: 0; }
 }
-@media (max-width: 479px) { .ds-section-title { font-size: var(--ds-section-label-size-compact); } }
+@media (max-width: 479px) { .ds-section-title { font-size: var(--ds-type-section-label-size-phone); } }
 .ds-section-label {
   display: flex;
   align-items: center;
   gap: 10px;
   margin: 0;
-  font-family: var(--ds-section-label-font);
-  font-size: var(--ds-section-label-size);
-  font-weight: var(--ds-section-label-weight);
-  line-height: var(--ds-section-label-leading);
-  color: var(--ds-white);
+  font-family: var(--ds-type-section-label-font);
+  font-size: var(--ds-type-section-label-size);
+  font-weight: var(--ds-type-section-label-weight);
+  line-height: var(--ds-type-section-label-line-height);
+  color: var(--ds-color-text-primary);
 }
 .ds-section-label img { width: var(--ds-section-arrow-width); height: var(--ds-section-arrow-height); margin: 0; }
-@media (max-width: 479px) { .ds-section-label { font-size: var(--ds-section-label-size-compact); } }
+@media (max-width: 479px) { .ds-section-label { font-size: var(--ds-type-section-label-size-phone); } }
 
 /* ==========================================================================
    Homepage — intro (top left)
@@ -794,8 +773,8 @@ ol.cs-list li::before {
   --ds-beam-strength: 10%;
   border-color: transparent;
   background:
-    linear-gradient(var(--ds-orange-darkest), var(--ds-orange-darkest)) padding-box,
-    conic-gradient(from var(--ds-beam-angle), var(--ds-orange-ember) 0 25%, color-mix(in srgb, var(--ds-orange) var(--ds-beam-strength), var(--ds-orange-ember)) 62.5%, var(--ds-orange-ember) 100%) border-box;
+    linear-gradient(var(--ds-color-orange-950), var(--ds-color-orange-950)) padding-box,
+    conic-gradient(from var(--ds-beam-angle), var(--ds-color-orange-850) 0 25%, color-mix(in srgb, var(--ds-color-orange-500) var(--ds-beam-strength), var(--ds-color-orange-850)) 62.5%, var(--ds-color-orange-850) 100%) border-box;
   animation: ds-beam 3.5s linear infinite;
 }
 @keyframes ds-beam { to { --ds-beam-angle: 360deg; } }
@@ -806,7 +785,7 @@ ol.cs-list li::before {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: color-mix(in srgb, var(--ds-orange) 25%, transparent);
+  background: color-mix(in srgb, var(--ds-color-orange-500) 25%, transparent);
   animation: ds-glow 2.8s ease-in-out infinite;
 }
 @keyframes ds-glow {
@@ -826,7 +805,7 @@ ol.cs-list li::before {
 .ds-flag { display: inline-block; width: 1.15em; height: .6em; margin-left: 2px; vertical-align: -.02em; }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-hero-badge .flex-block-105 { animation: none; background: var(--ds-orange-darkest); border-color: var(--ds-orange-ember); }
+  .ds-hero-badge .flex-block-105 { animation: none; background: var(--ds-color-orange-950); border-color: var(--ds-color-orange-850); }
   .ds-hero-badge .div-block-534::before, .ds-hero-badge-track { animation: none; }
 }
 
@@ -870,11 +849,6 @@ ol.cs-list li::before {
   .section-36:not(.cs) > .section-37,
   .section-36:not(.cs) > .cs-pager { margin-left: 10px; margin-right: 10px; }
 }
-/* Homepage, "What I've been up to": the three cards stopped at 350px, so on
-   very wide screens the row ended short of the right edge; on phones the
-   cards started 10px outside the left edge. */
-@media (min-width: 1280px) { .section-45 .div-block-530 { max-width: none; } }
-@media (max-width: 767px) { .section-45 .div-block-530 { margin-left: 10px; } }
 /* Homepage, "What others think" on phones: Webflow narrows the one column
    to .75fr and centres it, which left the title and the cards 9px inside
    both edges. Its rule is an ID selector, hence the !important. */
@@ -928,17 +902,17 @@ ol.cs-list li::before {
   display: flex;
   align-items: center;
   padding: 24px;
-  background-color: var(--ds-surface-card);
-  background-image: repeating-linear-gradient(135deg, transparent 0 18px, var(--ds-overlay-white-5) 18px 19px);
+  background-color: var(--ds-color-surface-card);
+  background-image: repeating-linear-gradient(135deg, transparent 0 18px, var(--ds-color-overlay-subtle) 18px 19px);
   box-sizing: border-box;
 }
 .ds-card-visual-title {
   max-width: 34ch;
-  font-family: var(--ds-font-display);
-  font-size: var(--ds-text-xl);
-  font-weight: var(--ds-weight-medium);
+  font-family: var(--ds-font-family-display);
+  font-size: var(--ds-font-size-24);
+  font-weight: var(--ds-font-weight-medium);
   line-height: 1.25;
-  color: var(--ds-white);
+  color: var(--ds-color-text-primary);
 }
 .ds-card-visual--mobile { aspect-ratio: 4 / 3; height: auto; min-height: 0; padding: 18px; }
 /* A Yanta card's thumbnail, with the older cards' hover (their Webflow
@@ -958,7 +932,7 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
 .project-image-block-mob > :is(.div-block-461, .div-block-462, .div-block-463, .div-block-464) { margin-top: 20px; }
 .new-project-card:hover .ds-card-thumb { width: 105%; height: 105%; }
 @media (prefers-reduced-motion: reduce) { .ds-card-thumb { transition: none; } }
-.ds-card-visual--mobile .ds-card-visual-title { font-size: var(--ds-text-lg); }
+.ds-card-visual--mobile .ds-card-visual-title { font-size: var(--ds-font-size-20); }
 
 /* Every card's footer (Webflow .div-block-579): the summary and the result
    share one centre line, and the space is the same 20px all round, from the
@@ -1003,7 +977,7 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
    circle showed as plain white. A black background of its own, with the blend
    kept inside the box, makes it the same in every browser.
    ========================================================================== */
-.spotlight1_layout { background-color: var(--ds-black); isolation: isolate; }
+.spotlight1_layout { background-color: var(--ds-color-black); isolation: isolate; }
 /* The box (.div-block-517) and the drawing inside it are both 55svh tall
    (50 and 35 on smaller screens), so the drawing runs 4px past the box's
    border; clip it, or its black hides the bottom border. */
@@ -1048,12 +1022,12 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
   flex-direction: column;
   gap: 20px;
   padding: 40px 40px 32px;
-  background: var(--ds-surface-1);
-  border: 2px solid var(--ds-border-strong);
+  background: var(--ds-color-surface-floating);
+  border: 2px solid var(--ds-color-border-default);
   border-radius: var(--ds-card-radius);  /* 8px, as every card */
   box-shadow: 0 28px 56px rgba(0, 0, 0, .65);
-  font-family: var(--ds-font-primary);
-  color: var(--ds-white);
+  font-family: var(--ds-font-family-sans);
+  color: var(--ds-color-text-primary);
   text-align: left;
   transform-origin: 50% 50%;
   transition: transform .45s cubic-bezier(.45, 0, .25, 1), opacity .35s ease;
@@ -1068,40 +1042,34 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
 .ds-quote[data-pos="hold"] { transform: translate(var(--deck-out, -102%), 6px) rotate(-3deg) scale(1); z-index: 0; }
 .ds-quote-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
 .ds-dots { display: flex; align-items: center; gap: 6px; }
-.ds-dots span { width: 8px; height: 8px; border-radius: var(--ds-radius-circle); background: var(--ds-text-muted); opacity: .4; }
-.ds-dots span.is-on { background: var(--ds-orange); opacity: 1; }
+.ds-dots span { width: 8px; height: 8px; border-radius: var(--ds-radius-circle); background: var(--ds-color-grey-400); opacity: .4; }
+.ds-dots span.is-on { background: var(--ds-color-orange-500); opacity: 1; }
 .ds-quote-mark {
   /* the mark's glyph sits high in its line; pull the quote up under it */
   margin: 8px 0 -24px;
-  font-family: var(--ds-font-display);
-  font-size: var(--ds-text-7xl);
+  font-family: var(--ds-font-family-display);
+  font-size: var(--ds-font-size-56);
   line-height: 1;
-  color: var(--ds-coral);
+  color: var(--ds-color-text-highlight);
 }
-/* Quote: the site's body copy (.ms-body-text-1.ocp75); its keywords in full
-   white at medium weight, the body copy's emphasis (see README §2). No
+/* Quote: Body 1 (type.css), its keywords white at medium weight. No
    quotation marks around it: the coral mark above the quote is the cue. */
-.ds-quote blockquote { font-family: var(--ds-font-body); font-size: var(--ds-body-size); line-height: var(--ds-body-leading); color: var(--ds-body-color); }
-.ds-quote blockquote strong { color: var(--ds-white); font-weight: var(--ds-weight-medium); }
 /* Full opacity: the Webflow stylesheet fades every figcaption to 60%,
    which dimmed the photo, name and role. */
 .ds-quote figcaption { margin-top: auto; display: flex; align-items: center; gap: 12px; opacity: 1; }
-.ds-avatar { flex: none; display: block; width: 48px; height: 48px; border-radius: var(--ds-radius-circle); object-fit: cover; background: var(--ds-border-strong); }
+.ds-avatar { flex: none; display: block; width: 48px; height: 48px; border-radius: var(--ds-radius-circle); object-fit: cover; background: var(--ds-color-grey-800); }
 .ds-person { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 /* Name and role: the testimonials' .v25-h3 and .v25-h4.grey */
-.ds-person-name { font-family: var(--ds-font-primary); font-size: var(--ds-text-base); font-weight: var(--ds-weight-regular); line-height: 1.5; color: var(--ds-white); }
-.ds-person-role { font-family: var(--ds-font-primary); font-size: var(--ds-text-xs); font-weight: var(--ds-weight-medium); letter-spacing: .5px; line-height: 1.5; color: var(--ds-text-muted); }
-@media screen and (max-width: 991px) {
-  .ds-quote blockquote { font-size: var(--ds-body-size-compact); }
-}
+.ds-person-name { font-family: var(--ds-font-family-sans); font-size: var(--ds-font-size-16); font-weight: var(--ds-font-weight-regular); line-height: 1.5; color: var(--ds-color-text-primary); }
+/* .ds-person-role is a Caption (type.css). */
 @media screen and (max-width: 767px) {
   .ds-deck-cell { grid-column: auto; }
   .ds-deck { --fan: .5; max-width: none; padding: 32px 24px 56px 0; }
   .ds-quote { padding: 28px 24px 24px; gap: 16px; }
-  .ds-quote-mark { font-size: var(--ds-text-6xl); }
+  .ds-quote-mark { font-size: var(--ds-font-size-48); }
 }
 @media screen and (max-width: 479px) {
-  .ds-person-name { font-size: var(--ds-text-sm); }
+  .ds-person-name { font-size: var(--ds-font-size-14); }
 }
 @media (prefers-reduced-motion: reduce) { .ds-quote { transition: none; } }
 
@@ -1126,11 +1094,11 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
   box-sizing: border-box;
   overflow: hidden;
   text-align: left;
-  color: var(--ds-white);
-  background: var(--ds-surface-1);
-  border: 1px solid var(--ds-overlay-white-10);
+  color: var(--ds-color-text-primary);
+  background: var(--ds-color-surface-floating);
+  border: 1px solid var(--ds-color-overlay-active);
   border-radius: var(--ds-card-radius);  /* 8px, as every card (12px until 2026-11-11) */
-  box-shadow: 0 16px 48px var(--ds-overlay-black-70);
+  box-shadow: 0 16px 48px var(--ds-color-scrim);
   opacity: 0;
   transform: translateY(-4px) scale(.98);
   transform-origin: top right;
@@ -1148,17 +1116,17 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
   column-gap: 12px;
   min-height: 44px;
   padding: 0 16px;
-  border-bottom: 1px solid var(--ds-overlay-white-8);
+  border-bottom: 1px solid var(--ds-color-overlay-hover);
   transition: background-color .15s ease;
 }
 .ds-feedback-label {
-  font-family: var(--ds-font-primary);
-  font-size: var(--ds-text-xs);
-  font-weight: var(--ds-weight-regular);
+  font-family: var(--ds-font-family-sans);
+  font-size: var(--ds-font-size-12);
+  font-weight: var(--ds-font-weight-regular);
   line-height: 1.5;
   letter-spacing: normal;
   text-transform: none;
-  color: var(--ds-body-color);
+  color: var(--ds-type-body-1-color);
 }
 .ds-feedback-input {
   display: block;
@@ -1166,50 +1134,50 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
   height: 44px;
   margin: 0;
   padding: 0;
-  font-family: var(--ds-font-body);
-  font-size: var(--ds-text-sm);
+  font-family: var(--ds-type-body-1-font);
+  font-size: var(--ds-font-size-14);
   line-height: 1.5;
-  color: var(--ds-white);
+  color: var(--ds-color-text-primary);
   background: transparent;
   border: 0;
   border-radius: 0;
   outline: none;
   box-shadow: none;
 }
-.ds-feedback-input::placeholder { color: color-mix(in srgb, var(--ds-white) 32%, transparent); }
-.ds-feedback-hint { font-family: var(--ds-font-primary); font-size: var(--ds-text-xs); color: var(--ds-text-muted); }
-/* The dot: 6px of --ds-red in a 16px hover area (pulled 5px right so the
+.ds-feedback-input::placeholder { color: color-mix(in srgb, var(--ds-color-text-primary) 32%, transparent); }
+.ds-feedback-hint { font-family: var(--ds-font-family-sans); font-size: var(--ds-font-size-12); color: var(--ds-color-text-muted); }
+/* The dot: 6px of --ds-color-red-500 in a 16px hover area (pulled 5px right so the
    dot keeps the row's edge). Hovering it shows "Required field" to its
    left, a small tooltip kept inside the row, so the panel doesn't clip it. */
 .ds-feedback-error { position: relative; display: block; width: 16px; height: 16px; margin-right: -5px; cursor: help; }
-.ds-feedback-error::before { content: ""; position: absolute; inset: 5px; border-radius: var(--ds-radius-circle); background: var(--ds-red); }
+.ds-feedback-error::before { content: ""; position: absolute; inset: 5px; border-radius: var(--ds-radius-circle); background: var(--ds-color-red-500); }
 .ds-feedback-error::after {
   content: "Required field" / "";
   position: absolute;
   top: 50%;
   right: calc(100% + 4px);
   padding: 3px 8px;
-  font-family: var(--ds-font-primary);
-  font-size: var(--ds-text-xs);
+  font-family: var(--ds-font-family-sans);
+  font-size: var(--ds-font-size-12);
   line-height: 16px;
   white-space: nowrap;
-  color: var(--ds-white);
-  background: var(--ds-grey-800);
-  border: 1px solid var(--ds-overlay-white-10);
-  border-radius: var(--ds-radius-sm);
+  color: var(--ds-color-text-primary);
+  background: var(--ds-color-surface-tooltip);
+  border: 1px solid var(--ds-color-overlay-active);
+  border-radius: var(--ds-radius-4);
   opacity: 0;
   transform: translate(4px, -50%);
   transition: opacity .12s ease, transform .12s ease;
   pointer-events: none;
 }
 .ds-feedback-error:hover::after { opacity: 1; transform: translate(0, -50%); }
-.ds-feedback-row:focus-within, .ds-feedback-message:focus-within { background: var(--ds-overlay-white-5); }
-.ds-feedback-row:focus-within .ds-feedback-label { color: var(--ds-white); }
+.ds-feedback-row:focus-within, .ds-feedback-message:focus-within { background: var(--ds-color-overlay-subtle); }
+.ds-feedback-row:focus-within .ds-feedback-label { color: var(--ds-color-text-primary); }
 
 .ds-feedback-message {
   position: relative;
   padding: 12px 16px;
-  border-bottom: 1px solid var(--ds-overlay-white-8);
+  border-bottom: 1px solid var(--ds-color-overlay-hover);
   transition: background-color .15s ease;
 }
 .ds-feedback-message .ds-feedback-input {
@@ -1225,9 +1193,9 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
 
 .ds-feedback-fail {
   padding: 12px 16px 0;
-  font-family: var(--ds-font-primary);
-  font-size: var(--ds-text-xs);
-  color: var(--ds-red);
+  font-family: var(--ds-font-family-sans);
+  font-size: var(--ds-font-size-12);
+  color: var(--ds-color-text-error);
 }
 /* Submit and the badge share a line, Submit on the left; where they don't
    fit (phones), the badge moves under it. */
@@ -1251,13 +1219,13 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
   gap: 6px;
   min-width: 0;
   padding: 4px 10px 4px 8px;
-  font-family: var(--ds-font-primary);
-  font-size: var(--ds-text-xs);
+  font-family: var(--ds-font-family-sans);
+  font-size: var(--ds-font-size-12);
   line-height: 16px;
   white-space: nowrap;
-  color: var(--ds-text-muted);
-  background: var(--ds-overlay-white-5);
-  border: 1px solid var(--ds-overlay-white-8);
+  color: var(--ds-color-text-muted);
+  background: var(--ds-color-overlay-subtle);
+  border: 1px solid var(--ds-color-overlay-hover);
   border-radius: var(--ds-radius-pill);
 }
 .ds-info-badge svg { flex: none; width: 14px; height: 14px; }
@@ -1271,11 +1239,11 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
   width: 32px;
   height: 32px;
   border-radius: var(--ds-radius-circle);
-  background: var(--ds-overlay-white-8);
+  background: var(--ds-color-overlay-hover);
 }
 .ds-feedback-check svg { width: 16px; height: 16px; }
-.ds-feedback-done-title { font-family: var(--ds-font-primary); font-size: var(--ds-text-sm); font-weight: var(--ds-weight-medium); line-height: 1.5; }
-.ds-feedback-done-note { font-family: var(--ds-font-body); font-size: var(--ds-text-xs); line-height: 1.5; color: var(--ds-text-muted); }
+.ds-feedback-done-title { font-family: var(--ds-font-family-sans); font-size: var(--ds-font-size-14); font-weight: var(--ds-font-weight-medium); line-height: 1.5; }
+.ds-feedback-done-note { font-family: var(--ds-type-body-1-font); font-size: var(--ds-font-size-12); line-height: 1.5; color: var(--ds-color-text-muted); }
 
 .ds-sr-only {
   position: absolute;
@@ -1290,7 +1258,7 @@ video.ds-card-video::-webkit-media-controls-start-playback-button { display: non
 }
 /* 16px fields on phones, so iOS doesn't zoom in on focus. */
 @media screen and (max-width: 767px) {
-  .ds-feedback-input { font-size: var(--ds-text-base); }
+  .ds-feedback-input { font-size: var(--ds-font-size-16); }
 }
 @media (prefers-reduced-motion: reduce) {
   .ds-popover { transform: none; transition: opacity .15s ease; }

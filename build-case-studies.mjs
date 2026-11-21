@@ -93,6 +93,11 @@ const people = {
 // assets/ path, 3:2, about 1560 × 1040) replaces the homepage card's
 // placeholder. A thumbnail can be an .mp4, which always loops muted like a
 // GIF; a .jpg of the same name next to it is shown until it plays.
+// `intro` is the two-column block above the hero, laid out as the About
+// page's opening (title left, paragraphs right): { prefix?, title, text: [paragraphs] };
+// a prefix ("Yanta") is shown before the title in grey, with a slash.
+// For now each is the study's name and its work-card description (Anamitra,
+// 2026-11-20: "we will make the individual changes later").
 // `nextName` is the one-line name on the previous study's "Next case study"
 // card (default: `shortName`). `leadCards` names
 // draft sections (## headings) to show as the cards above the body instead of
@@ -115,6 +120,7 @@ const caseStudies = [
     thumbnail: "assets/yanta/ask-ai-thumbnail.mp4",
     tags: ["PRODUCT", "B2B", "AI"],
     summary: "AI assistant for Yanta’s analysis notebook, so scientists can query and chart their data without writing a line of SQL.",
+    intro: { prefix: "Yanta", title: "Ask AI", text: ["AI assistant for Yanta’s analysis notebook, so scientists can query and chart their data without writing a line of SQL."] },
     impact: "V0 testing –",
     highlight: "87.5/100 on UX-Lite",
     team: ["anupam-chowdhury", "vinit-vasant-khatavkar", "rohith-chimpiri"],
@@ -130,6 +136,7 @@ const caseStudies = [
     thumbnail: "assets/yanta/data-transformer-thumbnail.jpg",
     tags: ["PRODUCT", "B2B", "AI"],
     summary: "Automated mapping of raw instrument data into Yanta, with scientists keeping the final say on every import.",
+    intro: { prefix: "Yanta", title: "Data Transformer", text: ["Automated mapping of raw instrument data into Yanta, with scientists keeping the final say on every import."] },
     impact: "V1 testing –",
     highlight: "91.7/100 on UX-Lite",
     team: ["anupam-chowdhury", "fan-lu", "vinit-vasant-khatavkar", "nanguan-lin"],
@@ -140,6 +147,7 @@ const caseStudies = [
     shortName: "Identity, website & design system",
     tags: ["PRODUCT", "BRAND/WEB", "DESIGN SYSTEM"],
     summary: "Shaping Yanta’s brand, website, and design system as one, creating a recognizable identity that holds together across every touchpoint.",
+    intro: { title: "Identity, website & design system", text: ["Shaping Yanta’s brand, website, and design system as one, creating a recognizable identity that holds together across every touchpoint."] },
     impact: "Shipped in three weeks:",
     highlight: "280+ component variants",
     team: ["michael-tai", "ted-netland", "anupam-chowdhury", "vinit-vasant-khatavkar", "abhinav-sriram", "nanguan-lin", "rohith-chimpiri", "grace-li"],
@@ -158,6 +166,7 @@ const caseStudies = [
     thumbnail: "assets/yanta/scheduler-thumbnail.mp4",
     tags: ["PRODUCT", "B2B", "SAAS/WEB"],
     summary: "Gantt-style planning board for bioprocess labs, so teams can plan runs, people and equipment in one place.",
+    intro: { prefix: "Yanta", title: "Scheduler", text: ["Gantt-style planning board for bioprocess labs, so teams can plan runs, people and equipment in one place."] },
     impact: "V1 testing –",
     highlight: "93.8/100 on UX-Lite",
     team: ["johannes-kung", "anupam-chowdhury", "mackenzie-bower", "vinit-vasant-khatavkar", "abhinav-sriram"],
@@ -168,11 +177,16 @@ const caseStudies = [
 // the Webflow exports; the build only adds their end-of-page cards (All work /
 // Next case study), so every case study leads on to the next one.
 const olderStudies = [
-  { slug: "featurely", nextName: "Featurely AI" },
-  { slug: "tmf1", nextName: "TMF · Pantry check-in" },
-  { slug: "redlab", nextName: "Redlab" },
-  { slug: "tmf2", nextName: "TMF · Pantry workflow" },
-  { slug: "crayon", nextName: "Crayon" },
+  { slug: "featurely", nextName: "Featurely AI",
+    intro: { title: "Featurely AI", text: ["Streamlined user experience, onboarding, and AI-powered testing for a stealth-mode research platform."] } },
+  { slug: "tmf1", nextName: "TMF · Pantry check-in",
+    intro: { title: "TMF · Pantry check-in", text: ["Enhanced check-in process efficiency for partnering food pantry (WNS) by removing language barriers."] } },
+  { slug: "redlab", nextName: "Redlab",
+    intro: { title: "Redlab", text: ["Building an advanced incident reporting system for firefighters leveraging radio communication data and AI/ML."] } },
+  { slug: "tmf2", nextName: "TMF · Pantry workflow",
+    intro: { title: "TMF · Pantry workflow", text: ["Elevated client experience and operational efficiency at partnering food pantry (HCC) through service redesign."] } },
+  { slug: "crayon", nextName: "Crayon",
+    intro: { title: "Crayon", text: ["Ensuring essential early childhood cognitive growth by infusing gamification with proven assessment scales."] } },
 ];
 
 const contextLabels = ["Role", "Company", "Product", "Timeline", "Team"];
@@ -376,6 +390,8 @@ function loadShell() {
     .replace(/<script>\(function\(w,i,g\)[\s\S]*?<\/script>/, "")
     .replace(/<script type="text\/javascript">window\.dataLayer[\s\S]*?<\/script>/, "")
     .replace(/\s*<link rel="stylesheet" href="assets\/cdn\.jsdelivr\.net\/swiper[^>]*>/, "")
+    // The design-system stylesheets are added once, in order, by renderPage.
+    .replaceAll(/<link href="design-system\/[^>]*>/g, "")
     .replace(/\s*<style>[\s\S]*?<\/style>\s*/, "\n");
 
   const nav = html
@@ -479,13 +495,24 @@ function renderHeroImage(src, hero) {
   return `<div class="cs-hero-media"><img class="cs-hero-image" src="${versioned(src)}" alt="${escapeHtml(hero ? hero.description : "")}" fetchpriority="high"/></div>`;
 }
 
+// The block above the hero: the About page's opening layout (its Webflow
+// markup and classes), title left and paragraphs right, stacking on phones.
+function renderIntro(intro) {
+  if (!intro) return "";
+  const paragraphs = intro.text.map((text) => `<div><p class="ms-body-text-1 ocp75">${inline(text)}</p></div>`).join("");
+  // A `prefix` (the product, "Yanta") comes first in the muted grey: "Yanta / Ask AI".
+  const prefix = intro.prefix ? `<span class="cs-intro-prefix">${inline(intro.prefix)} /</span> ` : "";
+  return `<div class="cs-intro w-row"><div class="w-col w-col-6"><div><h1 class="v25-title-text extra-large">${prefix}${inline(intro.title)}</h1></div></div>`
+    + `<div class="w-col w-col-6"><div class="w-layout-vflex flex-block-126">${paragraphs}</div></div></div>`;
+}
+
 function renderOpening(study, page) {
   const context = Object.fromEntries(contextLabels.map((name, i) => [name, page.context[i]]));
   const team = study.team.map(teamMember).join("");
   const hero = study.heroVideo ? renderHeroVideo(study.heroVideo, page.hero)
     : study.heroImage ? renderHeroImage(study.heroImage, page.hero)
     : renderHeroVisual(page.hero);
-  return `<section class="section-36"><section class="tmf-header"><div class="div-block-474">${hero}</div></section>`
+  return `<section class="section-36">${renderIntro(study.intro)}<section class="tmf-header"><div class="div-block-474">${hero}</div></section>`
     + `<div class="columns-36 w-row"><div class="column-67 w-col w-col-5"><div class="div-block-454"><h1 class="ms-heading-2 orange">${inline(page.title)}</h1></div></div>`
     + `<div class="column-68 w-col w-col-3"><div class="div-block-459">${detail("Company", context.Company)}${detail("Role", capitalize(context.Role || ""))}${detail("Product", context.Product)}</div></div>`
     + `<div class="w-col w-col-4"><div class="div-block-473"><div>${heading("Project details")}</div><div class="w-layout-vflex flex-block-98">`
@@ -642,7 +669,7 @@ ${renderPager(study)}
     .replace(/<meta content="[^"]*" property="og:title"\/>/, `<meta content="${escapeHtml(title)}" property="og:title"/>`)
     .replace(/<meta content="[^"]*" name="twitter:title"\/>/, `<meta content="${escapeHtml(title)}" name="twitter:title"/>`);
 
-  return `${head}<link href="design-system/tokens.css" rel="stylesheet" type="text/css"/><link href="design-system/buttons.css" rel="stylesheet" type="text/css"/><link href="design-system/layout.css" rel="stylesheet" type="text/css"/><link href="design-system/case-study.css" rel="stylesheet" type="text/css"/></head>${shell.nav}${main}${shell.footer}${shell.scripts}\n<script src="design-system/toc.js"></script>\n<script src="design-system/gallery.js"></script>${main.includes("<video") ? '\n<script src="design-system/video.js"></script>' : ""}\n</body></html>\n`;
+  return `${head}<link href="design-system/tokens.css" rel="stylesheet" type="text/css"/><link href="design-system/buttons.css" rel="stylesheet" type="text/css"/><link href="design-system/layout.css" rel="stylesheet" type="text/css"/><link href="design-system/case-study.css" rel="stylesheet" type="text/css"/><link href="design-system/type.css" rel="stylesheet" type="text/css"/></head>${shell.nav}${main}${shell.footer}${shell.scripts}\n<script src="design-system/toc.js"></script>\n<script src="design-system/gallery.js"></script>${main.includes("<video") ? '\n<script src="design-system/video.js"></script>' : ""}\n</body></html>\n`;
 }
 
 // ---------------------------------------------------------------------------
@@ -691,17 +718,20 @@ function placeBlock(html, name, anchor, block) {
 }
 
 // The older project pages get the end-of-page cards after their "Curious
-// about the journey?" box.
+// about the journey?" box, and the intro block above their hero.
 function updateOlderPages() {
   for (const study of olderStudies) {
     const file = path.join(root, `${study.slug}.html`);
     const anchor = { after: '<section class="section-37">', marker: "</section>", insertAfterMarker: true };
-    fs.writeFileSync(file, placeBlock(fs.readFileSync(file, "utf8"), "cs-pager", anchor, renderPager(study)));
+    let html = placeBlock(fs.readFileSync(file, "utf8"), "cs-pager", anchor, renderPager(study));
+    html = placeBlock(html, "cs-intro", { after: '<section class="section-36">', marker: '<section class="tmf-header">' }, renderIntro(study.intro));
+    fs.writeFileSync(file, html);
   }
 }
 
-// Every page carries the buttons and the page frame: tokens.css, buttons.css
-// and layout.css after the Webflow stylesheet, and the buttons' SVG filters
+// Every page carries the buttons, the page frame and the text styles:
+// tokens.css, buttons.css, layout.css and type.css after the Webflow
+// stylesheet (type.css last, after case-study.css where a page has it), and the buttons' SVG filters
 // at the top of <body>.
 function updateButtonsEverywhere() {
   const webflowCss = /(<link href="assets\/cdn\.prod\.website-files\.com\/anamitras-portfolio\.webflow\.shared[^>]*>)/;
@@ -714,6 +744,11 @@ function updateButtonsEverywhere() {
       if (!html.includes("design-system/tokens.css")) html = html.replace(webflowCss, `$1${link("tokens.css")}`);
       if (!html.includes("design-system/buttons.css")) html = html.replace(/(<link href="design-system\/tokens\.css[^>]*>)/, `$1${link("buttons.css")}`);
       if (!html.includes("design-system/layout.css")) html = html.replace(/(<link href="design-system\/buttons\.css[^>]*>)/, `$1${link("layout.css")}`);
+      // The text styles come last, after case-study.css where a page has it.
+      if (!html.includes("design-system/type.css")) {
+        const last = html.includes("design-system/case-study.css") ? /(<link href="design-system\/case-study\.css[^>]*>)/ : /(<link href="design-system\/layout\.css[^>]*>)/;
+        html = html.replace(last, `$1${link("type.css")}`);
+      }
     }
     // The style guide links buttons.css itself; it gets the filters too.
     if (!html.includes("design-system/buttons.css")) continue;

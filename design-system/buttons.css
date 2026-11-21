@@ -2,7 +2,7 @@
    ANA™ Buttons
    ==========================================================================
    Three levels, aktiv-grotesk 500, sentence case.
-   Tokens: tokens.css, section 11. Linked from every page.
+   Tokens: tokens.css, "Buttons" in the component tier. Linked from every page.
 
    Sizes (primary and secondary): fixed height, side padding and text size.
      .ds-btn--sm   32px tall · 16px sides · 14px text   dense rows; unused so far
@@ -11,13 +11,14 @@
    Side padding is twice the vertical padding (8 × 16, 12 × 24, 16 × 32).
    A button is as wide as its label plus the side padding, never stretched.
    .ds-btn--icon makes either level a square icon-only button of that height.
-   The tertiary has one fixed size: 40px tall, a 124px pill and a 40px circle.
+   The tertiary is medium below 1500px (40px tall, 14px text, 40px circle)
+   and large from 1500px (48px tall, 16px text, 48px circle).
 
    Primary    .ds-btn.ds-btn--primary     the one action a view is for
    Secondary  .ds-btn.ds-btn--secondary   hairline ghost; everything else:
                                           navigation,
                                           repeated per-item actions, options
-   Tertiary   .ds-btn-talk                "Let's talk" only
+   Tertiary   .ds-btn-talk                "Let's talk"; "Explore the Lab" on the Lab canvas
               .ds-btn-icon                its circle on its own: icon-only
                                           controls (contact links, deck arrows)
 
@@ -76,14 +77,14 @@
   text-transform: none;
   text-decoration: none;
   white-space: nowrap;
-  color: var(--ds-white);
+  color: var(--ds-color-text-primary);
   cursor: pointer;
   -webkit-appearance: none;
   appearance: none;
 }
-.ds-btn:hover { color: var(--ds-white); }
+.ds-btn:hover { color: var(--ds-color-text-primary); }
 .ds-btn:focus-visible,
-.ds-btn-talk:focus-visible { outline: 2px solid var(--ds-orange); outline-offset: 3px; }
+.ds-btn-talk:focus-visible { outline: 2px solid var(--ds-color-focus-ring); outline-offset: 3px; }
 .ds-btn:disabled { opacity: .6; cursor: default; }
 .ds-btn--sm {
   --btn-h: var(--ds-btn-sm-height);
@@ -170,10 +171,10 @@
 .ds-btn--primary {
   --btn-border: var(--ds-btn-primary-border-width);
   border: var(--btn-border) solid transparent;
-  background: radial-gradient(130% 160% at 0% 100%, var(--ds-orange), rgb(var(--ds-glow-rgb) / .25) 40%, rgb(255 255 255 / .13) 70%) border-box;
+  background: radial-gradient(130% 160% at 0% 100%, var(--ds-color-orange-500), rgb(var(--ds-btn-glow-rgb) / .25) 40%, rgb(255 255 255 / .13) 70%) border-box;
 }
 .ds-btn--primary:hover {
-  background: radial-gradient(180% 220% at 0% 100%, var(--ds-orange), rgb(var(--ds-glow-rgb) / .35) 50%, rgb(255 255 255 / .2) 80%) border-box;
+  background: radial-gradient(180% 220% at 0% 100%, var(--ds-color-orange-500), rgb(var(--ds-btn-glow-rgb) / .35) 50%, rgb(255 255 255 / .2) 80%) border-box;
 }
 .ds-btn--primary::before {
   content: "";
@@ -181,7 +182,7 @@
   inset: 0;
   z-index: -1;
   border-radius: calc(var(--ds-btn-radius) - var(--btn-border));
-  background: var(--ds-black);
+  background: var(--ds-color-black);
   pointer-events: none;
   transition: opacity .25s ease;
 }
@@ -205,29 +206,55 @@
             circle's light slides the other way as the circle moves.
    __rim    the same two shapes again, turned into the glass edge by
             #ds-glass-rim-goo.
+
+   Two sizes, switched by screen width (Anamitra, 2026-11-20): medium below
+   1500px and large from 1500px (14" laptops and bigger), where the homepage
+   Lab canvas has grown and a 40px button looked small next to it. Large is
+   medium at 1.2x: 48px tall, 16px text, 48px circle; every length below
+   follows --talk-h / --talk-k. The pill fits its label: --talk-pill-md and
+   --talk-pill-lg (124px and 146px for "Let's talk"; a page with another
+   label sets both).
    -------------------------------------------------------------------------- */
 .ds-btn-talk {
-  --talk-pill: 124px;      /* pill width */
-  --talk-dot: 114px;       /* circle's left edge at rest: tucked 10px into the pill */
+  --talk-pill-md: 124px;   /* pill width, medium ("Let's talk": 58px label + 33px either side) */
+  --talk-pill-lg: 146px;   /* pill width, large (the same at 1.2x: 67px label + 40px either side) */
+  --talk-h: var(--ds-btn-md-height);   /* height, and the circle's size */
+  --talk-size: var(--ds-btn-md-size);  /* label size */
+  --talk-k: 1;             /* the size's scale against medium, for the light */
+  --talk-pill: var(--talk-pill-md);
+  --talk-tuck: 10px;       /* how far the circle sits inside the pill */
   --talk-pull: 22px;       /* how far the circle travels on hover */
+  --talk-icon: 18px;       /* arrow */
   --talk-pad: 14px;        /* room around the shapes for the liquid filter */
+  --talk-dot: calc(var(--talk-pill) - var(--talk-tuck));  /* circle's left edge at rest */
   --talk-ease: cubic-bezier(.135, .9, .15, 1);
   position: relative;
   display: inline-block;
   flex: none;
-  width: calc(var(--talk-dot) + 40px);
-  height: var(--ds-btn-height);
+  width: calc(var(--talk-dot) + var(--talk-h));
+  height: var(--talk-h);
   font-family: var(--ds-btn-font);
-  font-size: var(--ds-btn-size);
+  font-size: var(--talk-size);
   font-weight: var(--ds-btn-weight);
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-decoration: none;
-  color: var(--ds-white);
+  color: var(--ds-color-text-primary);
   cursor: pointer;
 }
-.ds-btn-talk:hover { color: var(--ds-white); }
+@media (min-width: 1500px) {
+  .ds-btn-talk {
+    --talk-pill: var(--talk-pill-lg);
+    --talk-h: var(--ds-btn-lg-height);
+    --talk-size: var(--ds-btn-lg-size);
+    --talk-k: 1.2;
+    --talk-tuck: 12px;
+    --talk-pull: 26px;
+    --talk-icon: 22px;
+  }
+}
+.ds-btn-talk:hover { color: var(--ds-color-text-primary); }
 .ds-btn-talk__glass,
 .ds-btn-talk__rim {
   position: absolute;
@@ -242,13 +269,13 @@
 .ds-btn-talk__rim > i {
   position: absolute;
   top: var(--talk-pad);
-  height: var(--ds-btn-height);
+  height: var(--talk-h);
   overflow: hidden;
 }
 .ds-btn-talk__pill,
 .ds-btn-talk__rim > i:first-child { left: var(--talk-pad); width: var(--talk-pill); border-radius: 100px; }
 .ds-btn-talk__dot,
-.ds-btn-talk__rim > i:last-child { left: calc(var(--talk-pad) + var(--talk-dot)); width: 40px; border-radius: 50%; }
+.ds-btn-talk__rim > i:last-child { left: calc(var(--talk-pad) + var(--talk-dot)); width: var(--talk-h); border-radius: 50%; }
 .ds-btn-talk__rim > i { background: #000; }
 
 /* What moves on hover: the circle (in both layers) and the arrow.
@@ -268,50 +295,50 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: calc(var(--talk-dot) + 40px + var(--talk-pull));
+  width: calc(var(--talk-dot) + var(--talk-h) + var(--talk-pull));
   height: 100%;
   background:
-    linear-gradient(180deg, rgb(var(--ds-glass-tint-rgb) / .24), rgb(var(--ds-glass-tint-rgb) / 0) 60%, rgb(var(--ds-glass-tint-rgb) / 0) 81%, rgb(var(--ds-glass-tint-rgb) / .12)),
-    var(--ds-glass-brown);
+    linear-gradient(180deg, rgb(var(--ds-btn-glass-tint-rgb) / .24), rgb(var(--ds-btn-glass-tint-rgb) / 0) 60%, rgb(var(--ds-btn-glass-tint-rgb) / 0) 81%, rgb(var(--ds-btn-glass-tint-rgb) / .12)),
+    var(--ds-btn-glass-fill);
 }
 .ds-btn-talk__dot i { left: calc(var(--talk-dot) * -1); transition: left .9s var(--talk-ease); }
 .ds-btn-talk:hover .ds-btn-talk__dot i { left: calc((var(--talk-dot) + var(--talk-pull)) * -1); }
 .ds-btn-talk__glass i::before {
   content: "";
   position: absolute;
-  left: -19px;
-  top: 20px;
-  width: 90px;
-  height: 44px;
+  left: calc(-19px * var(--talk-k));
+  top: calc(20px * var(--talk-k));
+  width: calc(90px * var(--talk-k));
+  height: calc(44px * var(--talk-k));
   border-radius: 50%;
-  background-color: rgb(var(--ds-glow-rgb) / .75);
+  background-color: rgb(var(--ds-btn-glow-rgb) / .75);
   filter: blur(14px);
   transition: width .6s var(--talk-ease), background-color .6s ease;
 }
-.ds-btn-talk:hover .ds-btn-talk__glass i::before { width: 180px; background-color: rgb(var(--ds-glow-rgb) / .95); }
+.ds-btn-talk:hover .ds-btn-talk__glass i::before { width: calc(180px * var(--talk-k)); background-color: rgb(var(--ds-btn-glow-rgb) / .95); }
 
 /* The circle's own light: a warm edge on its far side, and on hover an
    ember of its own. */
 .ds-btn-talk__dot::before,
 .ds-btn-talk__dot::after { content: ""; position: absolute; z-index: 1; }
 .ds-btn-talk__dot::before {
-  left: -10px;
+  left: calc(-10px * var(--talk-k));
   top: 0;
-  width: 60px;
-  height: 46px;
+  width: calc(60px * var(--talk-k));
+  height: calc(46px * var(--talk-k));
   background: radial-gradient(75% 85% at 80% 85%, rgb(190 75 30 / .5), rgb(190 75 30 / 0) 75%);
 }
 .ds-btn-talk__dot::after {
-  left: -8px;
-  top: 24px;
-  width: 52px;
-  height: 40px;
+  left: calc(-8px * var(--talk-k));
+  top: calc(24px * var(--talk-k));
+  width: calc(52px * var(--talk-k));
+  height: calc(40px * var(--talk-k));
   border-radius: 50%;
-  background-color: rgb(var(--ds-glow-rgb) / 0);
+  background-color: rgb(var(--ds-btn-glow-rgb) / 0);
   filter: blur(12px);
   transition: background-color .6s ease;
 }
-.ds-btn-talk:hover .ds-btn-talk__dot::after { background-color: rgb(var(--ds-glow-rgb) / .6); }
+.ds-btn-talk:hover .ds-btn-talk__dot::after { background-color: rgb(var(--ds-btn-glow-rgb) / .6); }
 
 .ds-btn-talk__label,
 .ds-btn-talk__arrow {
@@ -328,13 +355,13 @@
   .ds-btn-talk__label {
     display: block;
     height: auto;
-    padding-block: calc((var(--ds-btn-height) - 1cap) / 2);
+    padding-block: calc((var(--talk-h) - 1cap) / 2);
     text-align: center;
     text-box: trim-both cap alphabetic;
   }
 }
-.ds-btn-talk__arrow { left: var(--talk-dot); width: 40px; }
-.ds-btn-talk__arrow svg { width: 18px; height: 18px; transition: transform .9s var(--talk-ease); }
+.ds-btn-talk__arrow { left: var(--talk-dot); width: var(--talk-h); }
+.ds-btn-talk__arrow svg { width: var(--talk-icon); height: var(--talk-icon); transition: transform .9s var(--talk-ease); }
 .ds-btn-talk:hover .ds-btn-talk__arrow svg { transform: rotate(45deg); }
 
 /* --------------------------------------------------------------------------
@@ -368,16 +395,16 @@
   font: inherit;
   -webkit-appearance: none;
   appearance: none;
-  color: var(--ds-white);
+  color: var(--ds-color-text-primary);
   text-decoration: none;
   cursor: pointer;
   background:
     radial-gradient(45px 39px at 38px 39px, rgb(190 75 30 / .5), rgb(190 75 30 / 0) 75%),
-    linear-gradient(180deg, rgb(var(--ds-glass-tint-rgb) / .24), rgb(var(--ds-glass-tint-rgb) / 0) 60%, rgb(var(--ds-glass-tint-rgb) / 0) 81%, rgb(var(--ds-glass-tint-rgb) / .12)),
-    var(--ds-glass-brown);
+    linear-gradient(180deg, rgb(var(--ds-btn-glass-tint-rgb) / .24), rgb(var(--ds-btn-glass-tint-rgb) / 0) 60%, rgb(var(--ds-btn-glass-tint-rgb) / 0) 81%, rgb(var(--ds-btn-glass-tint-rgb) / .12)),
+    var(--ds-btn-glass-fill);
 }
-.ds-btn-icon:hover { color: var(--ds-white); }
-.ds-btn-icon:focus-visible { outline: 2px solid var(--ds-orange); outline-offset: 3px; }
+.ds-btn-icon:hover { color: var(--ds-color-text-primary); }
+.ds-btn-icon:focus-visible { outline: 2px solid var(--ds-color-focus-ring); outline-offset: 3px; }
 .ds-btn-icon::before,
 .ds-btn-icon::after { content: ""; position: absolute; pointer-events: none; }
 .ds-btn-icon::before {
@@ -394,7 +421,7 @@
   width: 52px;
   height: 40px;
   border-radius: 50%;
-  background: rgb(var(--ds-glow-rgb));
+  background: rgb(var(--ds-btn-glow-rgb));
   filter: blur(12px);
   opacity: 0;
   transition: opacity .6s ease;

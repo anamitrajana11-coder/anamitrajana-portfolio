@@ -1,190 +1,214 @@
 /* ==========================================================================
    ANA™ Design Tokens
    ==========================================================================
-   Formalized from the live site's stylesheet (anamitras-portfolio.webflow
-   .shared.*.css) on 2026-08-19. Every value below was extracted from styles
-   actually in use — nothing here is invented.
+   The site's design language as CSS variables, in three tiers. Each tier
+   builds on the one above it:
 
-   This file is ADDITIVE: it only defines --ds-* variables, so linking it
-   changes nothing visually. It is the canonical reference for the site's
-   design language, and the semantic layer to build against going forward.
-   Linked from: index.html and the Yanta case-study pages (yanta-*.html),
-   which are styled by design-system/case-study.css.
+   1. PRIMITIVES  Raw values, named by what they are: --ds-color-grey-800,
+                  --ds-font-size-16, --ds-radius-8. Nothing styles a page
+                  with these directly when a role below fits.
+   2. SEMANTIC    Roles, named by what a value is for: --ds-color-text-
+                  secondary, --ds-color-border-default, --ds-type-body-1-size.
+                  Change a role here and every place that uses it follows.
+   3. COMPONENT   One component's own settings: --ds-btn-*, --ds-card-*,
+                  --ds-team-*, pointing at the tiers above.
 
-   The original Webflow variables (--brand-color, --ana-orange, --tmf-blue,
-   --crayon-*, etc.) remain defined in the Webflow stylesheet; the tokens
-   here alias the same values under organized, semantic names.
+   Naming
+   - Pattern: --ds-<category>-<name>[-<variant>][-<state>], all lowercase.
+   - Sizes and radii are named by their pixel value (--ds-font-size-14).
+   - Colour ramps run from 950 (darkest) to 100 (lightest); the brand
+     orange is 500. Alpha colours end in -a<percent> (--ds-color-white-a75).
+     Channel triplets for rgb(… / alpha) end in -rgb.
+   - Text styles are roles: --ds-type-<role>-<property>, with -phone for
+     the size at ≤ 479px.
+
+   This file only defines variables, so linking it changes nothing on its
+   own. It is linked from every page (build-case-studies.mjs keeps the
+   link and its ?v= stamp). The original Webflow variables (--ana-orange,
+   --tmf-blue, …) stay in the Webflow stylesheet; tokens here repeat the
+   values the site uses under these names. Cleaned up 2026-11-20: one name
+   per value, unused tokens removed (see the README's "Tokens" section for
+   the old names).
    ========================================================================== */
 
 :root {
-  /* ------------------------------------------------------------------
-     1. BRAND CORE
-     The site identity: white type on true black, orange + purple accents.
-     ------------------------------------------------------------------ */
-  --ds-black: #000;              /* page background (used 89x)            */
-  --ds-white: #fff;              /* primary text on dark (used 123x)      */
-  --ds-orange: #f15a24;          /* signature accent = --ana-orange       */
-  --ds-purple: #a798ff;          /* = --brand-color                       */
-  --ds-purple-dark: #816cff;     /* = --brand-colour-dark                 */
-  --ds-green: #009b5c;           /* Webflow body default green (17x)      */
-  --ds-brand-green: #1d8e6b;     /* = Yanta DS brand-60 (--primary-brand); status tag fill + border tints */
-  --ds-brand-green-light: #86ceb8; /* = Yanta DS brand-20; status tag text + dot, 9.5:1 on its fill */
+  /* ==================================================================
+     1. PRIMITIVES
+     ================================================================== */
 
-  /* ------------------------------------------------------------------
-     2. DARK SURFACES & OVERLAYS
-     The "glass on black" system: near-black panels with faint white
-     overlays and hairline borders.
-     ------------------------------------------------------------------ */
-  --ds-surface-1: #141314;       /* near-black panel                      */
-  --ds-surface-2: #191414;       /* warm near-black panel                 */
-  --ds-border-hairline: #111;    /* card hairline border on black         */
-  --ds-overlay-white-5: #ffffff0d;   /* 5% white — subtle fill            */
-  --ds-overlay-white-8: #ffffff14;   /* 8% white — hover fill             */
-  --ds-overlay-white-10: #ffffff1a;  /* 10% white — active fill           */
-  --ds-overlay-black-50: #00000080;  /* 50% black — scrim                 */
-  --ds-overlay-black-70: #000000b3;  /* 70% black — modal scrim           */
+  /* Colour: neutrals, dark to light */
+  --ds-color-black: #000;
+  --ds-color-grey-950: #090909;     /* = Webflow --back-g-grey             */
+  --ds-color-grey-900: #141314;
+  --ds-color-grey-875: #161616;
+  --ds-color-grey-850: #222;
+  --ds-color-grey-800: #2c2c2c;     /* = Webflow --walsh--black            */
+  --ds-color-grey-600: #555;
+  --ds-color-grey-400: #a1a1a1;     /* = Webflow --dark-grey               */
+  --ds-color-grey-100: #e4e6ee;     /* = Webflow --ghost-white             */
+  --ds-color-white: #fff;
 
-  /* ------------------------------------------------------------------
-     3. LIGHT-CONTEXT NEUTRALS (case-study sections on light backgrounds)
-     ------------------------------------------------------------------ */
-  --ds-grey-100: #f4f4f4;
-  --ds-grey-200: #eee;
-  --ds-grey-300: #ddd;
-  --ds-grey-400: #ccc;
-  --ds-grey-600: #555;   /* team avatars' 2px ring (Anamitra, 2026-11-20) */
-  --ds-grey-700: #333;
-  --ds-grey-800: #222;
-  --ds-border-grey: #e4e4e4;     /* = --border-grey                       */
+  /* Colour: white and black at an alpha */
+  --ds-color-white-a4: #ffffff0a;
+  --ds-color-white-a5: #ffffff0d;
+  --ds-color-white-a8: #ffffff14;
+  --ds-color-white-a10: #ffffff1a;
+  --ds-color-white-a14: #ffffff24;
+  --ds-color-white-a34: #ffffff57;
+  --ds-color-white-a50: #ffffff80;
+  --ds-color-white-a75: #ffffffbf;
+  --ds-color-black-a70: #000000b3;
 
-  /* ------------------------------------------------------------------
-     4. SECONDARY ACCENTS (appear sitewide in small doses)
-     ------------------------------------------------------------------ */
-  --ds-pink: #ff7bac;
-  --ds-red: #ff4632;
+  /* Colour: orange (brand), dark to light */
+  --ds-color-orange-950: #0f0400;   /* = Webflow --darkest-orange          */
+  --ds-color-orange-900: #1a0b05;
+  --ds-color-orange-850: #340e00;
+  --ds-color-orange-800: #641b00;   /* = Webflow --orange-dark             */
+  --ds-color-orange-500: #f15a24;   /* = Webflow --ana-orange: the brand   */
+  --ds-color-orange-400: #f87638;   /* = Webflow --coral                   */
+  --ds-color-orange-700-rgb: 164 55 17;   /* #a43711                       */
+  --ds-color-orange-500-rgb: 241 90 36;   /* = --ds-color-orange-500       */
 
-  /* ------------------------------------------------------------------
-     5. TYPOGRAPHY
-     Primary face is aktiv-grotesk (Adobe Fonts kit qjc6msf, 125 rules).
-     Montserrat is the Webflow body default (16px/28px). Serif, mono and
-     pixel faces belong to individual case studies only.
-     ------------------------------------------------------------------ */
-  --ds-font-primary: aktiv-grotesk, sans-serif;
-  --ds-font-secondary: Montserrat, sans-serif;
-  --ds-font-serif: "PT Serif", serif;
-  --ds-font-mono: "Spline Sans Mono", monospace;
-  --ds-font-pixel: "Pixelify Sans", sans-serif;
+  /* Colour: other hues */
+  --ds-color-red-500: #ff4632;
+  --ds-color-green-600: #1d8e6b;    /* = Yanta design system brand-60      */
+  --ds-color-green-200: #86ceb8;    /* = Yanta design system brand-20      */
 
-  /* Type scale — px values by real frequency of use */
-  --ds-text-xs: 12px;    /* captions, labels (106x — most used size)      */
-  --ds-text-sm: 14px;    /* nav, buttons, meta (53x)                      */
-  --ds-text-base: 16px;  /* body copy (59x)                               */
-  --ds-text-md: 18px;    /* large body / lead (46x)                       */
-  --ds-text-lg: 20px;    /* small headings (33x)                          */
-  --ds-text-xl: 24px;    /* h3-level (72x)                                */
-  --ds-text-2xl: 28px;   /* section subheads (41x)                        */
-  --ds-text-3xl: 32px;   /* h2-level (26x)                                */
-  --ds-text-4xl: 36px;   /* page headings (31x)                           */
-  --ds-text-5xl: 40px;   /* display (14x)                                 */
-  --ds-text-6xl: 48px;   /* display (8x)                                  */
-  --ds-text-7xl: 56px;   /* hero (7x)                                     */
-  --ds-text-8xl: 64px;   /* hero (6x)                                     */
+  /* Font families */
+  --ds-font-family-display: Cabin, sans-serif;          /* titles, headings */
+  --ds-font-family-sans: aktiv-grotesk, sans-serif;     /* labels, UI, buttons (Adobe Fonts kit qjc6msf) */
+  --ds-font-family-body: Montserrat, sans-serif;        /* body copy        */
+  --ds-font-family-mono: "Spline Sans Mono", monospace; /* tags             */
 
-  /* Weights — 400/500/600 carry the site; 700/800 for emphasis/display */
-  --ds-weight-regular: 400;
-  --ds-weight-medium: 500;
-  --ds-weight-semibold: 600;
-  --ds-weight-bold: 700;
-  --ds-weight-extrabold: 800;
+  /* Font sizes */
+  --ds-font-size-12: 12px;
+  --ds-font-size-14: 14px;
+  --ds-font-size-16: 16px;
+  --ds-font-size-18: 18px;
+  --ds-font-size-20: 20px;
+  --ds-font-size-24: 24px;
+  --ds-font-size-28: 28px;
+  --ds-font-size-32: 32px;
+  --ds-font-size-48: 48px;
+  --ds-font-size-56: 56px;
 
-  /* Body rhythm (Webflow body default) */
-  --ds-leading-body: 1.75;       /* 16px/28px                             */
-  --ds-leading-heading: 1.15;
+  /* Font weights */
+  --ds-font-weight-regular: 400;
+  --ds-font-weight-medium: 500;
 
-  /* ------------------------------------------------------------------
-     6. RADII — 8px for buttons, every card (--ds-card-radius) and the
-        pictures and videos in the case studies (--ds-media-radius); 4px for
-        chips and tags; 6px for the team's name card (--ds-name-card-radius)
-     ------------------------------------------------------------------ */
-  --ds-radius-xs: 2px;     /* inner button label                          */
-  --ds-radius-sm: 4px;     /* small chips and tags (56x)                  */
-  --ds-radius-md: 8px;
-  --ds-radius-lg: 12px;
-  --ds-radius-xl: 16px;
-  --ds-radius-2xl: 20px;   /* Webflow's old card radius; unused now       */
-  --ds-card-radius: var(--ds-radius-md);  /* 8px: every card on the site (see "Cards" in layout.css) */
-  --ds-media-radius: var(--ds-radius-md); /* 8px: pictures and videos in the case studies */
-  --ds-name-card-radius: 6px;  /* the team avatars' hover name card (Anamitra, 2026-11-20) */
-  --ds-radius-3xl: 24px;
+  /* Line heights and letter spacing */
+  --ds-line-height-tight: 1.15;     /* headings                            */
+  --ds-line-height-normal: 1.5;     /* body copy, labels, captions         */
+  --ds-letter-spacing-wide: .5px;   /* captions and tags                   */
+
+  /* Radii */
+  --ds-radius-2: 2px;
+  --ds-radius-4: 4px;
+  --ds-radius-6: 6px;
+  --ds-radius-8: 8px;
   --ds-radius-pill: 100px;
   --ds-radius-circle: 50%;
 
-  /* ------------------------------------------------------------------
-     7. SIGNATURE RECIPES (exact values from live components)
-     ------------------------------------------------------------------ */
-  /* Nav CTA gradient border (.grad-bg): 2px gradient frame, 4px radius,
-     black label inside at 2px radius, aktiv-grotesk 14px white.        */
-  --ds-gradient-cta: linear-gradient(15deg, #f15a24, #a43711 0%, #3b1001 80%, #0f0400 99%);
+  /* ==================================================================
+     2. SEMANTIC
+     ================================================================== */
 
-  /* Card on black (.flex-block-81 pattern): black fill, 1px #111 border,
-     20px gap, 20px radius family.                                       */
+  /* Text colour */
+  --ds-color-text-primary: var(--ds-color-white);         /* headings, labels, emphasis   */
+  --ds-color-text-secondary: var(--ds-color-white-a75);   /* body copy                    */
+  --ds-color-text-tertiary: var(--ds-color-white-a50);    /* quieter body copy: dates, footnotes */
+  --ds-color-text-soft: var(--ds-color-grey-100);         /* values beside labels ("Boston Bioprocess") */
+  --ds-color-text-muted: var(--ds-color-grey-400);        /* captions, tags, meta         */
+  --ds-color-text-accent: var(--ds-color-orange-500);     /* orange headlines and marks   */
+  --ds-color-text-highlight: var(--ds-color-orange-400);  /* impact figures, quote marks  */
+  --ds-color-text-success: var(--ds-color-green-200);     /* "Live" status                */
+  --ds-color-text-error: var(--ds-color-red-500);         /* form errors                  */
 
-  /* ------------------------------------------------------------------
-     8. V25 LAYER (added 2026-10-27)
-     The newest part of the site — the "Selected works." cards, page
-     titles on Lab and Home — uses a tighter recipe than the older pages:
-     4px cards with a 2px #2c2c2c frame, mono tags, Cabin display titles.
-     Every value aliases a variable already in the Webflow stylesheet.
-     ------------------------------------------------------------------ */
-  --ds-font-display: Cabin, sans-serif;  /* .v25-title-text page titles     */
-  --ds-surface-card: #090909;    /* = --back-g-grey, .new-project-card fill */
-  --ds-border-strong: #2c2c2c;   /* = --walsh--black, card + tag frames     */
-  --ds-orange-deep: #641b00;     /* = --orange-dark, client-tag frame       */
-  --ds-orange-darkest: #0f0400;  /* = --darkest-orange, "Available" pill fill */
-  --ds-orange-ember: #340e00;    /* "Available for work" pill border        */
-  --ds-coral: #f87638;           /* = --coral, highlighted impact figures   */
-  --ds-text-body: #e4e6ee;       /* = --ghost-white, long-form body copy    */
-  --ds-text-muted: #a1a1a1;      /* = --dark-grey, tags, captions, meta     */
-  --ds-divider: #181818;         /* = --darker-grey, card column divider    */
-  --ds-card-border-width: 2px;   /* every line in a work card: its frame, the line under the picture, the footer divider, the tags */
+  /* Surfaces and overlays */
+  --ds-color-surface-card: var(--ds-color-grey-950);      /* cards on the page            */
+  --ds-color-surface-floating: var(--ds-color-grey-900);  /* cards that float with a shadow: testimonials, the feedback popup */
+  --ds-color-surface-tooltip: var(--ds-color-grey-850);   /* tooltips, the team name card */
+  --ds-color-surface-canvas: var(--ds-color-grey-875);    /* the dotted Lab canvas on the homepage */
+  --ds-color-overlay-subtle: var(--ds-color-white-a5);    /* faint fill                   */
+  --ds-color-overlay-hover: var(--ds-color-white-a8);     /* hover fill                   */
+  --ds-color-overlay-active: var(--ds-color-white-a10);   /* pressed fill, popup frame    */
+  --ds-color-scrim: var(--ds-color-black-a70);            /* shadow under floating panels */
+  --ds-color-success: var(--ds-color-green-600);          /* "Live" status tint           */
 
-  /* ------------------------------------------------------------------
-     9. CASE-STUDY BODY COPY (added 2026-10-27)
-     One body style for every project page: the older pages'
-     .ms-body-text-1.ocp75 — Montserrat 14px/1.5, white at 75%, 12px at
-     ≤ 991px. Section headings use --ds-font-display (see case-study.css).
-     ------------------------------------------------------------------ */
-  --ds-font-body: Montserrat, sans-serif;
-  --ds-body-size: 14px;
-  --ds-body-size-compact: 12px;  /* ≤ 991px                                */
-  --ds-body-leading: 1.5;
-  --ds-body-color: #ffffffbf;    /* white at 75%, as .ocp75               */
+  /* Borders and focus */
+  --ds-color-border-default: var(--ds-color-grey-800);    /* card and tag frames          */
+  --ds-color-border-accent: var(--ds-color-orange-800);   /* highlighted frames, hover    */
+  --ds-color-focus-ring: var(--ds-color-orange-500);      /* keyboard focus outline       */
 
-  /* ------------------------------------------------------------------
-     10. SECTION HEADINGS (added 2026-11-05)
-     Two levels, each followed by the orange pixel arrow
-     (Brand-hyperlink-arrow, 16 × 15). See .ds-section-title and
-     .ds-section-label in case-study.css.
-     Section title (level 1): the one-pager's section headings
-       (hello-h2), Cabin 500 28px/1.15; the homepage's main sections.
-       Below 992px it takes the Section label recipe.
-     Section label (level 2): the homepage's "Experience" (.v25-h3),
-       aktiv-grotesk 400 16px/1.5, 14px ≤ 479px.
-     ------------------------------------------------------------------ */
-  --ds-section-title-font: var(--ds-font-display);
-  --ds-section-title-size: var(--ds-text-2xl);       /* 28px              */
-  --ds-section-title-weight: var(--ds-weight-medium);
-  --ds-section-title-leading: var(--ds-leading-heading);  /* 1.15         */
-  --ds-section-label-font: var(--ds-font-primary);
-  --ds-section-label-size: var(--ds-text-base);      /* 16px              */
-  --ds-section-label-size-compact: var(--ds-text-sm);  /* 14px, ≤ 479px   */
-  --ds-section-label-weight: var(--ds-weight-regular);
-  --ds-section-label-leading: 1.5;
+  /* Text styles. Each role is one spec everywhere it is used; -phone is
+     the size at ≤ 479px. Bold runs inside body copy (<strong>) are white
+     at medium weight. */
+
+  /* Body 1: all reading text (paragraphs, lists, intros, quotes) */
+  --ds-type-body-1-font: var(--ds-font-family-body);
+  --ds-type-body-1-size: var(--ds-font-size-16);
+  --ds-type-body-1-size-phone: var(--ds-font-size-14);
+  --ds-type-body-1-line-height: var(--ds-line-height-normal);
+  --ds-type-body-1-weight: var(--ds-font-weight-regular);
+  --ds-type-body-1-color: var(--ds-color-text-secondary);
+  --ds-type-body-1-strong-weight: var(--ds-font-weight-medium);
+  --ds-type-body-1-strong-color: var(--ds-color-text-primary);
+
+  /* Body 2: smaller supporting text (card descriptions, lists of facts,
+     notes) */
+  --ds-type-body-2-font: var(--ds-font-family-body);
+  --ds-type-body-2-size: var(--ds-font-size-14);
+  --ds-type-body-2-size-phone: var(--ds-font-size-12);
+  --ds-type-body-2-line-height: var(--ds-line-height-normal);
+  --ds-type-body-2-weight: var(--ds-font-weight-regular);
+  --ds-type-body-2-color: var(--ds-color-text-secondary);
+  --ds-type-body-2-strong-weight: var(--ds-font-weight-medium);
+
+  /* Caption: small grey meta text (people's roles, dates, picture captions) */
+  --ds-type-caption-font: var(--ds-font-family-sans);
+  --ds-type-caption-size: var(--ds-font-size-12);
+  --ds-type-caption-line-height: var(--ds-line-height-normal);
+  --ds-type-caption-weight: var(--ds-font-weight-medium);
+  --ds-type-caption-letter-spacing: var(--ds-letter-spacing-wide);
+  --ds-type-caption-color: var(--ds-color-text-muted);
+
+  /* Section title (level 1): the homepage's main sections ("Selected
+     works"); below 992px it takes the section label's style. */
+  --ds-type-section-title-font: var(--ds-font-family-display);
+  --ds-type-section-title-size: var(--ds-font-size-28);
+  --ds-type-section-title-weight: var(--ds-font-weight-medium);
+  --ds-type-section-title-line-height: var(--ds-line-height-tight);
+
+  /* Section label (level 2): "Experience", "Company", "The problem" */
+  --ds-type-section-label-font: var(--ds-font-family-sans);
+  --ds-type-section-label-size: var(--ds-font-size-16);
+  --ds-type-section-label-size-phone: var(--ds-font-size-14);
+  --ds-type-section-label-weight: var(--ds-font-weight-regular);
+  --ds-type-section-label-line-height: var(--ds-line-height-normal);
+
+  /* ==================================================================
+     3. COMPONENT
+     ================================================================== */
+
+  /* Cards, pictures and videos */
+  --ds-card-radius: var(--ds-radius-8);       /* every card on the site (see "Cards" in layout.css) */
+  --ds-card-border-width: 2px;                /* every line in a work card: its frame, the line under the picture, the footer divider, the tags */
+  --ds-media-radius: var(--ds-radius-8);      /* pictures and videos in the case studies */
+
+  /* Section heading arrow (the orange pixel arrow after a title or label) */
   --ds-section-arrow-width: 16px;
   --ds-section-arrow-height: 15px;
 
-  /* ------------------------------------------------------------------
-     11. BUTTONS (added 2026-11-11)
-     Three levels in three sizes; see buttons.css.
+  /* Team avatars and their hover name card (Anamitra, 2026-11-20) */
+  --ds-team-avatar-ring: var(--ds-color-grey-600);  /* 2px ring round each photo */
+  --ds-team-card-radius: var(--ds-radius-6);
+  /* Lab canvas (homepage): the line above "Explore the Lab" is Body 1; from
+     1500px it grows with the button's large size (lab-canvas.css). */
+  --ds-lab-line-size-lg: var(--ds-font-size-20);  /* Body 1's 16px at large  */
+  --ds-lab-line-gap: 24px;                         /* line to the button     */
+  --ds-lab-line-gap-lg: 36px;
+
+  /* Buttons (2026-11-11). Three levels in three sizes; see buttons.css.
      Primary (.ds-btn--primary): black, with a 1.5px border lit orange from
        the bottom-left corner; on hover the fill drops to 80% and the
        light glows through. One per view: the action the view is for.
@@ -192,46 +216,40 @@
        no fill; hover brightens the outline and adds a faint fill.
        Navigation, repeated per-item actions and alternatives.
      Tertiary (.ds-btn-talk): brown glass arrow button, "Let's talk" only.
-     ------------------------------------------------------------------ */
-  /* Sizes: fixed height, side padding, text size and icon gap. The
-     32 / 40 / 48 ladder is the common one (Carbon, Material and most
-     product systems sit on it). Side padding is twice the vertical
-     padding, the site's own ratio (the old buttons were 10px 20px and
-     20px 40px): around a 16px line that is 8 × 16, 12 × 24 and 16 × 32.
-     Width is always the label plus the side padding; nothing stretches a
-     button.
+     Sizes: fixed height, side padding, text size and icon gap on the
+     32 / 40 / 48 ladder, side padding twice the vertical padding (the
+     site's own ratio: the old buttons were 10px 20px and 20px 40px).
+     Width is always the label plus the side padding.
        Small   32px tall · 16px sides · 14px text · 6px gap   dense rows; unused so far
        Medium  40px tall · 24px sides · 14px text · 8px gap   the default: every button today
-       Large   48px tall · 32px sides · 16px text · 8px gap   one stand-out action; unused so far */
+       Large   48px tall · 32px sides · 16px text · 8px gap   one stand-out action; the tertiary's size from 1500px */
   --ds-btn-sm-height: 32px;
   --ds-btn-sm-pad-x: 16px;
-  --ds-btn-sm-size: var(--ds-text-sm);               /* 14px            */
+  --ds-btn-sm-size: var(--ds-font-size-14);
   --ds-btn-sm-gap: 6px;
   --ds-btn-md-height: 40px;
   --ds-btn-md-pad-x: 24px;
-  --ds-btn-md-size: var(--ds-text-sm);               /* 14px            */
+  --ds-btn-md-size: var(--ds-font-size-14);
   --ds-btn-md-gap: 8px;
   --ds-btn-lg-height: 48px;
   --ds-btn-lg-pad-x: 32px;
-  --ds-btn-lg-size: var(--ds-text-base);             /* 16px            */
+  --ds-btn-lg-size: var(--ds-font-size-16);
   --ds-btn-lg-gap: 8px;
-  --ds-btn-row-gap: 12px;                            /* between neighbouring buttons, side by side or stacked */
-  --ds-btn-height: var(--ds-btn-md-height);          /* the tertiary's height */
-  --ds-btn-radius: var(--ds-radius-md);              /* 8px: primary and secondary, every size */
-  --ds-btn-font: var(--ds-font-primary);
-  --ds-btn-size: var(--ds-btn-md-size);
-  --ds-btn-weight: var(--ds-weight-medium);
-  --ds-btn-cap-nudge: .24em;       /* fallback only: moves the label down 0.12em to centre its capitals (see buttons.css) */
-  --ds-btn-secondary-border: #ffffff24;              /* 14% white hairline */
-  --ds-btn-secondary-border-hover: #ffffff57;        /* 34% white: hover, and the current page in the menu */
-  --ds-btn-secondary-fill-hover: #ffffff0a;          /* 4% white fill: hover, and the current page in the menu */
-  --ds-btn-border-width: 2px;              /* the standard button border: 1.5px on sharp screens, see the end of this file */
+  --ds-btn-row-gap: 12px;                      /* between neighbouring buttons, side by side or stacked */
+  --ds-btn-radius: var(--ds-radius-8);         /* primary and secondary, every size */
+  --ds-btn-font: var(--ds-font-family-sans);
+  --ds-btn-weight: var(--ds-font-weight-medium);
+  --ds-btn-cap-nudge: .24em;                   /* fallback only: moves the label down 0.12em to centre its capitals (see buttons.css) */
+  --ds-btn-border-width: 2px;                  /* the standard button border: 1.5px on sharp screens, see the end of this file */
   --ds-btn-primary-border-width: var(--ds-btn-border-width);    /* the primary's lit border */
+  --ds-btn-primary-fill-hover: .8;             /* how solid the primary's black fill stays on hover */
   --ds-btn-secondary-border-width: var(--ds-btn-border-width);  /* the secondary's outline  */
-  --ds-btn-primary-fill-hover: .8; /* how solid the primary's black fill stays on hover */
-  --ds-glass-brown: #1a0b05;       /* tertiary fill                       */
-  --ds-glass-tint-rgb: 164 55 17;  /* = #a43711, the sheen on the glass   */
-  --ds-glow-rgb: 241 90 36;        /* = --ds-orange, the light inside     */
+  --ds-btn-secondary-border: var(--ds-color-white-a14);         /* outline at rest          */
+  --ds-btn-secondary-border-hover: var(--ds-color-white-a34);   /* hover, and the current page in the menu */
+  --ds-btn-secondary-fill-hover: var(--ds-color-white-a4);      /* hover, and the current page in the menu */
+  --ds-btn-glass-fill: var(--ds-color-orange-900);              /* the tertiary's brown glass */
+  --ds-btn-glass-tint-rgb: var(--ds-color-orange-700-rgb);      /* the sheen on the glass     */
+  --ds-btn-glow-rgb: var(--ds-color-orange-500-rgb);            /* the light inside the glass */
 }
 
 /* The standard button border, primary and secondary alike, is 1.5px. A
@@ -241,10 +259,19 @@
    2x and sharper. */
 @media (min-resolution: 2dppx) { :root { --ds-btn-border-width: 1.5px; } }
 
+/* Text sizes on phones: each role's size becomes its -phone size, so
+   every rule that uses the role follows without a media query of its own. */
+@media (max-width: 479px) {
+  :root {
+    --ds-type-body-1-size: var(--ds-type-body-1-size-phone);
+    --ds-type-body-2-size: var(--ds-type-body-2-size-phone);
+  }
+}
+
 /* ==========================================================================
    PROJECT-SCOPED PALETTES
    Each case study carries its own accent set. These stay scoped to their
-   pages — never promote them to global brand colors.
+   pages (in the Webflow stylesheet); never promote them to global tokens.
    ==========================================================================
    TMF          --tmf-blue: #2370f0
    Crayon       --crayon-purple: #7e06d2   --crayon-blue: #6184db
@@ -259,11 +286,11 @@
    ========================================================================== */
 
 /* ==========================================================================
-   BREAKPOINTS (for reference — CSS variables cannot be used in @media)
+   BREAKPOINTS (for reference: CSS variables cannot be used in @media)
    ==========================================================================
-   >= 1280px   wide desktop enhancements
+   >= 1280px   wide desktop
    base        desktop (Webflow default)
    <= 991px    tablet
    <= 767px    phone landscape
-   <= 479px    phone portrait
+   <= 479px    phone portrait ("-phone" sizes)
    ========================================================================== */
