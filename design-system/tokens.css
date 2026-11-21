@@ -57,6 +57,7 @@
   --ds-color-white-a34: #ffffff57;
   --ds-color-white-a50: #ffffff80;
   --ds-color-white-a75: #ffffffbf;
+  --ds-color-black-a30: #0000004d;
   --ds-color-black-a70: #000000b3;
 
   /* Colour: orange (brand), dark to light */
@@ -129,6 +130,7 @@
   --ds-color-surface-floating: var(--ds-color-grey-900);  /* cards that float with a shadow: testimonials, the feedback popup */
   --ds-color-surface-tooltip: var(--ds-color-grey-850);   /* tooltips, the team name card */
   --ds-color-surface-canvas: var(--ds-color-grey-875);    /* the dotted Lab canvas on the homepage */
+  --ds-color-surface-footer: var(--ds-color-black-a30);   /* the footer's bottom card, on the orange */
   --ds-color-overlay-subtle: var(--ds-color-white-a5);    /* faint fill                   */
   --ds-color-overlay-hover: var(--ds-color-white-a8);     /* hover fill                   */
   --ds-color-overlay-active: var(--ds-color-white-a10);   /* pressed fill, popup frame    */

@@ -44,8 +44,8 @@
    The design system's cards (case-study summary and next/back, work,
    testimonial, visitor note) use the token where they are defined in
    case-study.css; these are Webflow's own boxes, here because Lab doesn't
-   load case-study.css. Pictures and videos keep 4px; the footer is not a
-   card.
+   load case-study.css. Pictures and videos keep 4px. The footer's bottom
+   row is a card too (below).
    -------------------------------------------------------------------------- */
 /* Case studies, closing box ("Curious about the journey?"): a 2px orange
    gradient frame around the dotted panel, so the panel's corners are 2px
@@ -59,3 +59,16 @@
 .div-block-537,
 .embed-div-block-1,
 .embed-div-block-2 { border-radius: var(--ds-card-radius); overflow: hidden; }
+
+/* --------------------------------------------------------------------------
+   Footer, bottom row (the ANA™ logo, copyright and social links): a card
+   instead of the black rule above it (Anamitra, 2026-11-20). Black at 30%
+   on the orange, 8px corners, 40px in from every side (24px on phones). The card spans the page's two edges; its contents sit inside.
+   -------------------------------------------------------------------------- */
+.div-block-422 {
+  border-top: 0;
+  padding: 40px;
+  border-radius: var(--ds-card-radius);
+  background: var(--ds-color-surface-footer);
+}
+@media (max-width: 479px) { .div-block-422 { padding: 24px; } }
