@@ -153,6 +153,45 @@
 /* A timeline in phases: one per line, below the label. */
 .cs-timeline { display: block; }
 
+/* Project facts, under the hero (Anamitra, 2026-11-20, option C): one card,
+   four cells split by hairlines (Company, Role, Timeline, Team), each a
+   label with the pixel arrow over its value. 2 × 2 on tablets, one column
+   on phones. */
+.cs-facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 60px 10px 0;  /* the 10px gutter puts it on the page edges, as the hero */
+  background: var(--ds-color-surface-card);
+  border: 2px solid var(--ds-color-border-default);
+  border-radius: var(--ds-card-radius);
+}
+.cs-fact {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 24px 28px;
+}
+.cs-fact + .cs-fact { border-left: 2px solid var(--ds-color-border-default); }
+.cs-fact > .flex-block-78,
+.cs-fact > .v25-h3 { margin: 0; }
+/* A team wider than its cell wraps, rows 12px apart as elsewhere. */
+.cs-fact .cs-team { flex-wrap: wrap; row-gap: var(--ds-team-gap); }
+/* From 1280px the page's container already carries the 10px gutter. */
+@media screen and (min-width: 1280px) { .cs-facts { margin-left: 0; margin-right: 0; } }
+@media screen and (max-width: 991px) {
+  .cs-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cs-fact + .cs-fact { border-left: 0; }
+  .cs-fact:nth-child(even) { border-left: 2px solid var(--ds-color-border-default); }
+  .cs-fact:nth-child(n + 3) { border-top: 2px solid var(--ds-color-border-default); }
+}
+@media screen and (max-width: 479px) {
+  .cs-facts { grid-template-columns: minmax(0, 1fr); }
+  .cs-fact:nth-child(even) { border-left: 0; }
+  .cs-fact + .cs-fact { border-top: 2px solid var(--ds-color-border-default); }
+  .cs-fact { padding: 20px 24px; }
+}
+
 /* Team avatars: the older pages animate these with Webflow interactions
    (the avatar's slot widens 50 → 70px and its name card appears). The same
    effect in CSS, plus keyboard focus. The !important beats the inline
@@ -161,15 +200,20 @@
 .cs-team .div-block-504:hover .div-block-502,
 .cs-team .div-block-504:focus-visible .div-block-502 { display: block !important; }
 .cs-team .div-block-504:focus-visible .image-295 { outline: 2px solid var(--ds-color-white); outline-offset: 2px; }
-/* Avatar size on every project page: 52px photos in 43px slots (Webflow's
-   60 in 50), and the hover widens the slot to 61px (was 70) — the same
-   overlap and spread in proportion. On the older pages this overrides the
-   inline widths of their Webflow hover; its name card works as before. */
-.team-flex-block .div-block-504 { width: 43px !important; transition: width .3s ease; }
+/* Avatar size on every project page (tokens "--ds-team-*"): 42px photos in
+   35px slots, and the hover widens the slot to 49px, spreading the row
+   (Anamitra, 2026-11-20: was 52 in 43, hover 61; Webflow's 60 in 50, hover
+   70; the same overlap and spread in proportion). On the older pages this
+   overrides the inline widths of their Webflow hover; its name card works
+   as before. */
+.team-flex-block .div-block-504 { width: var(--ds-team-avatar-step) !important; transition: width .3s ease; }
 .team-flex-block .div-block-504:hover,
-.team-flex-block .div-block-504:focus-visible { width: 61px !important; }
+.team-flex-block .div-block-504:focus-visible { width: var(--ds-team-avatar-step-hover) !important; }
 .team-flex-block .div-block-503,
-.team-flex-block .image-295 { width: 52px; height: 52px; }
+.team-flex-block .image-295 { width: var(--ds-team-avatar-size); height: var(--ds-team-avatar-size); }
+/* Webflow fixed the photo's wrapper at 62px, an empty box that stuck out
+   past the photo; it hugs the photo now. */
+.team-flex-block .flex-block-100 { width: auto; }
 /* Team avatars and name cards on every project page (Anamitra, 2026-11-20):
    - Avatars: a 2px mid-grey ring in place of Webflow's 2–3px orange one.
    - Name card: dark grey, no border, 6px corners, 4px top, 8px sides, 6px
@@ -182,16 +226,19 @@
   background: var(--ds-color-surface-tooltip);
   border-radius: var(--ds-team-card-radius);
   padding: 4px 8px 6px;
-  margin-top: 64px;  /* 12px below the 52px photo (Webflow's 75px left 23px) */
+  margin-top: calc(var(--ds-team-avatar-size) + var(--ds-team-gap));  /* 10px below the photo */
 }
 .div-block-502 > * { margin-bottom: 0; }
-/* The name and role are Body 1 (type.css). */
+/* The name and role are Body 2 (type.css). */
 
-/* Teams of 7+ don't fit one row in the 4-of-12 column: rows of four, with
-   room left for the hover widening so nothing reflows while hovering
-   (4 × 43 + 9 overhang + 18 hover = 199). Rows 12px apart (Anamitra,
-   2026-11-20; was 6px). */
-.cs-team--rows { flex-wrap: wrap; row-gap: 12px; max-width: 199px; }
+/* Teams of 7+ sit in rows of four, with room left for the hover widening
+   so nothing reflows while hovering (3 slots + a whole photo + the hover
+   spread: 3 × 35 + 42 + 14 = 161px). Rows 10px apart. */
+.cs-team--rows {
+  flex-wrap: wrap;
+  row-gap: var(--ds-team-gap);
+  max-width: calc(var(--ds-team-avatar-step) * 3 + var(--ds-team-avatar-size) + var(--ds-team-avatar-step-hover) - var(--ds-team-avatar-step));
+}
 .cs-avatar-placeholder {
   display: flex;
   align-items: center;
@@ -674,7 +721,7 @@ ol.cs-list li::before {
   .cs-visual-desc { font-size: 13px; }
   /* Seven avatars are wider than a phone; let the row wrap, rows 12px
      apart as in .cs-team--rows. */
-  .cs-team { flex-wrap: wrap; row-gap: 12px; }
+  .cs-team { flex-wrap: wrap; row-gap: var(--ds-team-gap); }
 }
 
 /* ==========================================================================

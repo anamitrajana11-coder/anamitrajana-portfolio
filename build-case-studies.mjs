@@ -434,9 +434,11 @@ function renderFigure(figure, tagText) {
 }
 
 // ---------------------------------------------------------------------------
-// Opening — the same markup as the older project pages (featurely.html,
-// tmf1.html): a full-width hero visual, then the orange claim beside
-// Company / Role / Product and "Project details" with the team avatars.
+// Opening — the intro block, a full-width hero visual, then the project facts:
+// one card of four cells, Company / Role / Timeline / Team (Anamitra's pick,
+// option C, 2026-11-20). It replaced the older pages' row of the orange
+// claim, Company / Role / Product and "Project details"; the intro above the
+// hero now says what the project is.
 // ---------------------------------------------------------------------------
 
 const silhouette = '<svg viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="23" r="10"/><path d="M11 53c2-11 9-16 19-16s17 5 19 16z"/></svg>';
@@ -445,8 +447,10 @@ function heading(text) {
   return `<div class="w-layout-hflex flex-block-78"><h1 class="v25-h3">${escapeHtml(text)}</h1><img src="${arrow}" loading="lazy" alt="" class="image-266"/></div>`;
 }
 
-function detail(name, value) {
-  return `<div class="div-block-460">${heading(name)}<div><p class="v25-h3 grey">${inline(value || "")}</p></div></div>`;
+// One cell of the project facts card: the label (with the pixel arrow) and
+// its value.
+function fact(name, html) {
+  return `<div class="cs-fact">${heading(name)}<p class="v25-h3 grey">${html}</p></div>`;
 }
 
 // Same structure as the older pages' avatars; the hover card is driven by
@@ -513,12 +517,12 @@ function renderOpening(study, page) {
     : study.heroImage ? renderHeroImage(study.heroImage, page.hero)
     : renderHeroVisual(page.hero);
   return `<section class="section-36">${renderIntro(study.intro)}<section class="tmf-header"><div class="div-block-474">${hero}</div></section>`
-    + `<div class="columns-36 w-row"><div class="column-67 w-col w-col-5"><div class="div-block-454"><h1 class="ms-heading-2 orange">${inline(page.title)}</h1></div></div>`
-    + `<div class="column-68 w-col w-col-3"><div class="div-block-459">${detail("Company", context.Company)}${detail("Role", capitalize(context.Role || ""))}${detail("Product", context.Product)}</div></div>`
-    + `<div class="w-col w-col-4"><div class="div-block-473"><div>${heading("Project details")}</div><div class="w-layout-vflex flex-block-98">`
-    + `<div class="frame-2"><div class="frame-4"><div class="ms-body-text-1 ocp75"><span class="text-span-1049">Timeline:  </span>${renderTimeline(context.Timeline || "")}</div></div></div>`
-    + `<div class="div-block-486"><div class="frame-2"><div class="frame-4"><div class="ms-body-text-1 ocp75"><span class="text-span-1049">Team (hover for details): </span></div><div class="div-block-505"><div class="w-layout-hflex team-flex-block cs-team${study.team.length > 6 ? " cs-team--rows" : ""}">${team}</div></div></div></div></div>`
-    + `</div></div></div></div></section>`;
+    + `<div class="cs-facts">`
+    + fact("Company", inline(context.Company || ""))
+    + fact("Role", inline(capitalize(context.Role || "")))
+    + fact("Timeline", renderTimeline(context.Timeline || ""))
+    + `<div class="cs-fact">${heading("Team")}<div class="w-layout-hflex team-flex-block cs-team${study.team.length > 6 ? " cs-team--rows" : ""}">${team}</div></div>`
+    + `</div></section>`;
 }
 
 // "**Website.** Visibility was…": the lead-in becomes the item's title line,

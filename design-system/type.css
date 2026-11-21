@@ -34,7 +34,6 @@
 .cs-status li,                                /* Status box                  */
 .cs-status p,
 .cs-credits p:not(.cs-note),                  /* credits                     */
-.div-block-502 > .black,                      /* team name card              */
 .section-36 .ms-body-text-1:not(.ocp50),      /* project pages' Webflow text: intro, Timeline and Team lines, the older studies' paragraphs and cards */
 .section-36 .ms-body-text-1-b:not(.black),    /* older studies' subheads (medium, below) */
 .ds-hero .div-block-448 > .ms-body-text-1,    /* homepage intro              */
@@ -62,9 +61,8 @@
 /* Subheads in the older studies: Body 1 at medium weight, colour as marked
    (orange, or 75% white). */
 .section-36 .ms-body-text-1-b:not(.black) { font-weight: var(--ds-type-body-1-strong-weight); }
-/* Team name card: the name white, the role the body's 75% white. */
+/* Team name card: the name Body 2 in white (below), the role a Caption. */
 .div-block-502 > .black { color: var(--ds-color-text-primary); -webkit-text-fill-color: currentcolor; }
-.div-block-502 > .v25-h4.black { color: var(--ds-type-body-1-color); }
 
 /* Bold words in body text */
 .cs-section strong,
@@ -90,7 +88,8 @@
 .div-block-532 > .ms-body-text-1,                   /* homepage "What I've been up to" cards */
 .feedback-card .ms-body-text-1,                     /* About: visitor notes        */
 .div-block-524 > .ms-body-text-1,                   /* Lab cards                   */
-.section-37 .ms-body-text-1.ocp50 {                 /* case studies: the line under "Curious about the journey?" */
+.section-37 .ms-body-text-1.ocp50,                  /* case studies: the line under "Curious about the journey?" */
+.div-block-502 > .black:not(.v25-h4) {             /* team name card on hover: the name (Anamitra, 2026-11-20; was Body 1) */
   font-family: var(--ds-type-body-2-font);
   font-size: var(--ds-type-body-2-size);
   line-height: var(--ds-type-body-2-line-height);
@@ -112,7 +111,8 @@
 .v25-h4.grey,                 /* About: visitors' roles and dates (Webflow shrank these to 10px on phones) */
 .ds-person-role,              /* testimonials: role                         */
 .div-block-501 > .v25-b1,     /* TMF studies: picture captions              */
-.cs-tldr-meta {               /* summary cards: a quote's attribution       */
+.cs-tldr-meta,                /* summary cards: a quote's attribution       */
+.div-block-502 > .v25-h4.black {  /* team name card on hover: the role (Anamitra, 2026-11-20) */
   font-family: var(--ds-type-caption-font);
   font-size: var(--ds-type-caption-size);
   line-height: var(--ds-type-caption-line-height);

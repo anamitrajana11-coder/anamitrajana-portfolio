@@ -204,6 +204,10 @@
   /* Team avatars and their hover name card (Anamitra, 2026-11-20) */
   --ds-team-avatar-ring: var(--ds-color-grey-600);  /* 2px ring round each photo */
   --ds-team-card-radius: var(--ds-radius-6);
+  --ds-team-avatar-size: 42px;        /* each photo (52px until 2026-11-20)        */
+  --ds-team-avatar-step: 35px;        /* each photo's slot: they overlap by 7px    */
+  --ds-team-avatar-step-hover: 49px;  /* the hovered photo's slot spreads the row  */
+  --ds-team-gap: 10px;                /* name card below the photo; rows apart     */
   /* Lab canvas (homepage): the line above "Explore the Lab" is Body 1; from
      1500px it grows with the button's large size (lab-canvas.css). */
   --ds-lab-line-size-lg: var(--ds-font-size-20);  /* Body 1's 16px at large  */
